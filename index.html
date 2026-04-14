@@ -370,6 +370,100 @@ body{background:var(--dark);color:#f0f2f5}
 #imp-export-btn svg{width:13px;height:13px;flex-shrink:0}
 #imp-export-btn.disabled{opacity:.35;pointer-events:none}
 
+/* ── IMPACT TAB NAV ── */
+.imp-tab-nav{display:flex;gap:4px;background:rgba(255,255,255,.06);border-radius:8px;padding:3px}
+.imp-tab{background:none;border:none;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:700;color:rgba(240,242,245,.45);cursor:pointer;transition:all .15s;font-family:inherit}
+.imp-tab.active{background:rgba(255,255,255,.12);color:#fff}
+.imp-tab:hover:not(.active){color:rgba(240,242,245,.75)}
+
+/* ── SHEE SCORECARD ── */
+#imp-score-pane::-webkit-scrollbar{width:4px}
+#imp-score-pane::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.sc-doc{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.sc-doc-header{
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px 14px 0 0;
+  padding:20px 24px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  border-bottom:2px solid rgba(255,255,255,.08)
+}
+.sc-doc-org{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,242,245,.4);margin-bottom:4px}
+.sc-doc-title{font-size:18px;font-weight:900;letter-spacing:-.01em;color:#fff}
+.sc-doc-sub{font-size:11px;color:rgba(240,242,245,.4);margin-top:3px;letter-spacing:.06em}
+.sc-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+.sc-meta-item{display:flex;flex-direction:column;gap:1px;text-align:right}
+.sc-meta-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:rgba(240,242,245,.35)}
+.sc-meta-val{font-size:11px;font-weight:700;color:rgba(240,242,245,.8)}
+.sc-legend-bar{
+  background:rgba(255,255,255,.04);border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1);
+  padding:10px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap
+}
+.sc-legend-title{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:rgba(240,242,245,.4)}
+.sc-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(240,242,245,.65)}
+.sc-dot{display:inline-block;width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.sc-dot.d1,.sc-rdot.r1{background:#ef4444}
+.sc-dot.d2,.sc-rdot.r2{background:#f97316}
+.sc-dot.d3,.sc-rdot.r3{background:#eab308}
+.sc-dot.d4,.sc-rdot.r4{background:#22c55e}
+.sc-dot.d5,.sc-rdot.r5{background:#10b981}
+.sc-section{border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1)}
+.sc-sec-hdr{
+  display:flex;align-items:center;gap:10px;padding:12px 24px;
+  font-size:12px;font-weight:800;letter-spacing:.04em
+}
+.sc-sec-icon{font-size:16px}
+.sc-sec-name{font-weight:900;font-size:13px;letter-spacing:.02em}
+.sc-sec-desc{font-size:10px;font-weight:500;opacity:.55;flex:1}
+.sc-sec-score{font-size:13px;font-weight:800;margin-left:auto;padding:3px 12px;border-radius:6px;background:rgba(255,255,255,.08)}
+.sc-social{background:rgba(139,92,246,.15);border-bottom:2px solid rgba(139,92,246,.4);color:#c4b5fd}
+.sc-health{background:rgba(249,115,22,.15);border-bottom:2px solid rgba(249,115,22,.4);color:#fdba74}
+.sc-econ{background:rgba(16,185,129,.15);border-bottom:2px solid rgba(16,185,129,.4);color:#6ee7b7}
+.sc-env{background:rgba(59,130,246,.15);border-bottom:2px solid rgba(59,130,246,.4);color:#93c5fd}
+.sc-table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.025)}
+.sc-table thead tr{background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08)}
+.sc-table th{padding:8px 12px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(240,242,245,.35);text-align:left}
+.sc-table td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;color:rgba(240,242,245,.75);vertical-align:middle}
+.sc-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.sc-ref{font-size:10px;font-weight:800;padding:4px 8px!important;border-radius:6px;width:36px;text-align:center;white-space:nowrap}
+.sc-ref.social{background:rgba(139,92,246,.2);color:#c4b5fd}
+.sc-ref.health{background:rgba(249,115,22,.2);color:#fdba74}
+.sc-ref.econ{background:rgba(16,185,129,.2);color:#6ee7b7}
+.sc-ref.env{background:rgba(59,130,246,.2);color:#93c5fd}
+.sc-ind{font-size:10px;color:rgba(240,242,245,.4)!important;line-height:1.4}
+.sc-dots-cell{white-space:nowrap}
+.sc-rdot{
+  display:inline-block;width:20px;height:20px;border-radius:50%;
+  cursor:pointer;border:2px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  margin-right:4px;transition:all .15s;vertical-align:middle
+}
+.sc-rdot:hover{transform:scale(1.2);border-color:rgba(255,255,255,.4)}
+.sc-rdot.selected{border-color:transparent}
+.sc-pts{font-size:13px;font-weight:800;text-align:center;width:40px;color:rgba(240,242,245,.5)}
+.sc-pts.scored{color:#fff}
+.sc-overall{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  border-top:2px solid rgba(255,255,255,.12);
+  border-radius:0 0 14px 14px;
+  padding:20px 24px
+}
+.sc-ov-grid{display:grid;grid-template-columns:repeat(4,1fr) 2fr;gap:12px;align-items:start;margin-bottom:14px}
+.sc-ov-cat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center}
+.sc-ov-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(240,242,245,.4);margin-bottom:6px}
+.sc-ov-val{font-size:18px;font-weight:800}
+.sc-ov-val.social{color:#c4b5fd}
+.sc-ov-val.health{color:#fdba74}
+.sc-ov-val.econ{color:#6ee7b7}
+.sc-ov-val.env{color:#93c5fd}
+.sc-ov-total{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px}
+.sc-ov-big{font-size:28px;font-weight:900;letter-spacing:-.02em;color:#fff;margin-bottom:8px}
+.sc-ov-bar-wrap{height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.sc-ov-bar{height:100%;border-radius:4px;transition:width .6s ease}
+.sc-ov-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;display:inline-block}
+.sc-footer-note{font-size:10px;color:rgba(240,242,245,.25);line-height:1.5;border-top:1px solid rgba(255,255,255,.06);padding-top:12px;margin-top:4px}
+
 /* ── IMPACT CALCULATOR ── */
 #impact{
   position:fixed;inset:0;z-index:2000;
@@ -1000,7 +1094,11 @@ body{background:var(--dark);color:#f0f2f5}
       <div class="imp-title">SHEE Impact Calculator</div>
       <div class="imp-subtitle">Social · Health · Economic · Environmental — Baseline vs Endline · SGG/SFC Ghana Data</div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="imp-tab-nav">
+        <button class="imp-tab active" id="itab-calc">⚡ Calculator</button>
+        <button class="imp-tab" id="itab-score">📋 Scorecard</button>
+      </div>
       <button id="imp-export-btn" class="disabled">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 1v8.586L4.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L9 9.586V1H7zm-5 12v1a1 1 0 001 1h10a1 1 0 001-1v-1h-2v.5H4V13H2z"/></svg>
         Export PDF
@@ -1008,7 +1106,7 @@ body{background:var(--dark);color:#f0f2f5}
       <button class="dash-close" id="impact-close">← Back to Map</button>
     </div>
   </div>
-  <div class="imp-body">
+  <div class="imp-body" id="imp-calc-pane">
     <!-- LEFT: Inputs -->
     <div class="imp-input">
       <div class="inp-section">
@@ -1056,8 +1154,7 @@ body{background:var(--dark);color:#f0f2f5}
           <b>Baseline</b> = Individual processing (pre-SFC)<br>
           <b>Endline</b> = Collective processing (with SFC)<br><br>
           Rates from SGG Project (Gushegu, Savelugu, Sagnarigu, Kanfehiyili, Bognayili, Gupanarigu).<br><br>
-          Firewood &amp; GHG show 43–66% improvement range.<br>
-          Women estimate ≈ 16.8 per tonne FN.
+          Firewood &amp; GHG show 43–66% improvement range.
         </div>
       </div>
     </div>
@@ -1080,6 +1177,196 @@ body{background:var(--dark);color:#f0f2f5}
       </div>
     </div>
   </div>
+
+  <!-- SHEE SCORECARD PANE -->
+  <div id="imp-score-pane" style="display:none;flex:1;overflow-y:auto;padding:24px 32px">
+    <div class="sc-doc">
+
+      <!-- Document Header -->
+      <div class="sc-doc-header">
+        <div class="sc-doc-left">
+          <div class="sc-doc-org">SFC — Shea Fingerprints Company</div>
+          <div class="sc-doc-title">SHEE Cooperative Performance Scorecard</div>
+          <div class="sc-doc-sub">Social · Health · Economic · Environmental</div>
+        </div>
+        <div class="sc-doc-right">
+          <div class="sc-meta-grid">
+            <div class="sc-meta-item"><span class="sc-meta-lbl">Season</span><span class="sc-meta-val">2025 / 26</span></div>
+            <div class="sc-meta-item"><span class="sc-meta-lbl">Standard</span><span class="sc-meta-val">SHEE v1.0</span></div>
+            <div class="sc-meta-item"><span class="sc-meta-lbl">Scope</span><span class="sc-meta-val">Nut Cooperatives</span></div>
+            <div class="sc-meta-item"><span class="sc-meta-lbl">Basis</span><span class="sc-meta-val">SGG / SFC Ghana Data</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rating Legend -->
+      <div class="sc-legend-bar">
+        <span class="sc-legend-title">Rating Scale:</span>
+        <span class="sc-legend-item"><span class="sc-dot d1"></span>1 — Not Met</span>
+        <span class="sc-legend-item"><span class="sc-dot d2"></span>2 — Developing</span>
+        <span class="sc-legend-item"><span class="sc-dot d3"></span>3 — Progressing</span>
+        <span class="sc-legend-item"><span class="sc-dot d4"></span>4 — Good</span>
+        <span class="sc-legend-item"><span class="sc-dot d5"></span>5 — Excellent</span>
+        <span class="sc-legend-item" style="margin-left:auto;font-style:italic;opacity:.5">Click dots to rate</span>
+      </div>
+
+      <!-- SOCIAL -->
+      <div class="sc-section">
+        <div class="sc-sec-hdr sc-social">
+          <span class="sc-sec-icon">👥</span>
+          <span class="sc-sec-name">S — SOCIAL</span>
+          <span class="sc-sec-desc">Relations · Satisfaction · Collective contribution</span>
+          <span class="sc-sec-score" id="scs-S">— / 15</span>
+        </div>
+        <table class="sc-table">
+          <thead><tr><th>Ref</th><th>Criterion</th><th>Measurement Indicator</th><th>Rating</th><th>Pts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="sc-ref social">S1</td>
+              <td>Quality of social relations within cooperative</td>
+              <td class="sc-ind">FFL standard applied to coop / focus group reference scale</td>
+              <td class="sc-dots-cell" id="dots-S1"></td>
+              <td class="sc-pts" id="pts-S1">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref social">S2</td>
+              <td>Women satisfaction with their work</td>
+              <td class="sc-ind">Reference scale (Very Good → Mediocre) via focus group</td>
+              <td class="sc-dots-cell" id="dots-S2"></td>
+              <td class="sc-pts" id="pts-S2">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref social">S3</td>
+              <td>Contribution to collective organisation</td>
+              <td class="sc-ind">Bonuses/annual turnover + investments/economic profit</td>
+              <td class="sc-dots-cell" id="dots-S3"></td>
+              <td class="sc-pts" id="pts-S3">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- HEALTH -->
+      <div class="sc-section">
+        <div class="sc-sec-hdr sc-health">
+          <span class="sc-sec-icon">🏥</span>
+          <span class="sc-sec-name">H — HEALTH</span>
+          <span class="sc-sec-desc">Equipment · Smoke exposure</span>
+          <span class="sc-sec-score" id="scs-H">— / 10</span>
+        </div>
+        <table class="sc-table">
+          <thead><tr><th>Ref</th><th>Criterion</th><th>Measurement Indicator</th><th>Rating</th><th>Pts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="sc-ref health">H1</td>
+              <td>Degree of use of appropriate equipment</td>
+              <td class="sc-ind">% of production using improved stoves / drying infrastructure (multiplier-weighted)</td>
+              <td class="sc-dots-cell" id="dots-H1"></td>
+              <td class="sc-pts" id="pts-H1">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref health">H2</td>
+              <td>Level of exposure to particulate matter (smoke)</td>
+              <td class="sc-ind">PM dose × exposure time (h) per kg dried kernels at processing</td>
+              <td class="sc-dots-cell" id="dots-H2"></td>
+              <td class="sc-pts" id="pts-H2">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ECONOMIC -->
+      <div class="sc-section">
+        <div class="sc-sec-hdr sc-econ">
+          <span class="sc-sec-icon">💰</span>
+          <span class="sc-sec-name">E — ECONOMIC</span>
+          <span class="sc-sec-desc">Income · Worktime efficiency</span>
+          <span class="sc-sec-score" id="scs-E">— / 10</span>
+        </div>
+        <table class="sc-table">
+          <thead><tr><th>Ref</th><th>Criterion</th><th>Measurement Indicator</th><th>Rating</th><th>Pts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="sc-ref econ">E1</td>
+              <td>Income generated for cooperative members</td>
+              <td class="sc-ind">GHS per worked hour / GHS per kg dried kernel vs baseline</td>
+              <td class="sc-dots-cell" id="dots-E1"></td>
+              <td class="sc-pts" id="pts-E1">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref econ">E2</td>
+              <td>Active worktime &amp; processing efficiency</td>
+              <td class="sc-ind">Minutes per kg dried kernel — collective vs individual baseline</td>
+              <td class="sc-dots-cell" id="dots-E2"></td>
+              <td class="sc-pts" id="pts-E2">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ENVIRONMENTAL -->
+      <div class="sc-section">
+        <div class="sc-sec-hdr sc-env">
+          <span class="sc-sec-icon">🌍</span>
+          <span class="sc-sec-name">En — ENVIRONMENTAL</span>
+          <span class="sc-sec-desc">Carbon · Water · Waste · Biodiversity</span>
+          <span class="sc-sec-score" id="scs-En">— / 20</span>
+        </div>
+        <table class="sc-table">
+          <thead><tr><th>Ref</th><th>Criterion</th><th>Measurement Indicator</th><th>Rating</th><th>Pts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="sc-ref env">En1</td>
+              <td>Product carbon footprint (fuel use)</td>
+              <td class="sc-ind">kg CO₂eq per kg dried kernels — firewood consumption endline vs baseline</td>
+              <td class="sc-dots-cell" id="dots-En1"></td>
+              <td class="sc-pts" id="pts-En1">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref env">En2</td>
+              <td>Impacts on water</td>
+              <td class="sc-ind">Litres water per kg dried kernels — usage endline vs baseline</td>
+              <td class="sc-dots-cell" id="dots-En2"></td>
+              <td class="sc-pts" id="pts-En2">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref env">En3</td>
+              <td>Liquid &amp; solid waste management</td>
+              <td class="sc-ind">kg waste per kg product + waste handling &amp; disposal practices</td>
+              <td class="sc-dots-cell" id="dots-En3"></td>
+              <td class="sc-pts" id="pts-En3">—</td>
+            </tr>
+            <tr>
+              <td class="sc-ref env">En4</td>
+              <td>Biodiversity &amp; sustainable sourcing</td>
+              <td class="sc-ind">Land use practices, sustainable harvesting, ecosystem preservation</td>
+              <td class="sc-dots-cell" id="dots-En4"></td>
+              <td class="sc-pts" id="pts-En4">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Overall Score -->
+      <div class="sc-overall">
+        <div class="sc-ov-grid">
+          <div class="sc-ov-cat"><div class="sc-ov-lbl">Social</div><div class="sc-ov-val social" id="ov-S">—/15</div></div>
+          <div class="sc-ov-cat"><div class="sc-ov-lbl">Health</div><div class="sc-ov-val health" id="ov-H">—/10</div></div>
+          <div class="sc-ov-cat"><div class="sc-ov-lbl">Economic</div><div class="sc-ov-val econ" id="ov-E">—/10</div></div>
+          <div class="sc-ov-cat"><div class="sc-ov-lbl">Environmental</div><div class="sc-ov-val env" id="ov-En">—/20</div></div>
+          <div class="sc-ov-total">
+            <div class="sc-ov-lbl">Overall SHEE Score</div>
+            <div class="sc-ov-big" id="ov-total">— / 55</div>
+            <div class="sc-ov-bar-wrap"><div class="sc-ov-bar" id="ov-bar" style="width:0%"></div></div>
+            <div class="sc-ov-badge" id="ov-badge">Rate all criteria above</div>
+          </div>
+        </div>
+        <div class="sc-footer-note">Scoring standard based on SHEE framework (SGG/SFC Ghana). Criteria S1–S3 (Social), H1–H2 (Health), E1–E2 (Economic), En1–En4 (Environmental). Max 55 points. Each criterion rated 1 (Not Met) → 5 (Excellent).</div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <script src="lib/leaflet.js"></script>
@@ -2138,6 +2425,103 @@ function closeImpact(){document.getElementById('impact').classList.remove('open'
 document.getElementById('impact-btn').addEventListener('click',openImpact);
 document.getElementById('impact-close').addEventListener('click',closeImpact);
 
+// ── Impact tab switching ──────────────────────────────────────────────
+document.getElementById('itab-calc').addEventListener('click',()=>{
+  document.getElementById('itab-calc').classList.add('active');
+  document.getElementById('itab-score').classList.remove('active');
+  document.getElementById('imp-calc-pane').style.display='';
+  document.getElementById('imp-score-pane').style.display='none';
+});
+document.getElementById('itab-score').addEventListener('click',()=>{
+  document.getElementById('itab-score').classList.add('active');
+  document.getElementById('itab-calc').classList.remove('active');
+  document.getElementById('imp-calc-pane').style.display='none';
+  document.getElementById('imp-score-pane').style.display='flex';
+  initScorecard();
+});
+
+// ── SHEE Scorecard ────────────────────────────────────────────────────
+const SC_CRITERIA = [
+  {id:'S1',cat:'S',max:5},{id:'S2',cat:'S',max:5},{id:'S3',cat:'S',max:5},
+  {id:'H1',cat:'H',max:5},{id:'H2',cat:'H',max:5},
+  {id:'E1',cat:'E',max:5},{id:'E2',cat:'E',max:5},
+  {id:'En1',cat:'En',max:5},{id:'En2',cat:'En',max:5},{id:'En3',cat:'En',max:5},{id:'En4',cat:'En',max:5}
+];
+const SC_CATS = {S:{max:15},H:{max:10},E:{max:10},En:{max:20}};
+const SC_DOT_COLORS = ['','#ef4444','#f97316','#eab308','#22c55e','#10b981'];
+const SC_SCORES = {};
+let scReady = false;
+
+function initScorecard(){
+  if(scReady) return; scReady = true;
+  SC_CRITERIA.forEach(cr=>{
+    const cell = document.getElementById('dots-'+cr.id);
+    if(!cell) return;
+    cell.innerHTML='';
+    for(let v=1;v<=5;v++){
+      const d=document.createElement('span');
+      d.className='sc-rdot';
+      d.dataset.id=cr.id; d.dataset.v=v;
+      d.title=['','Not Met','Developing','Progressing','Good','Excellent'][v];
+      d.addEventListener('click',()=>scoreClick(cr.id,v));
+      cell.appendChild(d);
+    }
+  });
+}
+
+function scoreClick(id, val){
+  SC_SCORES[id]=val;
+  // Update dots for this criterion
+  document.querySelectorAll(`.sc-rdot[data-id="${id}"]`).forEach(d=>{
+    const v=+d.dataset.v;
+    if(v<=val){d.classList.add('selected');d.style.background=SC_DOT_COLORS[val];d.style.borderColor=SC_DOT_COLORS[val];}
+    else{d.classList.remove('selected');d.style.background='rgba(255,255,255,.06)';d.style.borderColor='rgba(255,255,255,.12)';}
+  });
+  // Update points cell
+  const ptsEl=document.getElementById('pts-'+id);
+  if(ptsEl){ptsEl.textContent=val+'/5';ptsEl.classList.add('scored');}
+  updateScSummary();
+}
+
+function updateScSummary(){
+  const catTotals={S:0,H:0,E:0,En:0};
+  const catCounts={S:0,H:0,E:0,En:0};
+  SC_CRITERIA.forEach(cr=>{
+    if(SC_SCORES[cr.id]!=null){catTotals[cr.cat]+=SC_SCORES[cr.id];catCounts[cr.cat]++;}
+  });
+  // Category scores
+  const catExpected={S:3,H:2,E:2,En:4};
+  ['S','H','E','En'].forEach(cat=>{
+    const el=document.getElementById('scs-'+cat);
+    const ov=document.getElementById('ov-'+cat);
+    const t=catTotals[cat], m=SC_CATS[cat].max;
+    const txt=catCounts[cat]>0?t+'/'+m:'— /'+m;
+    if(el) el.textContent=txt;
+    if(ov) ov.textContent=txt;
+  });
+  // Overall
+  const allRated=SC_CRITERIA.every(cr=>SC_SCORES[cr.id]!=null);
+  const anyRated=SC_CRITERIA.some(cr=>SC_SCORES[cr.id]!=null);
+  if(!anyRated) return;
+  const total=Object.values(SC_SCORES).reduce((a,b)=>a+b,0);
+  const max=55;
+  const pct=total/max;
+  document.getElementById('ov-total').textContent=total+' / '+max;
+  const bar=document.getElementById('ov-bar');
+  bar.style.width=Math.round(pct*100)+'%';
+  let color,label;
+  if(pct<0.2){color='#ef4444';label='🔴 Critical'}
+  else if(pct<0.4){color='#f97316';label='🟠 Needs Improvement'}
+  else if(pct<0.6){color='#eab308';label='🟡 Developing'}
+  else if(pct<0.8){color='#22c55e';label='🟢 Good'}
+  else{color='#10b981';label='💚 Excellent'}
+  bar.style.background=color;
+  const badge=document.getElementById('ov-badge');
+  badge.textContent=label+(allRated?'':' (partial)');
+  badge.style.background=color+'33';
+  badge.style.color=color;
+}
+
 
 // SGG baseline/endline rates — NUTS (per kg dried kernel)
 const NR = {
@@ -2245,12 +2629,6 @@ function calcImpact(){
     <!-- HEADLINE METRICS -->
     <div class="imp-divider">Headline Impact</div>
     <div class="imp-row">
-      <div class="imp-card highlight">
-        <div class="ic-icon">👩‍🌾</div>
-        <div class="ic-val green">${women_est>0?women_est.toLocaleString():'—'}</div>
-        <div class="ic-lbl">Women Impacted</div>
-        <div class="ic-sub">Est. collectors &amp; processors</div>
-      </div>
       <div class="imp-card highlight">
         <div class="ic-icon">🌳</div>
         <div class="ic-val green">${fmtT(tot_fw_saved)}</div>
