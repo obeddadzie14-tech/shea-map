@@ -1115,18 +1115,6 @@ body{background:var(--dark);color:#111827}
   <div class="imp-body" id="imp-calc-pane">
     <!-- LEFT: Inputs -->
     <div class="imp-input">
-
-      <div class="inp-section" style="background:rgba(59,130,246,.05);border-color:rgba(59,130,246,.2)">
-        <h3><span>📍</span> Load from Centre</h3>
-        <div class="inp-field">
-          <div class="inp-label">Select Centre (auto-fills real data)</div>
-          <select class="sc-coop-sel" id="calc-ctr-sel" style="width:100%;max-width:100%;margin-top:4px">
-            <option value="">— or enter custom values below —</option>
-          </select>
-        </div>
-        <div id="calc-ctr-info" style="display:none;margin-top:10px;font-size:11px;color:rgba(17,24,39,.6);line-height:1.7;padding:8px 10px;background:#fff;border-radius:8px;border:1px solid rgba(0,0,0,.06)"></div>
-      </div>
-
       <div class="inp-section">
         <h3><span>🌰</span> Dried Nuts (Kernels)</h3>
         <div class="inp-field">
@@ -1167,17 +1155,12 @@ body{background:var(--dark);color:#111827}
       </div>
 
       <div class="inp-section" style="background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.2)">
-        <h3><span>📐</span> Methodology</h3>
-        <div class="inp-hint" style="margin-top:0;color:rgba(17,24,39,.5);line-height:1.7;font-size:11px">
-          <b style="color:#1f2937">CO₂ formula</b> — Gold Standard / IPCC Tier 1:<br>
-          <code style="font-size:9px;background:rgba(0,0,0,.05);padding:2px 5px;border-radius:4px;display:block;margin:4px 0">fw_kg × fNRB × NCV × EF_CO₂ + fw_kg × EF_CH₄ × GWP</code>
-          NCV=15.6 MJ/kg · EF_CO₂=112 kg/GJ · EF_CH₄=0.0156 · GWP=28<br><br>
-          <b style="color:#1f2937">fNRB</b> = Fraction Non-Renewable Biomass — district-specific.<br>
-          Only the non-renewable share counts as real GHG.<br>
-          Savelugu confirmed = 0.41 (SGG study).<br><br>
-          <b style="color:#1f2937">Field rates</b> from SGG Impact Assessment (Nitidae, Oct 2024): 30 samples/coop × 2 Ghana coops (Gushegu, Savelugu). Butter: 4 SFC centres.<br><br>
-          <b style="color:#1f2937">Trees</b> = 50 kg firewood / tree (sustainable branch harvest, standing shea trees).<br>
-          <b style="color:#1f2937">Cars</b> = 4.6 t CO₂/yr per vehicle (US EPA).
+        <h3><span>📐</span> About the Rates</h3>
+        <div class="inp-hint" style="margin-top:0;color:rgba(17,24,39,.45);line-height:1.55">
+          <b>Baseline</b> = Individual processing (pre-SFC)<br>
+          <b>Endline</b> = Collective processing (with SFC)<br><br>
+          Rates from SGG Project (Gushegu, Savelugu, Sagnarigu, Kanfehiyili, Bognayili, Gupanarigu).<br><br>
+          Firewood &amp; GHG show 43–66% improvement range.
         </div>
       </div>
     </div>
@@ -2464,39 +2447,6 @@ document.getElementById('itab-calc').addEventListener('click',()=>{
   document.getElementById('imp-calc-pane').style.display='';
   document.getElementById('imp-score-pane').style.display='none';
 });
-// ── Calculator centre selector ────────────────────────────────────────
-(function(){
-  const sel = document.getElementById('calc-ctr-sel');
-  if(!sel) return;
-  CENTERS.forEach(c=>{
-    const o = document.createElement('option');
-    o.value = c.id;
-    o.textContent = c.centerName + ' · ' + c.district;
-    sel.appendChild(o);
-  });
-  sel.addEventListener('change', ()=>{
-    const c = CENTERS.find(x=>x.id===sel.value);
-    const info = document.getElementById('calc-ctr-info');
-    if(!c){ info.style.display='none'; calcCtrSelected=null; calcImpact(); return; }
-    calcCtrSelected = c;
-    // Auto-fill dried kernels from actual centre data (dryNuts bags × 85 kg/bag)
-    const dryT = (c.ops.dryNuts * 85 / 1000).toFixed(1);
-    document.getElementById('inp-nuts').value = dryT;
-    document.getElementById('inp-butter').value = '';
-    // Show info panel
-    const fNRB = getFNRB(c.district);
-    const h1 = calcH1(c.ops.stoves, c.ops.drying, c.ops.fnBags);
-    const h1Labels = ['','Not Met','Developing','Progressing','Good','Excellent'];
-    info.innerHTML =
-      `<b>${c.centerName}</b> · ${c.district} · ${c.region}<br>`+
-      `Season 2025/26: <b>${c.ops.fnBags} bags FN</b> → <b>${dryT} t dried kernels</b><br>`+
-      `Equipment: <b>${c.ops.stoves||0} improved stoves</b> · <b>${c.ops.drying||0} drying platforms</b><br>`+
-      `H1 score: <b>${h1!==null?h1+'/5 — '+h1Labels[h1]:'n/a'}</b> · fNRB: <b>${fNRB}</b> (${c.district})`;
-    info.style.display = 'block';
-    calcImpact();
-  });
-})();
-
 document.getElementById('itab-score').addEventListener('click',()=>{
   document.getElementById('itab-score').classList.add('active');
   document.getElementById('itab-calc').classList.remove('active');
@@ -2733,114 +2683,33 @@ ${sHtml}
   setTimeout(()=>{win.focus();win.print();},600);
 }
 
-// ═══════════════════════════════════════════════════════════════════════
-//  SHEE IMPACT RATES  —  Source: SGG Impact Assessment (Nitidae, Oct 2024)
-//  All field measurements from Gushegu & Savelugu pilot centres, Ghana.
-//  CO2 formula: Gold Standard / IPCC Tier 1 (biomass cooking stoves)
-// ═══════════════════════════════════════════════════════════════════════
-
-// ── fNRB (Fraction Non-Renewable Biomass) by district ─────────────────
-// Source: UNFCCC/Gold Standard Ghana data; Savelugu = 0.41 confirmed SGG.
-// fNRB is the share of firewood that is non-sustainable (drives real GHG).
-// A lower fNRB = forests are regenerating = less permanent CO2 damage.
-const FNRB = {
-  'Kassena-Nankana West':     0.41,
-  'Kassena-Nankana East':     0.41,
-  'Kassena-Nankana Municipal':0.41,
-  'Bolgatanga Municipal':     0.40,
-  'West Mamprusi Municipal':  0.38,
-  'Tolon':                    0.41,
-  'Savelugu':                 0.41,
-  'Sawla-Tuna-Kalba':         0.44,
-  'West Gonja':               0.44,
-  'Bole':                     0.44,
-  'Wa West':                  0.42,
-  'Lambussie-Karni':          0.42,
-  'default':                  0.41   // Northern Ghana reference (SGG)
-};
-function getFNRB(district){ return FNRB[district]||FNRB.default; }
-
-// ── IPCC Tier 1 emission factors for woody biomass combustion ──────────
-// Source: IPCC 2006 Guidelines for National GHG Inventories, Table 2.2
-const IPCC = {
-  NCV:     0.0156,  // GJ / kg dry firewood  (Net Calorific Value: 15.6 MJ/kg)
-  EF_CO2:  112,     // kg CO2 / GJ  (IPCC default for wood / wood waste)
-  EF_CH4:  0.0156,  // kg CH4 / kg dry fuel  (open burning / cooking stove)
-  GWP_CH4: 28       // 100-year GWP (IPCC AR5)
-  // CO2 contribution per kg firewood = fNRB × NCV × EF_CO2 = fNRB × 1.747
-  // CH4 contribution per kg firewood = EF_CH4 × GWP = 0.437 kg CO2eq/kg
-  // Total: (fNRB × 1.747) + 0.437  kg CO2eq per kg dry firewood
-};
-
-// Compute tonnes CO2eq for a given dry firewood mass and district
-function calcCO2(fw_kg, district){
-  const fNRB = getFNRB(district);
-  const co2  = fw_kg * fNRB * IPCC.NCV * IPCC.EF_CO2;        // kg CO2
-  const ch4  = fw_kg * IPCC.EF_CH4 * IPCC.GWP_CH4;           // kg CO2eq
-  return { tCO2: (co2+ch4)/1000, fNRB };                      // tonnes
-}
-
-// ── H1 EQUIPMENT MULTIPLIERS  (SHEE standard §H1, PDF p.10) ──────────
-// Estimate equipment share score: % of kernels through each type × multiplier
-const H1_STOVE = {
-  '3stone':    0,    // Traditional 3-stone fireplace
-  'improved':  0.5,  // Improved clay stove, no chimney
-  'improved+': 1.0   // Improved clay/concrete stove WITH chimney  ← SFC standard
-};
-const H1_DRYING = {
-  'plastic':   0,    // Light plastic sheet
-  'concrete':  0.3,  // Concrete drying area
-  'tarpaulin': 0.5,  // Thick tarpaulin                           ← SFC standard
-  'racks':     1.0   // Raised drying racks
-};
-// SFC improved stoves = x1.0 (chimney stoves); SFC drying = x0.5 (tarpaulin)
-function calcH1(stoves, drying, fnBags){
-  if(!stoves && !drying) return null;
-  const stoveScore  = stoves  > 0 ? H1_STOVE['improved+']  : 0;  // x1.0 if SFC stoves
-  const dryingScore = drying  > 0 ? H1_DRYING['tarpaulin'] : 0;  // x0.5 if SFC tarp
-  const raw = (stoveScore + dryingScore) / 2;  // 0–1 composite
-  // Map to 1–5 SHEE scale
-  if(raw >= 0.80) return 5;
-  if(raw >= 0.65) return 4;
-  if(raw >= 0.45) return 3;
-  if(raw >= 0.25) return 2;
-  return 1;
-}
-
-// ── NUTS rates (per kg dried kernel) ──────────────────────────────────
+// SGG baseline/endline rates — NUTS (per kg dried kernel)
 const NR = {
-  // Firewood — SGG Ghana field measurements (30 samples per coop × 2 coops)
-  fw_base:    0.63,             // kg dry fw / kg kernel  [Gushegu 0.70 + Savelugu 0.55 / 2]
-  fw_end_lo:  0.63*(1-0.43),   // Gushegu endline: −43%
-  fw_end_hi:  0.63*(1-0.66),   // Savelugu endline: −66%
-  // Water — SGG Ghana measured
-  water_base: 0.91,   // L/kg kernel  (individual baseline)
-  water_end:  1.10,   // L/kg kernel  (collective: more QA rinsing)
-  // Revenue — SGG Ghana purchase records 2022-23
-  rev_base:   4.71,   // GHS/kg kernel  (individual selling price)
-  rev_end:    7.50,   // GHS/kg kernel  (SFC organic collective premium)
-  // Worktime — SGG time-and-motion study
-  work_base:  16.5,   // min/kg kernel
-  work_end:   20.3,   // min/kg kernel  (collective QA adds time, improves quality)
-  // Women mobilisation
-  women_per_t_fn: 16.8  // women per tonne fresh nuts  (SGG field headcount)
+  fw_base: 0.63,    // kg firewood / kg kernel (avg Gushegu 0.70 + Savelugu 0.55)
+  fw_end_lo: 0.63*(1-0.43), // 43% reduction
+  fw_end_hi: 0.63*(1-0.66), // 66% reduction
+  water_base: 0.91,  // L / kg kernel
+  water_end: 1.10,   // L / kg kernel (increases slightly with collective)
+  ghg_base: 0.521,   // kg CO2eq / kg kernel (avg 0.55+0.492)
+  ghg_end_lo: 0.521*(1-0.43),
+  ghg_end_hi: 0.521*(1-0.66),
+  rev_base: 4.71,    // GHS / kg kernel
+  rev_end: 7.50,     // GHS / kg kernel (collective gets premium)
+  work_base: 16.5,   // min / kg kernel
+  work_end: 20.3,    // min / kg kernel (slightly more with collective QA)
+  women_per_t_fn: 16.8 // women per tonne fresh nuts
 };
 
-// ── BUTTER rates (per kg butter) ──────────────────────────────────────
+// SGG baseline/endline rates — BUTTER (per kg butter)
 const BR = {
-  // Firewood — SGG Ghana avg across 4 SFC butter centres (Sagnarigu, Kanfehiyili,
-  //            Bognayili, Gupanarigu) — baseline measurement
-  fw_base:    0.797,            // kg dry fw / kg butter
-  fw_end:     0.797*(1-0.35),  // −35% with improved roasting equipment
-  // Water — SGG Ghana measured
-  water_base: 6.925,  // L/kg butter
-  water_end:  5.54,   // −20% with collective processing
-  // Waste — SGG Ghana estimated (effluent + solids)
-  waste_base: 9.575,  // kg total waste / kg butter
-  // GHG — NOTE: shea cake (shell fuel) EF=0 (fully renewable per PDF)
-  //        Only firewood contributes CO2; calculated via calcCO2() using fNRB
-  ghg_fw_share: 0.70,  // ~70% of butter fuel is firewood (rest = cake, EF=0)
-  women_per_t: 25      // approx women per tonne butter  (SGG estimate)
+  fw_base: 0.797,   // kg firewood / kg butter (avg across 4 centres)
+  fw_end: 0.797*(1-0.35), // ~35% reduction with improved equipment
+  water_base: 6.925, // L / kg butter
+  water_end: 5.54,   // ~20% reduction
+  waste_base: 9.575, // kg waste / kg butter
+  ghg_base: 0.65,    // kg CO2eq / kg butter (estimated from firewood rate + NCV)
+  ghg_end: 0.65*(1-0.40),
+  women_per_t: 25    // approx women per tonne butter
 };
 
 function fmtN(n,d=1){
@@ -2854,8 +2723,6 @@ function fmtT(n){
   if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k t';
   return n.toFixed(1)+' t';
 }
-
-let calcCtrSelected = null; // currently selected centre for calculator
 
 function calcImpact(){
   const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
@@ -2875,100 +2742,50 @@ function calcImpact(){
   live.style.display='block';
   exportBtn.classList.remove('disabled');
 
-  // Determine district for fNRB — use selected centre, or default
-  const district = calcCtrSelected ? calcCtrSelected.district : 'default';
-  const fNRB = getFNRB(district);
-
   const nutKg = nutT*1000;
   const butKg = butT*1000;
-  const fnKg = nutKg*3; // 3 kg fresh nuts → 1 kg dried kernel (SGG measured)
+  const fnKg = nutKg*3; // approx fresh nuts = 3x dried kernels
   const fnT = fnKg/1000;
 
-  // ── NUTS — firewood ────────────────────────────────────────────────
-  const fw_end_avg = (NR.fw_end_lo + NR.fw_end_hi) / 2;
-  const n_fw_base_kg = nutKg * NR.fw_base;
-  const n_fw_end_kg  = nutKg * fw_end_avg;
-  const n_fw_base_t  = n_fw_base_kg / 1000;
-  const n_fw_end_t   = n_fw_end_kg / 1000;
-  const n_fw_saved_t = n_fw_base_t - n_fw_end_t;
-
-  // ── NUTS — GHG  (Gold Standard IPCC Tier 1, fNRB per district) ────
-  // CO2eq = fw_kg × [fNRB × NCV × EF_CO2 + EF_CH4 × GWP_CH4]
-  const n_ghg_base = calcCO2(n_fw_base_kg, district);
-  const n_ghg_end  = calcCO2(n_fw_end_kg,  district);
-  const n_ghg_saved_t = n_ghg_base.tCO2 - n_ghg_end.tCO2;
-
-  // ── NUTS — water ──────────────────────────────────────────────────
+  // NUTS calculations
+  const n_fw_base = nutKg * NR.fw_base / 1000;
+  const n_fw_end_avg = nutKg * ((NR.fw_end_lo+NR.fw_end_hi)/2) / 1000;
+  const n_fw_saved = n_fw_base - n_fw_end_avg;
   const n_water_base = nutKg * NR.water_base / 1000; // m³
-  const n_water_end  = nutKg * NR.water_end  / 1000;
-
-  // ── NUTS — economic ───────────────────────────────────────────────
+  const n_water_end = nutKg * NR.water_end / 1000;
+  const n_ghg_base = nutKg * NR.ghg_base / 1000; // tonnes CO2
+  const n_ghg_end_avg = nutKg * ((NR.ghg_end_lo+NR.ghg_end_hi)/2) / 1000;
+  const n_ghg_saved = n_ghg_base - n_ghg_end_avg;
   const n_rev_base = nutKg * NR.rev_base; // GHS
-  const n_rev_end  = nutKg * NR.rev_end;
+  const n_rev_end = nutKg * NR.rev_end;
   const n_rev_gain = n_rev_end - n_rev_base;
-
-  // ── NUTS — worktime ───────────────────────────────────────────────
   const n_work_base = nutKg * NR.work_base / 60; // hours
-  const n_work_end  = nutKg * NR.work_end  / 60;
+  const n_work_end = nutKg * NR.work_end / 60;
 
-  // ── BUTTER — firewood ─────────────────────────────────────────────
-  const b_fw_base_kg = butKg * BR.fw_base;
-  const b_fw_end_kg  = butKg * BR.fw_end;
-  const b_fw_base_t  = b_fw_base_kg / 1000;
-  const b_fw_end_t   = b_fw_end_kg  / 1000;
-  const b_fw_saved_t = b_fw_base_t - b_fw_end_t;
-
-  // ── BUTTER — GHG  (NOTE: shea cake EF=0 per PDF, only firewood CO2) ─
-  const b_ghg_base = calcCO2(b_fw_base_kg * BR.ghg_fw_share, district);
-  const b_ghg_end  = calcCO2(b_fw_end_kg  * BR.ghg_fw_share, district);
-  const b_ghg_saved_t = b_ghg_base.tCO2 - b_ghg_end.tCO2;
-
-  // ── BUTTER — water & waste ────────────────────────────────────────
-  const b_water_base  = butKg * BR.water_base / 1000;
-  const b_water_end   = butKg * BR.water_end  / 1000;
+  // BUTTER calculations
+  const b_fw_base = butKg * BR.fw_base / 1000;
+  const b_fw_end = butKg * BR.fw_end / 1000;
+  const b_fw_saved = b_fw_base - b_fw_end;
+  const b_water_base = butKg * BR.water_base / 1000;
+  const b_water_end = butKg * BR.water_end / 1000;
   const b_water_saved = b_water_base - b_water_end;
-  const b_waste       = butKg * BR.waste_base / 1000;
+  const b_waste = butKg * BR.waste_base / 1000;
+  const b_ghg_base = butKg * BR.ghg_base / 1000;
+  const b_ghg_end = butKg * BR.ghg_end / 1000;
+  const b_ghg_saved = b_ghg_base - b_ghg_end;
 
-  // ── COMBINED ──────────────────────────────────────────────────────
-  const tot_fw_saved  = n_fw_saved_t  + b_fw_saved_t;
-  const tot_ghg_saved = n_ghg_saved_t + b_ghg_saved_t;
+  // Combined totals
+  const tot_fw_saved = n_fw_saved + b_fw_saved;
+  const tot_ghg_saved = n_ghg_saved + b_ghg_saved;
+  const tot_water_base = n_water_base + b_water_base;
+  const tot_water_end = n_water_end + b_water_end;
   const women_est = Math.round(fnT * NR.women_per_t_fn + butT * BR.women_per_t);
 
-  // ── EQUIVALENCES ─────────────────────────────────────────────────
-  // Trees: 50 kg firewood per standing tree (sustainable branch harvest,
-  //        without felling — typical for protected shea belt trees)
-  const trees_saved = Math.round(tot_fw_saved * 1000 / 50);
-  // Cars: 4.6 t CO2/year per average passenger vehicle (US EPA benchmark)
-  const cars_eq = (tot_ghg_saved / 4.6).toFixed(1);
-
-  // ── H1 EQUIPMENT SCORE (if centre selected) ───────────────────────
-  const h1Score = calcCtrSelected
-    ? calcH1(calcCtrSelected.ops.stoves, calcCtrSelected.ops.drying, calcCtrSelected.ops.fnBags)
-    : null;
-  const h1Label = ['','Not Met','Developing','Progressing','Good','Excellent'];
-  const h1Color = ['','#ef4444','#f97316','#eab308','#22c55e','#10b981'];
-
-  // Pre-compute per-kg CO2 for unit rate display
-  const ghg_base_per_kg = n_ghg_base.tCO2 / nutKg * 1000; // kg CO2eq/kg kernel
-  const ghg_end_per_kg  = n_ghg_end.tCO2  / nutKg * 1000;
+  // Equivalences
+  const trees_saved = Math.round(tot_fw_saved / 0.012); // ~12 kg usable firewood per tree
+  const cars_eq = (tot_ghg_saved / 4.6).toFixed(1); // 4.6 t CO2/year per avg car
 
   live.innerHTML = `
-    <!-- METHODOLOGY BADGE -->
-    <div style="padding:8px 20px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-size:10px;font-weight:700;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:20px;letter-spacing:.04em">
-        ✓ IPCC Tier 1 · Gold Standard CO₂ formula
-      </span>
-      <span style="font-size:10px;font-weight:700;background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;padding:3px 10px;border-radius:20px">
-        fNRB = ${fNRB} · ${district==='default'?'Northern Ghana avg':district}
-      </span>
-      ${h1Score!==null?`<span style="font-size:10px;font-weight:700;background:#fef9c3;color:#92400e;border:1px solid #fde68a;padding:3px 10px;border-radius:20px">
-        H1 Equipment: ${h1Score}/5 — ${h1Label[h1Score]}
-      </span>`:''}
-      ${calcCtrSelected?`<span style="font-size:10px;font-weight:700;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;padding:3px 10px;border-radius:20px">
-        📍 ${calcCtrSelected.centerName} · Actual 2025/26 data
-      </span>`:'<span style="font-size:10px;color:rgba(17,24,39,.35);padding:3px 8px">Custom entry — select a centre for real data</span>'}
-    </div>
-
     <!-- HEADLINE METRICS -->
     <div class="imp-divider">Headline Impact</div>
     <div class="imp-row">
@@ -2977,69 +2794,67 @@ function calcImpact(){
         <div class="ic-val green">${fmtT(tot_fw_saved)}</div>
         <div class="ic-lbl">Firewood Saved</div>
         <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved</div>
-        <div class="ic-sub" style="opacity:.5;margin-top:2px">50 kg branch harvest per tree</div>
       </div>
       <div class="imp-card highlight">
         <div class="ic-icon">💨</div>
         <div class="ic-val green">${fmtT(tot_ghg_saved)}</div>
         <div class="ic-lbl">GHG Avoided</div>
         <div class="ic-sub">≈ ${cars_eq} cars off road / year</div>
-        <div class="ic-sub" style="opacity:.5;margin-top:2px">4.6 t CO₂/yr per vehicle (US EPA)</div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">💰</div>
         <div class="ic-val blue">${nutT>0?'GHS '+fmtN(n_rev_gain,0):'—'}</div>
-        <div class="ic-lbl">Extra Revenue (Nuts)</div>
-        <div class="ic-sub">Collective premium vs individual</div>
+        <div class="ic-lbl">Extra Revenue</div>
+        <div class="ic-sub">Endline vs baseline pricing</div>
       </div>
     </div>
 
     ${nutT>0?`
     <!-- NUTS SECTION -->
-    <div class="imp-divider">🌰 Nuts — ${nutT} t dried kernels · ${fnT.toFixed(0)} t fresh nuts equiv.</div>
+    <div class="imp-divider">🌰 Nuts — ${nutT} tonnes dried kernels ≈ ${fnT.toFixed(0)} t fresh nuts</div>
 
     <div class="imp-row">
       <div class="imp-card">
         <div class="ic-icon">🔥</div>
-        <div class="ic-lbl">Firewood (kg/kg: ${NR.fw_base} → ${fw_end_avg.toFixed(2)})</div>
+        <div class="ic-lbl">Firewood</div>
         <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_fw_base_t.toFixed(1)} t</div></div>
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_fw_base.toFixed(1)} t</div></div>
           <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_t.toFixed(1)} t</div></div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_avg.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${n_fw_saved_t.toFixed(1)} t saved (${((n_fw_saved_t/n_fw_base_t)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved_t/n_fw_base_t)*100))}%"></div></div>
+        <div class="bve-saving pos">▼ ${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved/n_fw_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">💧</div>
-        <div class="ic-lbl">Water Use (${NR.water_base} → ${NR.water_end} L/kg)</div>
+        <div class="ic-lbl">Water Use</div>
         <div class="imp-bve">
           <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_water_base.toFixed(0)} m³</div></div>
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_water_end.toFixed(0)} m³</div></div>
         </div>
-        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more QA rinsing collective)</div>
+        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">💨</div>
-        <div class="ic-lbl">GHG · fNRB=${fNRB} · IPCC Tier 1</div>
+        <div class="ic-lbl">GHG Emissions</div>
         <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_ghg_base.tCO2.toFixed(2)} t</div></div>
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_ghg_base.toFixed(1)} t</div></div>
           <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end.tCO2.toFixed(2)} t</div></div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end_avg.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${n_ghg_saved_t.toFixed(2)} t CO₂eq avoided</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved_t/n_ghg_base.tCO2)*100))}%"></div></div>
+        <div class="bve-saving pos">▼ ${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved/n_ghg_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">⏱</div>
-        <div class="ic-lbl">Person-Hours (${NR.work_base} → ${NR.work_end} min/kg)</div>
+        <div class="ic-lbl">Person-Hours</div>
         <div class="imp-bve">
           <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${fmtN(n_work_base)}h</div></div>
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${fmtN(n_work_end)}h</div></div>
         </div>
-        <div class="bve-saving neg">▲ Collective QA adds time · improves quality grade</div>
+        <div class="bve-saving neg">▲ Collective QA adds time but improves quality</div>
       </div>
     </div>
 
@@ -3052,28 +2867,27 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">GHS ${fmtN(n_rev_end,0)}</div></div>
         </div>
-        <div class="bve-saving pos">+GHS ${fmtN(n_rev_gain,0)} extra (+${((n_rev_gain/n_rev_base)*100).toFixed(0)}%)</div>
+        <div class="bve-saving pos">+GHS ${fmtN(n_rev_gain,0)} extra income (+${((n_rev_gain/n_rev_base)*100).toFixed(0)}%)</div>
         <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((n_rev_gain/n_rev_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
-        <div class="ic-icon">📐</div>
-        <div class="ic-lbl">CO₂ Audit Trail</div>
-        <div class="ic-sub" style="margin-top:8px;line-height:1.8;font-size:10px">
-          Formula: fw_kg × fNRB × NCV × EF_CO₂ + fw_kg × EF_CH₄ × GWP<br>
-          NCV = ${IPCC.NCV} GJ/kg · EF = ${IPCC.EF_CO2} kg CO₂/GJ · fNRB = ${fNRB}<br>
-          CH₄: ${IPCC.EF_CH4} kg/kg × ${IPCC.GWP_CH4} GWP<br>
-          <b>${ghg_base_per_kg.toFixed(3)}</b> → <b>${ghg_end_per_kg.toFixed(3)}</b> kg CO₂eq/kg kernel<br>
-          <span style="color:#9ca3af">Source: IPCC 2006 Table 2.2 + SGG field data</span>
+        <div class="ic-icon">📊</div>
+        <div class="ic-lbl">Unit Rates — Nuts</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b>${NR.fw_base}</b> → <b>${((NR.fw_end_lo+NR.fw_end_hi)/2).toFixed(2)}</b> kg/kg<br>
+          Water: <b>${NR.water_base}</b> → <b>${NR.water_end}</b> L/kg<br>
+          GHG: <b>${NR.ghg_base}</b> → <b>${((NR.ghg_end_lo+NR.ghg_end_hi)/2).toFixed(3)}</b> kg CO₂/kg<br>
+          Revenue: <b>${NR.rev_base}</b> → <b>${NR.rev_end}</b> GHS/kg
         </div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">🎯</div>
-        <div class="ic-lbl">SGG Improvement Range</div>
-        <div class="ic-sub" style="margin-top:8px;line-height:1.8;font-size:11px">
-          Firewood: <b style="color:#16a34a">−43%</b> (Gushegu) to <b style="color:#16a34a">−66%</b> (Savelugu)<br>
-          GHG: same range as firewood (proportional)<br>
-          Revenue: <b style="color:#2563eb">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> collective premium<br>
-          Water: <b style="color:#d97706">+21%</b> more rinsing (quality trade-off)
+        <div class="ic-lbl">Improvement Range</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
+          GHG: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
+          Revenue: <b style="color:#60a5fa">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> premium<br>
+          Water: <b style="color:#fbbf24">+21%</b> (more QA rinsing)
         </div>
       </div>
     </div>
@@ -3081,47 +2895,47 @@ function calcImpact(){
 
     ${butT>0?`
     <!-- BUTTER SECTION -->
-    <div class="imp-divider">🧈 Butter — ${butT} t · Shea cake EF=0 (renewable, per PDF)</div>
+    <div class="imp-divider">🧈 Butter — ${butT} tonnes raw butter</div>
 
     <div class="imp-row">
       <div class="imp-card">
         <div class="ic-icon">🔥</div>
-        <div class="ic-lbl">Firewood (${BR.fw_base} → ${BR.fw_end.toFixed(3)} kg/kg)</div>
+        <div class="ic-lbl">Firewood</div>
         <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_fw_base_t.toFixed(1)} t</div></div>
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_fw_base.toFixed(1)} t</div></div>
           <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end_t.toFixed(1)} t</div></div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${b_fw_saved_t.toFixed(1)} t saved (${((b_fw_saved_t/b_fw_base_t)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved_t/b_fw_base_t)*100))}%"></div></div>
+        <div class="bve-saving pos">▼ ${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved/b_fw_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">💧</div>
-        <div class="ic-lbl">Water Use (${BR.water_base} → ${BR.water_end} L/kg)</div>
+        <div class="ic-lbl">Water Use</div>
         <div class="imp-bve">
           <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_water_base.toFixed(0)} m³</div></div>
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_water_end.toFixed(0)} m³</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${b_water_saved.toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
+        <div class="bve-saving pos">▼ ${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
         <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((b_water_saved/b_water_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">💨</div>
-        <div class="ic-lbl">GHG · firewood fraction only (cake EF=0)</div>
+        <div class="ic-lbl">GHG Emissions</div>
         <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_ghg_base.tCO2.toFixed(2)} t</div></div>
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_ghg_base.toFixed(1)} t</div></div>
           <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.tCO2.toFixed(2)} t</div></div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${b_ghg_saved_t.toFixed(2)} t CO₂eq avoided</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved_t/b_ghg_base.tCO2)*100))}%"></div></div>
+        <div class="bve-saving pos">▼ ${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved/b_ghg_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
         <div class="ic-icon">🗑</div>
         <div class="ic-lbl">Waste Generated</div>
         <div class="ic-val amber" style="margin-top:8px">${b_waste.toFixed(1)} t</div>
-        <div class="ic-sub">${BR.waste_base} kg waste / kg butter (SGG avg)</div>
+        <div class="ic-sub">At ${BR.waste_base} kg waste / kg butter</div>
         <div class="ic-sub">Effluent treatment recommended</div>
       </div>
     </div>
@@ -3136,8 +2950,8 @@ function calcImpact(){
           <div style="font-size:42px">🌍</div>
           <div>
             <div class="ic-val green" style="font-size:32px">${fmtT(tot_ghg_saved)} CO₂eq</div>
-            <div class="ic-lbl" style="margin-top:4px">Total GHG Avoided · IPCC Tier 1 · fNRB=${fNRB}</div>
-            <div class="ic-sub">= ${cars_eq} cars off road for a year (4.6 t CO₂/yr · US EPA)</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Greenhouse Gas Avoided</div>
+            <div class="ic-sub">Equivalent to taking ${cars_eq} cars off the road for a year</div>
           </div>
         </div>
       </div>
@@ -3146,8 +2960,8 @@ function calcImpact(){
           <div style="font-size:42px">🌳</div>
           <div>
             <div class="ic-val green" style="font-size:32px">${fmtT(tot_fw_saved)}</div>
-            <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided (SGG measured)</div>
-            <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees · 50 kg sustainable branch harvest per tree</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided</div>
+            <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved · Reduced deforestation pressure</div>
           </div>
         </div>
       </div>
