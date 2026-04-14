@@ -370,6 +370,109 @@ body{background:var(--dark);color:#f0f2f5}
 #imp-export-btn svg{width:13px;height:13px;flex-shrink:0}
 #imp-export-btn.disabled{opacity:.35;pointer-events:none}
 
+/* ── EXPANSION DASHBOARD ── */
+#exp-dash{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#exp-dash.open{transform:translateY(0)}
+.exp-hdr{
+  flex-shrink:0;
+  background:linear-gradient(90deg,rgba(16,185,129,.12),rgba(6,182,212,.06));
+  border-bottom:1px solid rgba(16,185,129,.25);
+  padding:14px 24px;display:flex;align-items:center;justify-content:space-between
+}
+.exp-hdr-left{display:flex;flex-direction:column;gap:2px}
+.exp-title{font-size:15px;font-weight:800;letter-spacing:-.01em;color:#34d399}
+.exp-sub{font-size:10px;color:rgba(240,242,245,.45);margin-top:2px}
+.exp-body{
+  flex:1;min-height:0;overflow-y:auto;
+  padding:20px 24px;
+  display:flex;flex-direction:column;gap:18px
+}
+.exp-body::-webkit-scrollbar{width:4px}
+.exp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.exp-kpi-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;flex-shrink:0
+}
+.exp-kpi{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(16,185,129,.2);
+  border-radius:14px;padding:16px 14px;
+  display:flex;flex-direction:column;gap:3px
+}
+.ek-val{font-size:22px;font-weight:800;color:#34d399;letter-spacing:-.02em;line-height:1}
+.ek-lbl{font-size:11px;font-weight:700;color:rgba(240,242,245,.8);margin-top:4px}
+.ek-sub{font-size:10px;color:rgba(240,242,245,.4);line-height:1.3}
+.exp-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;flex:1
+}
+.exp-col{display:flex;flex-direction:column;gap:16px}
+.exp-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:14px;padding:18px
+}
+.ec-title{
+  font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(240,242,245,.45);margin-bottom:14px
+}
+.ebl-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ebl-lbl{font-size:11px;color:rgba(240,242,245,.65);min-width:170px;flex-shrink:0}
+.ebl-bar{flex:1;height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.ebl-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.ebl-val{font-size:11px;font-weight:700;color:#fff;min-width:44px;text-align:right}
+.ebl-total{
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--border);margin-top:6px;padding-top:10px;
+  font-size:12px;font-weight:800;color:#fff
+}
+.exp-compare{display:grid;grid-template-columns:1fr 28px 1fr;gap:8px;align-items:center}
+.cmp-col{display:flex;flex-direction:column;gap:0}
+.cmp-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(240,242,245,.4);margin-bottom:10px}
+.cmp-val{font-size:20px;font-weight:800;color:rgba(240,242,245,.5);line-height:1}
+.cmp-sub{font-size:10px;color:rgba(240,242,245,.35);margin-top:3px;margin-bottom:8px}
+.cmp-arrow{font-size:22px;color:rgba(240,242,245,.25);text-align:center}
+.pct-badge{background:rgba(16,185,129,.2);color:#34d399;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.exp-targets .et-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:12px;color:rgba(240,242,245,.6)
+}
+.exp-targets .et-row:last-child{border-bottom:none}
+.exp-targets .et-row strong{color:#fff;font-weight:700}
+.exp-geo{width:100%;border-collapse:collapse;font-size:12px}
+.exp-geo th{
+  text-align:left;padding:6px 8px;
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(240,242,245,.35);border-bottom:1px solid var(--border)
+}
+.exp-geo td{
+  padding:9px 8px;border-bottom:1px solid rgba(255,255,255,.04);
+  color:rgba(240,242,245,.75)
+}
+.exp-geo td strong{color:#fff}
+.exp-total-row td{
+  border-top:1px solid rgba(16,185,129,.25);
+  border-bottom:none;
+  color:#34d399!important;padding-top:10px
+}
+.exp-note{
+  font-size:10px;color:rgba(240,242,245,.3);
+  border-top:1px solid var(--border);padding-top:14px;line-height:1.5
+}
+@media(max-width:900px){
+  .exp-kpi-row{grid-template-columns:repeat(3,1fr)}
+  .exp-grid{grid-template-columns:1fr}
+}
+
 /* ── IMPACT CALCULATOR ── */
 #impact{
   position:fixed;inset:0;z-index:2000;
@@ -736,6 +839,10 @@ body{background:var(--dark);color:#f0f2f5}
     <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM7.25 4v4.75H12v-1.5H8.75V4h-1.5z"/></svg>
     Impact
   </button>
+  <button class="glass-btn" id="expansion-btn" style="margin-left:2px;border-color:rgba(16,185,129,.4);color:#34d399">
+    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 14h14v-1.5H1V14zm0-4h9V8.5H1V10zm0-4h6V4.5H1V6zm11-4v8l3-4-3-4z"/></svg>
+    Expansion
+  </button>
 </div>
 
 <!-- Legend -->
@@ -1081,6 +1188,217 @@ body{background:var(--dark);color:#f0f2f5}
     </div>
   </div>
 </div>
+
+<!-- EXPANSION DASHBOARD -->
+<div id="exp-dash">
+  <div class="exp-hdr">
+    <div class="exp-hdr-left">
+      <div class="exp-title">📈 Expansion Plan — Post-Harvest Centre Network</div>
+      <div class="exp-sub">157 New Centres · 37,680 Women · Ghana · Côte d'Ivoire · Togo · Total Investment $15.3M</div>
+    </div>
+    <button class="dash-close" id="exp-close">← Back to Map</button>
+  </div>
+
+  <div class="exp-body">
+
+    <!-- KPI Row -->
+    <div class="exp-kpi-row">
+      <div class="exp-kpi">
+        <div class="ek-val">157</div>
+        <div class="ek-lbl">Centres to Build</div>
+        <div class="ek-sub">New post-harvest processing centres</div>
+      </div>
+      <div class="exp-kpi">
+        <div class="ek-val">$15.3M</div>
+        <div class="ek-lbl">Total Investment</div>
+        <div class="ek-sub">CAPEX + soft costs + management</div>
+      </div>
+      <div class="exp-kpi">
+        <div class="ek-val">37,680</div>
+        <div class="ek-lbl">Women to Reach</div>
+        <div class="ek-sub">31,400 collectors + 6,280 processors</div>
+      </div>
+      <div class="exp-kpi">
+        <div class="ek-val">$9.42M</div>
+        <div class="ek-lbl">Annual Income Generated</div>
+        <div class="ek-sub">Across all roles in the network</div>
+      </div>
+      <div class="exp-kpi">
+        <div class="ek-val">3</div>
+        <div class="ek-lbl">Countries</div>
+        <div class="ek-sub">Ghana · Côte d'Ivoire · Togo</div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="exp-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="exp-col">
+
+        <!-- Investment Breakdown -->
+        <div class="exp-card">
+          <div class="ec-title">Total Investment Breakdown — $15,278,000</div>
+          <div class="exp-bar-list">
+            <div class="ebl-row">
+              <div class="ebl-lbl">CAPEX — Centre Setup (×157)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:51%;background:#10b981"></div></div>
+              <div class="ebl-val">$7.85M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Capacity Building &amp; Logistics</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:24.7%;background:#6366f1"></div></div>
+              <div class="ebl-val">$3.77M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Project Management &amp; Reporting</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:15.1%;background:#f59e0b"></div></div>
+              <div class="ebl-val">$2.31M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Certifications &amp; Digital Traceability</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:2.9%;background:#06b6d4"></div></div>
+              <div class="ebl-val">$0.45M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Communication &amp; Social Media</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:2.9%;background:#8b5cf6"></div></div>
+              <div class="ebl-val">$0.45M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Contingency (3%)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:2.9%;background:#ef4444"></div></div>
+              <div class="ebl-val">$0.45M</div>
+            </div>
+            <div class="ebl-total">
+              <span>Total Investment Required</span>
+              <span>$15,278,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annual Income Generated -->
+        <div class="exp-card">
+          <div class="ec-title">Annual Income Generated — $9,418,010</div>
+          <div class="exp-bar-list">
+            <div class="ebl-row">
+              <div class="ebl-lbl">Women Collectors (31,400)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:84%;background:#22c55e"></div></div>
+              <div class="ebl-val">$7.91M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Nut Processors (6,280)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:13.3%;background:#10b981"></div></div>
+              <div class="ebl-val">$1.26M</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Drivers (471)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:1.1%;background:#6366f1"></div></div>
+              <div class="ebl-val">$98.9K</div>
+            </div>
+            <div class="ebl-row">
+              <div class="ebl-lbl">Bookkeepers &amp; Treasurers (167)</div>
+              <div class="ebl-bar"><div class="ebl-fill" style="width:1.6%;background:#f59e0b"></div></div>
+              <div class="ebl-val">$150.3K</div>
+            </div>
+            <div class="ebl-total">
+              <span>Total Annual Income</span>
+              <span style="color:#4ade80">$9,418,010 / year</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /LEFT -->
+
+      <!-- RIGHT COLUMN -->
+      <div class="exp-col">
+
+        <!-- Collector Impact -->
+        <div class="exp-card">
+          <div class="ec-title">Collector Impact — Individual vs Centre Member</div>
+          <div class="exp-compare">
+            <div class="cmp-col">
+              <div class="cmp-lbl">Before — Individual</div>
+              <div class="cmp-val">20 kg/day</div>
+              <div class="cmp-sub">Fresh nuts collected daily</div>
+              <div class="cmp-val">GHS 4,500</div>
+              <div class="cmp-sub">Revenue per season (42 days)</div>
+              <div class="cmp-val">GHS 20/day</div>
+              <div class="cmp-sub">Minimum daily wage</div>
+            </div>
+            <div class="cmp-arrow">→</div>
+            <div class="cmp-col">
+              <div class="cmp-lbl" style="color:#34d399">After — Coop + Centre</div>
+              <div class="cmp-val" style="color:#34d399">100 kg/day</div>
+              <div class="cmp-sub"><span class="pct-badge">+400%</span></div>
+              <div class="cmp-val" style="color:#34d399">GHS 9,882</div>
+              <div class="cmp-sub"><span class="pct-badge">+120%</span></div>
+              <div class="cmp-val" style="color:#34d399">+1,076% above</div>
+              <div class="cmp-sub">vs minimum daily wage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Production Targets -->
+        <div class="exp-card">
+          <div class="ec-title">Production &amp; Centre Targets</div>
+          <div class="exp-targets">
+            <div class="et-row"><span>Fresh Nuts to Collect</span><strong>33,600 mT</strong></div>
+            <div class="et-row"><span>Dried Kernels to Produce</span><strong>12,000 mT</strong></div>
+            <div class="et-row"><span>Shea Butter to Produce</span><strong>4,000 mT</strong></div>
+            <div class="et-row"><span>Processing Capacity / Centre / Season</span><strong>214.2 mT FN</strong></div>
+            <div class="et-row"><span>Women Processing / Day / Centre</span><strong>60 women</strong></div>
+            <div class="et-row"><span>Setup Cost per Centre (incl. tricycles)</span><strong>$50,000</strong></div>
+            <div class="et-row"><span>Tricycles per Centre</span><strong>3</strong></div>
+          </div>
+        </div>
+
+        <!-- Geographic Breakdown -->
+        <div class="exp-card">
+          <div class="ec-title">Geographic Breakdown — First Mile Modernisation</div>
+          <table class="exp-geo">
+            <thead>
+              <tr><th>Country</th><th>Centres</th><th>Women</th><th>Investment</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🇬🇭 Ghana</td>
+                <td>80</td>
+                <td>19,200</td>
+                <td>$4,000,000</td>
+              </tr>
+              <tr>
+                <td>🇨🇮 Côte d'Ivoire</td>
+                <td>67</td>
+                <td>16,080</td>
+                <td>$3,350,000</td>
+              </tr>
+              <tr>
+                <td>🇹🇬 Togo</td>
+                <td>10</td>
+                <td>2,400</td>
+                <td>$500,000</td>
+              </tr>
+              <tr class="exp-total-row">
+                <td><strong>Total</strong></td>
+                <td><strong>157</strong></td>
+                <td><strong>37,680</strong></td>
+                <td><strong>$7,850,000</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /RIGHT -->
+
+    </div><!-- /exp-grid -->
+
+    <div class="exp-note">
+      Rates based on SGG/SFC Ghana pilot data. Collector revenue calculated at GHS 200/kg fresh nuts, 42-day season. Processor income at GHS 40/day × 50 working days. USD/GHS rate: 10. Investment per centre includes 3 tricycles at $50,000 total.
+    </div>
+
+  </div><!-- /exp-body -->
+</div><!-- /exp-dash -->
 
 <script src="lib/leaflet.js"></script>
 <script src="lib/chart.umd.min.js"></script>
@@ -2137,6 +2455,11 @@ function openImpact(){document.getElementById('impact').classList.add('open');}
 function closeImpact(){document.getElementById('impact').classList.remove('open');}
 document.getElementById('impact-btn').addEventListener('click',openImpact);
 document.getElementById('impact-close').addEventListener('click',closeImpact);
+
+function openExpansion(){document.getElementById('exp-dash').classList.add('open');}
+function closeExpansion(){document.getElementById('exp-dash').classList.remove('open');}
+document.getElementById('expansion-btn').addEventListener('click',openExpansion);
+document.getElementById('exp-close').addEventListener('click',closeExpansion);
 
 // SGG baseline/endline rates — NUTS (per kg dried kernel)
 const NR = {
