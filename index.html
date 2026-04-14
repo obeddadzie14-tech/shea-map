@@ -772,7 +772,7 @@ body{background:var(--dark);color:#f0f2f5}
   <div class="s-pill"><strong>964</strong> t FN 25/26</div>
   <div class="s-pill"><strong>492</strong> t FN 23/24</div>
   <div class="s-pill"><strong>+96%</strong> YoY growth</div>
-  <div class="s-pill"><strong>2,249</strong> women served</div>
+  <div class="s-pill" id="stat-women-served"><strong>—</strong> women served</div>
   <div class="s-pill"><strong>16,184</strong> coop members</div>
 </div>
 
@@ -965,7 +965,7 @@ body{background:var(--dark);color:#f0f2f5}
         <div style="margin-top:6px;font-size:11px;color:rgba(240,242,245,.45)">→ Dried Kernels: <b style="color:rgba(240,242,245,.75)">164 t</b> &nbsp;1,928 bags</div>
       </div>
       <div class="dk"><div class="dv" style="color:#4ade80">+96%</div><div class="dl">YoY FN Growth</div><div class="dd">492 t → 964 t Fresh Nuts</div></div>
-      <div class="dk"><div class="dv" style="color:#f9a8d4">2,249</div><div class="dl">Women Served</div><div class="dd">Across 20 active centres</div></div>
+      <div class="dk"><div class="dv" style="color:#f9a8d4" id="dash-women-served">—</div><div class="dl">Women Served</div><div class="dd">Collectors + processors across centres</div></div>
       <div class="dk"><div class="dv">16,184</div><div class="dl">Coop Members</div><div class="dd">Total across 10 cooperatives</div></div>
     </div>
 
@@ -1749,6 +1749,19 @@ function mkIcon(perf,sel){
   });
 }
 
+// ── Compute dynamic totals ──────────────────────────────────────────────
+(function(){
+  const total=CENTERS.reduce((sum,c)=>{
+    const wc=c.ops.womenColl||0, wp=c.ops.womenProc||0;
+    return sum+(wc+wp);
+  },0);
+  const fmt=total.toLocaleString();
+  const el=document.getElementById('stat-women-served');
+  if(el) el.innerHTML=`<strong>${fmt}</strong> women served`;
+  const el2=document.getElementById('dash-women-served');
+  if(el2) el2.textContent=fmt;
+})();
+
 const mIdx=new Map();
 CENTERS.forEach(c=>{
   const m=L.marker([c.lat,c.lng],{icon:mkIcon(c.performance,false)}).addTo(map);
@@ -1915,7 +1928,9 @@ function renderPanel(c){
     {v:o.stoves,l:'Stoves'},{v:o.drying,l:'Drying Areas'},{v:o.tricycles,l:'Tricycles'}
   ].map(i=>`<div class="infra-cell"><div class="ic-val">${i.v??'—'}</div><div class="ic-lbl">${i.l}</div></div>`).join('');
 
-  setVal('op-wb',o.womenBenef);setVal('op-wc',o.womenColl);setVal('op-wp',o.womenProc);
+  const womenServed=(o.womenColl||0)+(o.womenProc||0);
+  setVal('op-wb', womenServed>0 ? womenServed : null);
+  setVal('op-wc',o.womenColl);setVal('op-wp',o.womenProc);
   const costEl=document.getElementById('op-cost');
   costEl.textContent=o.cost!=null?`USD ${o.cost.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'—';
   costEl.className=o.cost!=null?'kt-val':'kt-val nil';
