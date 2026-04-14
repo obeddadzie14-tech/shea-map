@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SFC Shea Network — Operations Intelligence</title>
+<link rel="preconnect" href="https://basemaps.cartocdn.com"/>
+<link rel="preconnect" href="https://drive.google.com"/>
+<link rel="stylesheet" href="lib/leaflet.css"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#22c55e;--green-bg:#dcfce7;--green-text:#15803d;
+  --red:#ef4444;--red-bg:#fee2e2;--red-text:#dc2626;
+  --amber:#f59e0b;--amber-bg:#fef3c7;--amber-text:#b45309;
+  --dark:#0d0f14;--glass:rgba(13,15,20,.88);--border:rgba(255,255,255,.07);
+  --panel-w:clamp(380px,27vw,660px);--tr:cubic-bezier(.16,1,.3,1)
+}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
+body{background:var(--dark);color:#f0f2f5}
+
+/* MAP */
+#map{position:absolute;inset:0;z-index:0;transition:padding-right .45s var(--tr)}
+#map.panel-open{padding-right:var(--panel-w)}
+
+/* HEADER */
+#header{position:absolute;top:16px;left:16px;z-index:900;background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:11px 16px}
+#header .brand{font-size:13px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+#header .sub{font-size:10px;color:rgba(240,242,245,.5);margin-top:2px}
+
+/* TOP CONTROLS */
+#top-right{position:absolute;top:16px;right:calc(var(--panel-w) + 16px);z-index:900;display:flex;gap:8px;transition:right .45s var(--tr)}
+#top-right.panel-open{right:calc(var(--panel-w) + 16px)}
+.glass-btn{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:600;color:rgba(240,242,245,.85);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.glass-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.glass-btn.active-filter{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.18);color:#fff}
+.glass-btn svg{width:13px;height:13px;flex-shrink:0}
+
+/* LEGEND */
+#legend{position:absolute;top:80px;left:16px;z-index:900;background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:13px 16px;min-width:200px}
+#legend h3{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,242,245,.45);margin-bottom:8px}
+.leg-section{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,242,245,.3);margin:9px 0 6px;padding-top:7px;border-top:1px solid var(--border)}
+.leg-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.leg-row:last-child{margin-bottom:0}
+.leg-pip{width:11px;height:11px;border-radius:50%;border:2px solid rgba(255,255,255,.25);flex-shrink:0}
+.leg-swatch{width:16px;height:10px;border-radius:2px;border:1.5px solid rgba(255,255,255,.18);flex-shrink:0}
+.leg-line{width:18px;height:2px;flex-shrink:0;border-radius:1px}
+.leg-row span{font-size:11.5px;color:rgba(240,242,245,.75)}
+
+/* ATTRIBUTION */
+.leaflet-control-attribution{background:rgba(13,15,20,.72)!important;color:rgba(240,242,245,.35)!important;font-size:9px!important;padding:2px 8px!important;border-radius:6px 0 0 0!important;backdrop-filter:blur(8px)!important}
+.leaflet-control-attribution a{color:rgba(240,242,245,.5)!important}
+
+/* LAYER CONTROL */
+.leaflet-control-layers{background:var(--glass)!important;backdrop-filter:blur(16px)!important;border:1px solid var(--border)!important;border-radius:12px!important;padding:10px 14px!important;min-width:158px}
+.leaflet-control-layers-toggle{background-color:var(--glass)!important;border:1px solid var(--border)!important;border-radius:10px!important;width:30px!important;height:30px!important;background-size:16px!important}
+.leaflet-control-layers-list label{font-size:11.5px!important;color:rgba(240,242,245,.8)!important;display:flex!important;align-items:center!important;gap:7px!important;margin-bottom:5px!important;cursor:pointer}
+.leaflet-control-layers-list input{accent-color:#6366f1;cursor:pointer}
+.leaflet-control-layers-separator{border-top-color:var(--border)!important;margin:7px 0!important}
+.leaflet-control-layers-base span,.leaflet-control-layers-overlays span{color:rgba(240,242,245,.8)!important;font-size:11.5px}
+.leaflet-control-layers-subgroup-name{font-size:9px!important;font-weight:700!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:rgba(240,242,245,.35)!important;padding:4px 0 2px!important}
+
+/* COORD DISPLAY */
+#coords{position:absolute;bottom:66px;right:16px;z-index:900;background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:10.5px;color:rgba(240,242,245,.55);font-family:'SF Mono','Fira Code',monospace;pointer-events:none;transition:right .45s var(--tr)}
+#coords.panel-open{right:calc(var(--panel-w) + 16px)}
+
+/* NORTH ARROW */
+#north{position:absolute;bottom:108px;right:16px;z-index:900;background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:50%;width:34px;height:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;pointer-events:none;transition:right .45s var(--tr)}
+#north.panel-open{right:calc(var(--panel-w) + 16px)}
+.n-arrow{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:12px solid rgba(240,242,245,.7)}
+.n-lbl{font-size:8px;font-weight:800;color:rgba(240,242,245,.55);letter-spacing:.05em}
+
+/* STATS BAR */
+#stats{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:900;display:flex;gap:7px;transition:opacity .3s,transform .3s;white-space:nowrap}
+#stats.hide{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(20px)}
+.s-pill{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:30px;padding:7px 13px;font-size:12px;color:rgba(240,242,245,.75)}
+.s-pill strong{color:#fff;font-weight:700}
+
+/* ── SIDE PANEL ── */
+#panel{
+  position:fixed;top:0;right:0;height:100vh;width:var(--panel-w);
+  background:#fff;z-index:1200;
+  transform:translateX(100%);transition:transform .45s var(--tr);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,.25)
+}
+#panel.open{transform:translateX(0)}
+#panel::-webkit-scrollbar{display:none}
+
+/* Panel top nav */
+.panel-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px 10px;border-bottom:1px solid #f1f2f4;flex-shrink:0
+}
+.nav-arrows{display:flex;align-items:center;gap:6px}
+.nav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid #e5e7eb;background:#fff;color:#374151;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.nav-btn:hover{background:#f9fafb;border-color:#d1d5db}
+.nav-counter{font-size:12px;font-weight:600;color:#6b7280;padding:0 4px}
+.panel-close{width:30px;height:30px;border-radius:50%;border:none;background:#f3f4f6;color:#6b7280;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.panel-close:hover{background:#e5e7eb}
+
+/* Panel hero */
+.panel-hero{padding:14px 18px 12px;border-bottom:1px solid #f1f2f4;flex-shrink:0}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.hero-title h2{font-size:17px;font-weight:800;color:#0d0f14;line-height:1.2;letter-spacing:-.02em}
+.hero-title .coop{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.35}
+.perf-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+.perf-badge.high{background:var(--green-bg);color:var(--green-text)}
+.perf-badge.low{background:var(--red-bg);color:var(--red-text)}
+.perf-badge.expansion{background:var(--amber-bg);color:var(--amber-text)}
+.hero-meta{display:flex;align-items:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+.lot-chip{font-family:'SF Mono','Fira Code',monospace;font-size:11px;font-weight:600;color:#374151;background:#f3f4f6;padding:3px 8px;border-radius:5px}
+.loc-text{font-size:12px;color:#6b7280}
+
+/* Photo strip */
+.photo-strip{
+  display:none;overflow-x:auto;flex-direction:row;gap:8px;
+  padding:10px 16px;border-bottom:1px solid #f1f2f4;
+  flex-shrink:0;background:#f9fafb;white-space:nowrap;
+  scrollbar-width:thin;scrollbar-color:#e5e7eb transparent
+}
+.photo-strip::-webkit-scrollbar{height:3px}
+.photo-strip::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
+.photo-strip.has-images{display:flex}
+.photo-strip img{height:108px;width:auto;min-width:144px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#f1f2f4}
+
+/* Tabs */
+.panel-tabs{display:flex;border-bottom:2px solid #f1f2f4;flex-shrink:0;background:#fff}
+.tab-btn{flex:1;padding:11px 4px;font-size:12px;font-weight:600;color:#9ca3af;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .18s}
+.tab-btn.active{color:#0d0f14;border-bottom-color:#0d0f14}
+
+/* Panel body */
+.panel-body{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.panel-body::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px}
+.tab-pane{display:none;padding:16px 18px}
+.tab-pane.active{display:block}
+
+/* Section label */
+.sec-lbl{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:9px}
+
+/* KPI tiles (2-col grid) */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.kpi-tile{background:#f9fafb;border:1px solid #f1f2f4;border-radius:11px;padding:11px 12px}
+.kpi-tile .kt-lbl{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:4px}
+.kpi-tile .kt-val{font-size:18px;font-weight:800;color:#0d0f14;letter-spacing:-.03em;line-height:1}
+.kpi-tile .kt-sub{font-size:10px;color:#9ca3af;margin-top:3px}
+.kpi-tile .kt-val.nil{font-size:14px;font-weight:400;color:#d1d5db}
+.kpi-tile.span2{grid-column:span 2}
+
+/* Year comparison row */
+.yr-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.yr-tile{border-radius:11px;padding:11px 12px;position:relative}
+.yr-tile.y2526{background:#f0fdf4;border:1px solid #bbf7d0}
+.yr-tile.y2324{background:#eff6ff;border:1px solid #bfdbfe}
+.yr-tile .yt-season{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.yr-tile.y2526 .yt-season{color:#15803d}
+.yr-tile.y2324 .yt-season{color:#1d4ed8}
+.yr-tile .yt-kg{font-size:17px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.yr-tile.y2526 .yt-kg{color:#15803d}
+.yr-tile.y2324 .yt-kg{color:#1d4ed8}
+.yr-tile .yt-bags{font-size:10px;margin-top:3px}
+.yr-tile.y2526 .yt-bags{color:#16a34a}
+.yr-tile.y2324 .yt-bags{color:#2563eb}
+.yr-tile .yt-note{font-size:9px;color:#9ca3af;margin-top:2px}
+.yt-row-lbl{font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-top:8px;margin-bottom:1px}
+.yr-tile.y2526 .yt-row-lbl{color:rgba(21,128,61,.6)}
+.yr-tile.y2324 .yt-row-lbl{color:rgba(29,78,216,.6)}
+.yt-divider{height:1px;margin:8px 0 3px;opacity:.3}
+.yr-tile.y2526 .yt-divider{background:#16a34a}
+.yr-tile.y2324 .yt-divider{background:#2563eb}
+.yt-kg-sm{font-size:13px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.yr-tile.y2526 .yt-kg-sm{color:#15803d}
+.yr-tile.y2324 .yt-kg-sm{color:#1d4ed8}
+.yt-bags-sm{font-size:9.5px;margin-top:2px}
+.yr-tile.y2526 .yt-bags-sm{color:#16a34a}
+.yr-tile.y2324 .yt-bags-sm{color:#2563eb}
+
+/* Progress bar metric */
+.prog-row{margin-bottom:12px}
+.prog-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.prog-lbl{font-size:11px;font-weight:600;color:#374151}
+.prog-val{font-size:11px;font-weight:700;color:#374151}
+.prog-track{height:7px;background:#f1f2f4;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .6s var(--tr)}
+.prog-fill.green{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.prog-fill.red{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.prog-fill.amber{background:linear-gradient(90deg,#f59e0b,#d97706)}
+
+/* Tags */
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+.t-blue{background:#eff6ff;color:#1d4ed8}
+.t-green{background:#f0fdf4;color:#15803d}
+.t-amber{background:#fffbeb;color:#b45309}
+.t-violet{background:#f5f3ff;color:#6d28d9}
+.t-rose{background:#fff1f2;color:#be123c}
+
+/* Community list */
+.comm-item{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #f5f5f7}
+.comm-item:last-child{border-bottom:none}
+.c-pip{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.c-pip.low{background:var(--red)}
+.c-nm{font-size:13px;color:#1f2937;font-weight:500}
+.c-est{margin-left:auto;font-size:11px;color:#9ca3af}
+
+/* Bottleneck alert */
+.alert-box{border-radius:10px;padding:10px 12px;margin-bottom:14px;display:flex;gap:9px;align-items:flex-start}
+.alert-box.warn{background:#fffbeb;border:1px solid #fde68a}
+.alert-box.danger{background:#fef2f2;border:1px solid #fecaca}
+.alert-box.ok{background:#f0fdf4;border:1px solid #bbf7d0}
+.alert-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.alert-text{font-size:12.5px;line-height:1.45;color:#374151}
+.alert-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;margin-bottom:3px}
+
+/* Infra grid */
+.infra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:16px}
+.infra-cell{background:#f9fafb;border-radius:10px;padding:9px 10px;text-align:center}
+.infra-cell .ic-val{font-size:18px;font-weight:800;color:#0d0f14}
+.infra-cell .ic-lbl{font-size:10px;color:#9ca3af;margin-top:2px}
+
+/* Profile grid */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid #f1f2f4;border-radius:11px;overflow:hidden;margin-bottom:16px}
+.pg-cell{padding:9px 12px;border-bottom:1px solid #f1f2f4}
+.pg-cell:nth-child(odd){border-right:1px solid #f1f2f4}
+.pg-cell:nth-last-child(-n+2){border-bottom:none}
+.pg-lbl{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9ca3af;margin-bottom:2px}
+.pg-val{font-size:12.5px;font-weight:600;color:#1f2937}
+
+/* Highlight quote */
+.hl-block{background:#f8f9ff;border-left:3px solid #818cf8;border-radius:0 10px 10px 0;padding:11px 13px;margin-bottom:16px}
+.hl-lbl{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:5px}
+.hl-txt{font-size:12.5px;color:#4b5563;line-height:1.55}
+
+/* Insight row */
+.ins-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px}
+.ins-ic{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;margin-top:1px}
+.ins-ic.good{background:#dcfce7;color:#15803d}
+.ins-ic.warn{background:#fef3c7;color:#b45309}
+.ins-ic.bad{background:#fee2e2;color:#dc2626}
+.ins-txt{font-size:12.5px;color:#374151;line-height:1.45}
+
+/* Divider */
+.div{height:1px;background:#f1f2f4;margin-bottom:14px}
+
+/* ── DASHBOARD (compact, one screen) ── */
+#dash{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#dash.open{transform:translateY(0)}
+
+.dash-header{
+  flex-shrink:0;
+  position:relative;z-index:10;
+  background:var(--dark);border-bottom:1px solid var(--border);
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between
+}
+.dash-title{font-size:14px;font-weight:800;letter-spacing:-.01em}
+.dash-subtitle{font-size:10px;color:rgba(240,242,245,.5);margin-top:2px}
+.dash-close{background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:rgba(240,242,245,.8);cursor:pointer;transition:all .15s}
+.dash-close:hover{background:rgba(255,255,255,.14)}
+
+.dash-body{
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  padding:12px 18px 14px;
+  gap:10px;
+  overflow:hidden
+}
+
+/* KPI row */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0}
+.dk{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+.dk .dv{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1}
+.dk .dl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,242,245,.45);margin-top:5px}
+.dk .dd{font-size:10px;color:rgba(240,242,245,.5);margin-top:2px}
+
+/* Charts area */
+.charts-flex{flex:1;min-height:0;display:grid;grid-template-columns:1fr clamp(320px,25vw,540px);gap:10px}
+.cc{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.cc-title{font-size:11px;font-weight:700;color:rgba(240,242,245,.9);margin-bottom:2px;flex-shrink:0}
+.cc-sub{font-size:9.5px;color:rgba(240,242,245,.4);margin-bottom:12px;flex-shrink:0}
+.cc canvas{flex:1;min-height:0;display:block}
+.right-col{display:flex;flex-direction:column;gap:10px;min-height:0}
+.right-col .donut-card{flex:0 0 clamp(200px,17vw,330px)}
+.right-col .table-card{flex:1;min-height:0;overflow:hidden}
+.table-scroll{overflow-y:auto;height:100%}
+.table-scroll::-webkit-scrollbar{width:3px}
+.table-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+/* Bottleneck table */
+.bn-table{width:100%;border-collapse:collapse}
+.bn-table th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(240,242,245,.4);text-align:left;padding:6px 10px;border-bottom:1px solid var(--border)}
+.bn-table td{font-size:11.5px;color:rgba(240,242,245,.8);padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.bn-table tr:last-child td{border-bottom:none}
+.bn-badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:9.5px;font-weight:700}
+.bn-badge.high{background:rgba(34,197,94,.15);color:#4ade80}
+.bn-badge.low{background:rgba(239,68,68,.15);color:#f87171}
+.bn-badge.expansion{background:rgba(245,158,11,.15);color:#fbbf24}
+
+/* ── PRINT / PDF EXPORT ── */
+@media print {
+  @page{margin:12mm 14mm;size:A4}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,
+  .imp-input,#impact-close,#imp-export-btn{display:none!important}
+  body,html{background:#fff!important;height:auto!important;overflow:visible!important}
+  #impact{position:static!important;transform:none!important;background:#fff!important;
+    height:auto!important;overflow:visible!important;z-index:0!important}
+  .imp-header{background:#1a2744!important;color:#fff!important;padding:14px 20px!important;
+    border-radius:0!important;border:none!important;-webkit-print-color-adjust:exact!important}
+  .imp-title{color:#fff!important;font-size:16px!important}
+  .imp-subtitle{color:rgba(255,255,255,.7)!important}
+  .imp-body{display:block!important;height:auto!important;overflow:visible!important}
+  .imp-results{overflow:visible!important;height:auto!important;padding:14px 18px!important}
+  #imp-print-header{display:block!important}
+  .imp-row{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;page-break-inside:avoid}
+  .imp-row.three{grid-template-columns:repeat(3,1fr)!important}
+  .imp-card{background:#f3f4f6!important;border:1px solid #d1d5db!important;border-radius:10px!important;padding:10px 12px!important;page-break-inside:avoid}
+  .imp-card.highlight{background:#f0fdf4!important;border-color:#86efac!important}
+  .imp-card.warn-card{background:#fffbeb!important;border-color:#fde68a!important}
+  .ic-val{color:#111827!important;font-size:20px!important}
+  .ic-val.green{color:#15803d!important}
+  .ic-val.red{color:#dc2626!important}
+  .ic-val.blue{color:#1d4ed8!important}
+  .ic-val.amber{color:#b45309!important}
+  .ic-lbl{color:#6b7280!important}
+  .ic-sub{color:#9ca3af!important}
+  .ic-bar{background:#e5e7eb!important}
+  .ic-bar-fill.g{background:#22c55e!important}
+  .ic-bar-fill.b{background:#6366f1!important}
+  .ic-bar-fill.a{background:#f59e0b!important}
+  .bve-col.baseline .bve-val{color:#dc2626!important}
+  .bve-col.endline .bve-val{color:#15803d!important}
+  .bve-col .bve-lbl{color:#9ca3af!important}
+  .bve-saving.pos{color:#15803d!important}
+  .bve-saving.neg{color:#b45309!important}
+  .bve-arrow{color:#d1d5db!important}
+  .imp-divider{color:#374151!important;border-bottom-color:#d1d5db!important;font-size:9px!important}
+  .imp-empty{display:none!important}
+}
+
+/* Print-only header (hidden on screen) */
+#imp-print-header{
+  display:none;
+  background:#1a2744;color:#fff;
+  padding:10px 18px 12px;margin-bottom:14px;border-radius:8px;
+  font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif
+}
+#imp-print-header .iph-title{font-size:13px;font-weight:800;letter-spacing:-.01em}
+#imp-print-header .iph-meta{font-size:10px;color:rgba(255,255,255,.6);margin-top:3px}
+#imp-print-header .iph-inputs{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+#imp-print-header .iph-inp{background:rgba(255,255,255,.12);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600}
+#imp-print-header .iph-inp span{color:rgba(255,255,255,.55);font-weight:400;margin-right:4px}
+
+/* Export button */
+#imp-export-btn{
+  background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);
+  border-radius:9px;padding:7px 14px;font-size:11px;font-weight:700;
+  color:#fbbf24;cursor:pointer;display:flex;align-items:center;gap:6px;
+  transition:all .15s;letter-spacing:.02em
+}
+#imp-export-btn:hover{background:rgba(245,158,11,.25);color:#fde68a}
+#imp-export-btn svg{width:13px;height:13px;flex-shrink:0}
+#imp-export-btn.disabled{opacity:.35;pointer-events:none}
+
+/* ── IMPACT CALCULATOR ── */
+#impact{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#impact.open{transform:translateY(0)}
+
+.imp-header{
+  flex-shrink:0;
+  background:var(--dark);border-bottom:1px solid var(--border);
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between
+}
+.imp-title{font-size:14px;font-weight:800;letter-spacing:-.01em}
+.imp-subtitle{font-size:10px;color:rgba(240,242,245,.5);margin-top:2px}
+
+.imp-body{
+  flex:1;min-height:0;
+  display:grid;grid-template-columns:clamp(280px,22vw,480px) 1fr;
+  gap:0;overflow:hidden
+}
+
+/* Left: Input panel */
+.imp-input{
+  background:rgba(255,255,255,.03);
+  border-right:1px solid var(--border);
+  padding:20px 18px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:18px
+}
+.imp-input::-webkit-scrollbar{width:3px}
+.imp-input::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+.inp-section{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:14px;padding:16px
+}
+.inp-section h3{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,242,245,.45);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.inp-section h3 span{font-size:18px}
+
+.inp-field{margin-bottom:14px}
+.inp-field:last-child{margin-bottom:0}
+.inp-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(240,242,245,.4);margin-bottom:6px}
+.inp-wrap{position:relative}
+.inp-wrap input{
+  width:100%;padding:11px 14px 11px 14px;
+  background:rgba(255,255,255,.06);border:1.5px solid var(--border);
+  border-radius:10px;color:#fff;font-size:18px;font-weight:700;
+  font-family:inherit;outline:none;
+  transition:border-color .2s,box-shadow .2s
+}
+.inp-wrap input:focus{border-color:rgba(99,102,241,.6);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.inp-wrap input::placeholder{color:rgba(240,242,245,.2);font-weight:400;font-size:14px}
+.inp-unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:rgba(240,242,245,.35);pointer-events:none}
+
+.inp-hint{font-size:10px;color:rgba(240,242,245,.3);margin-top:6px;line-height:1.4}
+
+.inp-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.inp-quick button{
+  padding:5px 10px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:rgba(240,242,245,.6);
+  font-size:10px;font-weight:600;cursor:pointer;transition:all .15s
+}
+.inp-quick button:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* Right: Results */
+.imp-results{
+  padding:18px 22px;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:14px
+}
+.imp-results::-webkit-scrollbar{width:3px}
+.imp-results::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+.imp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.imp-row.three{grid-template-columns:repeat(3,1fr)}
+
+.imp-card{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:14px;padding:14px 16px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s
+}
+.imp-card.highlight{border-color:rgba(34,197,94,.3)}
+.imp-card.warn-card{border-color:rgba(245,158,11,.3)}
+.imp-card .ic-icon{font-size:22px;margin-bottom:6px}
+.imp-card .ic-val{font-size:26px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1;transition:all .35s}
+.imp-card .ic-val.green{color:#4ade80}
+.imp-card .ic-val.red{color:#f87171}
+.imp-card .ic-val.blue{color:#60a5fa}
+.imp-card .ic-val.amber{color:#fbbf24}
+.imp-card .ic-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,242,245,.4);margin-top:6px}
+.imp-card .ic-sub{font-size:10px;color:rgba(240,242,245,.45);margin-top:3px;line-height:1.35}
+
+.imp-card .ic-bar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin-top:10px;overflow:hidden}
+.imp-card .ic-bar-fill{height:100%;border-radius:3px;transition:width .6s var(--tr)}
+.ic-bar-fill.g{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.ic-bar-fill.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.ic-bar-fill.b{background:linear-gradient(90deg,#6366f1,#818cf8)}
+.ic-bar-fill.a{background:linear-gradient(90deg,#f59e0b,#d97706)}
+
+.imp-divider{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(240,242,245,.25);padding:4px 0;
+  border-bottom:1px solid var(--border);margin-bottom:0
+}
+
+.imp-bve{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center
+}
+.bve-col{text-align:center}
+.bve-col .bve-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,242,245,.3);margin-bottom:4px}
+.bve-col .bve-val{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.bve-col.baseline .bve-val{color:#f87171}
+.bve-col.endline .bve-val{color:#4ade80}
+.bve-arrow{font-size:20px;color:rgba(240,242,245,.2)}
+.bve-saving{text-align:center;font-size:11px;font-weight:700;margin-top:4px}
+.bve-saving.pos{color:#4ade80}
+.bve-saving.neg{color:#fbbf24}
+
+.imp-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;color:rgba(240,242,245,.2);text-align:center;gap:16px
+}
+.imp-empty .ee-icon{font-size:60px;opacity:.3}
+.imp-empty .ee-text{font-size:14px;font-weight:600;max-width:280px;line-height:1.5}
+
+/* ── RESPONSIVE SCALING ── */
+
+/* 1440px — large laptop / external monitor */
+@media (min-width:1440px){
+  #header .brand{font-size:15px}
+  #header .sub{font-size:11px}
+  .glass-btn{font-size:13px;padding:10px 16px}
+  .s-pill{font-size:13px;padding:8px 16px}
+  .dk .dv{font-size:26px}
+  .dk .dl{font-size:10px}
+  .imp-card .ic-val{font-size:28px}
+}
+
+/* 1920px — HD monitor / projector */
+@media (min-width:1920px){
+  #header{padding:14px 20px;border-radius:16px}
+  #header .brand{font-size:17px;gap:10px}
+  .brand-dot{width:10px;height:10px}
+  #header .sub{font-size:13px}
+  .glass-btn{font-size:14px;padding:12px 20px;border-radius:12px;gap:8px}
+  .glass-btn svg{width:16px;height:16px}
+  .s-pill{font-size:14px;padding:9px 18px}
+  #legend{padding:18px 22px;min-width:250px;border-radius:16px}
+  #legend h3{font-size:11px}
+  .leg-section{font-size:11px}
+  .leg-row span{font-size:14px}
+  .leg-pip{width:14px;height:14px}
+  .leg-swatch{width:20px;height:13px}
+
+  /* Dashboard */
+  .dash-header{padding:18px 32px}
+  .dash-title{font-size:20px}
+  .dash-subtitle{font-size:13px}
+  .dash-body{padding:18px 28px 20px;gap:16px}
+  .kpi-row{gap:14px}
+  .dk{padding:18px 24px;border-radius:16px}
+  .dk .dv{font-size:34px}
+  .dk .dl{font-size:12px;margin-top:6px}
+  .dk .dd{font-size:13px}
+  .cc{padding:18px 22px}
+  .cc-title{font-size:14px}
+  .cc-sub{font-size:12px;margin-bottom:16px}
+  .bn-table th{font-size:12px;padding:8px 14px}
+  .bn-table td{font-size:14px;padding:9px 14px}
+  .bn-badge{font-size:12px;padding:3px 10px}
+
+  /* Impact calculator */
+  .imp-header{padding:18px 32px}
+  .imp-title{font-size:20px}
+  .imp-subtitle{font-size:13px}
+  .imp-input{padding:28px 26px;gap:24px}
+  .inp-section{padding:20px;border-radius:18px}
+  .inp-section h3{font-size:13px;margin-bottom:14px}
+  .inp-section h3 span{font-size:20px}
+  .inp-label{font-size:12px}
+  .inp-wrap input{font-size:22px;padding:14px 18px;border-radius:12px}
+  .inp-hint{font-size:12px}
+  .inp-quick button{font-size:12px;padding:7px 14px;border-radius:10px}
+  .imp-results{padding:26px 32px;gap:20px}
+  .imp-row{gap:14px}
+  .imp-card{padding:18px 22px;border-radius:18px}
+  .imp-card .ic-icon{font-size:26px;margin-bottom:8px}
+  .imp-card .ic-val{font-size:36px}
+  .imp-card .ic-lbl{font-size:11px;margin-top:8px}
+  .imp-card .ic-sub{font-size:12px;margin-top:5px}
+  .imp-card .ic-bar{height:6px;margin-top:14px}
+  .bve-col .bve-lbl{font-size:11px;margin-bottom:6px}
+  .bve-col .bve-val{font-size:26px}
+  .bve-arrow{font-size:26px}
+  .bve-saving{font-size:14px;margin-top:6px}
+  .imp-divider{font-size:12px;padding:5px 0}
+  .imp-empty .ee-icon{font-size:80px}
+  .imp-empty .ee-text{font-size:17px;max-width:340px}
+  #imp-export-btn{font-size:13px;padding:9px 18px;border-radius:11px}
+  #imp-export-btn svg{width:15px;height:15px}
+
+  /* Side panel */
+  .hero-title h2{font-size:21px}
+  .hero-title .coop{font-size:14px}
+  .perf-badge{font-size:13px;padding:5px 13px}
+  .tab-btn{font-size:14px;padding:14px 4px}
+  .sec-lbl{font-size:11px;margin-bottom:11px}
+  .kpi-tile .kt-lbl{font-size:11px}
+  .kpi-tile .kt-val{font-size:22px}
+  .kpi-tile .kt-sub{font-size:12px}
+  .yr-tile .yt-season{font-size:11px}
+  .yr-tile .yt-kg{font-size:22px}
+  .yt-kg-sm{font-size:17px}
+  .yr-tile .yt-bags{font-size:13px}
+  .yt-bags-sm{font-size:12px}
+  .yt-row-lbl{font-size:10px}
+  .prog-lbl,.prog-val{font-size:13px}
+  .alert-text{font-size:14px}
+  .c-nm{font-size:15px}
+  .pg-val{font-size:14px}
+  .hl-txt{font-size:14px}
+  .ins-txt{font-size:14px}
+}
+
+/* 2560px — 2K / large projector */
+@media (min-width:2560px){
+  #header{padding:18px 26px;border-radius:20px}
+  #header .brand{font-size:22px;gap:12px}
+  .brand-dot{width:12px;height:12px}
+  #header .sub{font-size:16px;margin-top:4px}
+  .glass-btn{font-size:17px;padding:15px 26px;border-radius:15px;gap:10px}
+  .glass-btn svg{width:20px;height:20px}
+  .s-pill{font-size:17px;padding:11px 22px;border-radius:40px}
+  #legend{padding:22px 26px;min-width:300px;border-radius:20px}
+  #legend h3{font-size:13px;margin-bottom:12px}
+  .leg-section{font-size:13px;padding-top:10px;margin:12px 0 8px}
+  .leg-row span{font-size:17px}
+  .leg-row{gap:12px;margin-bottom:8px}
+  .leg-pip{width:18px;height:18px}
+  .leg-swatch{width:24px;height:16px}
+
+  /* Dashboard */
+  .dash-header{padding:24px 44px}
+  .dash-title{font-size:26px}
+  .dash-subtitle{font-size:17px;margin-top:4px}
+  .dash-body{padding:24px 36px 28px;gap:22px}
+  .kpi-row{gap:20px}
+  .dk{padding:24px 32px;border-radius:20px}
+  .dk .dv{font-size:48px}
+  .dk .dl{font-size:14px;margin-top:8px;letter-spacing:.1em}
+  .dk .dd{font-size:16px;margin-top:4px}
+  .cc{padding:24px 30px;border-radius:16px}
+  .cc-title{font-size:18px;margin-bottom:4px}
+  .cc-sub{font-size:15px;margin-bottom:20px}
+  .bn-table th{font-size:15px;padding:10px 18px}
+  .bn-table td{font-size:18px;padding:12px 18px}
+  .bn-badge{font-size:14px;padding:4px 13px;border-radius:24px}
+  .charts-flex{gap:16px}
+
+  /* Impact calculator */
+  .imp-header{padding:24px 44px}
+  .imp-title{font-size:26px}
+  .imp-subtitle{font-size:17px;margin-top:4px}
+  .imp-input{padding:36px 32px;gap:32px}
+  .inp-section{padding:26px;border-radius:22px}
+  .inp-section h3{font-size:17px;margin-bottom:18px;gap:12px}
+  .inp-section h3 span{font-size:26px}
+  .inp-label{font-size:15px;margin-bottom:8px}
+  .inp-wrap input{font-size:30px;padding:18px 22px;border-radius:15px}
+  .inp-unit{font-size:14px;right:16px}
+  .inp-hint{font-size:14px;margin-top:8px}
+  .inp-quick button{font-size:14px;padding:9px 18px;border-radius:12px}
+  .imp-results{padding:34px 44px;gap:26px}
+  .imp-row{gap:20px}
+  .imp-card{padding:24px 28px;border-radius:22px}
+  .imp-card .ic-icon{font-size:34px;margin-bottom:12px}
+  .imp-card .ic-val{font-size:50px}
+  .imp-card .ic-lbl{font-size:14px;margin-top:12px;letter-spacing:.1em}
+  .imp-card .ic-sub{font-size:15px;margin-top:7px}
+  .imp-card .ic-bar{height:8px;margin-top:20px}
+  .bve-col .bve-lbl{font-size:13px;margin-bottom:8px}
+  .bve-col .bve-val{font-size:36px}
+  .bve-arrow{font-size:36px}
+  .bve-saving{font-size:17px;margin-top:8px}
+  .imp-bve{gap:18px}
+  .imp-divider{font-size:15px;padding:7px 0}
+  .imp-empty .ee-icon{font-size:110px}
+  .imp-empty .ee-text{font-size:22px;max-width:400px}
+  #imp-export-btn{font-size:16px;padding:11px 24px;border-radius:14px;gap:9px}
+  #imp-export-btn svg{width:18px;height:18px}
+
+  /* Side panel */
+  .hero-title h2{font-size:28px}
+  .hero-title .coop{font-size:17px;margin-top:5px}
+  .perf-badge{font-size:16px;padding:7px 16px}
+  .tab-btn{font-size:17px;padding:18px 4px}
+  .sec-lbl{font-size:13px;margin-bottom:14px;letter-spacing:.12em}
+  .kpi-tile .kt-lbl{font-size:13px}
+  .kpi-tile .kt-val{font-size:30px}
+  .kpi-tile .kt-sub{font-size:14px}
+  .kpi-tile{padding:15px 16px;border-radius:14px}
+  .yr-tile{padding:15px 16px;border-radius:14px}
+  .yr-tile .yt-season{font-size:13px}
+  .yr-tile .yt-kg{font-size:30px}
+  .yt-kg-sm{font-size:22px}
+  .yr-tile .yt-bags{font-size:16px}
+  .yt-bags-sm{font-size:15px}
+  .yt-row-lbl{font-size:12px}
+  .prog-lbl,.prog-val{font-size:16px}
+  .prog-track{height:10px;border-radius:6px}
+  .alert-text{font-size:17px}
+  .c-nm{font-size:18px}
+  .pg-val{font-size:17px}
+  .pg-lbl{font-size:12px}
+  .hl-txt{font-size:17px;line-height:1.6}
+  .ins-txt{font-size:17px}
+  .ins-ic{width:24px;height:24px;font-size:12px}
+}
+
+/* Map controls */
+.leaflet-control-zoom{border:none!important;box-shadow:none!important}
+.leaflet-control-zoom a{background:var(--glass)!important;backdrop-filter:blur(16px)!important;color:#f0f2f5!important;border:1px solid var(--border)!important;border-radius:10px!important;margin-bottom:4px!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .15s!important}
+.leaflet-control-zoom a:hover{background:rgba(255,255,255,.12)!important}
+/* Tooltips for overlays */
+.zone-tip,.protect-tip,.crema-tip,.dist-tip{background:rgba(13,15,20,.88)!important;border:1px solid rgba(255,255,255,.1)!important;color:#e5e7eb!important;font-size:11px!important;padding:4px 9px!important;border-radius:6px!important;font-weight:600!important;box-shadow:0 2px 8px rgba(0,0,0,.4)!important}
+.protect-tip{border-color:rgba(34,197,94,.4)!important;color:#4ade80!important}
+.crema-tip{border-color:rgba(245,158,11,.4)!important;color:#fbbf24!important}
+.dist-tip{border-color:rgba(148,163,184,.3)!important;color:#cbd5e1!important}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Header -->
+<div id="header">
+  <div class="brand"><div class="brand-dot"></div>SFC Shea Network</div>
+  <div class="sub">Post-Harvest Intelligence · Northern Ghana · 2023–24 &amp; 2025–26</div>
+</div>
+
+<!-- Top-right controls -->
+<div id="top-right">
+  <button class="glass-btn active-filter" data-filter="all">All Centres</button>
+  <button class="glass-btn" data-filter="high">
+    <svg viewBox="0 0 8 8" fill="#22c55e"><circle cx="4" cy="4" r="4"/></svg>High
+  </button>
+  <button class="glass-btn" data-filter="low">
+    <svg viewBox="0 0 8 8" fill="#ef4444"><circle cx="4" cy="4" r="4"/></svg>Low
+  </button>
+  <button class="glass-btn" data-filter="expansion">
+    <svg viewBox="0 0 8 8" fill="#f59e0b"><circle cx="4" cy="4" r="4"/></svg>Expansion
+  </button>
+  <button class="glass-btn" id="dash-btn" style="margin-left:4px;border-color:rgba(99,102,241,.4);color:#a5b4fc">
+    <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+    Dashboard
+  </button>
+  <button class="glass-btn" id="impact-btn" style="margin-left:2px;border-color:rgba(245,158,11,.4);color:#fbbf24">
+    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM7.25 4v4.75H12v-1.5H8.75V4h-1.5z"/></svg>
+    Impact
+  </button>
+</div>
+
+<!-- Legend -->
+<div id="legend">
+  <h3>Map Legend</h3>
+  <div class="leg-section">Centre Performance</div>
+  <div class="leg-row"><div class="leg-pip" style="background:#22c55e"></div><span>High Performance Centre</span></div>
+  <div class="leg-row"><div class="leg-pip" style="background:#ef4444"></div><span>Low Performance Centre</span></div>
+  <div class="leg-row"><div class="leg-pip" style="background:#f59e0b"></div><span>Planned Expansion Site</span></div>
+  <div class="leg-section">Collection Areas</div>
+  <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>High Performance Zone</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:rgba(239,68,68,.13);border-color:#ef4444;border-style:dashed"></div><span>Low Performance Zone</span></div>
+  <div class="leg-section">Protected Areas</div>
+  <div class="leg-row"><div class="leg-swatch" style="background:rgba(20,83,45,.55);border-color:#16a34a"></div><span>National Park / Reserve</span></div>
+  <div class="leg-section">Administrative (toggle)</div>
+  <div class="leg-row">
+    <div style="display:flex;gap:2px;align-items:center">
+      <div style="width:8px;height:12px;background:#ef4444;border-radius:1px"></div>
+      <div style="width:8px;height:12px;background:#3b82f6;border-radius:1px"></div>
+      <div style="width:8px;height:12px;background:#22c55e;border-radius:1px"></div>
+    </div>
+    <span>District Boundary</span>
+  </div>
+</div>
+
+<!-- Coordinate display -->
+<div id="coords">0.000°N  0.000°E</div>
+
+<!-- North arrow -->
+<div id="north"><div class="n-arrow"></div><div class="n-lbl">N</div></div>
+
+<!-- Stats -->
+<div id="stats">
+  <div class="s-pill"><strong>964</strong> t FN 25/26</div>
+  <div class="s-pill"><strong>492</strong> t FN 23/24</div>
+  <div class="s-pill"><strong>+96%</strong> YoY growth</div>
+  <div class="s-pill"><strong>16,184</strong> women</div>
+</div>
+
+<!-- Side Panel -->
+<div id="panel">
+  <div class="panel-topbar">
+    <div class="nav-arrows">
+      <button class="nav-btn" id="btn-prev">&#8592;</button>
+      <span class="nav-counter" id="nav-ctr">1 / 20</span>
+      <button class="nav-btn" id="btn-next">&#8594;</button>
+    </div>
+    <button class="panel-close" id="panel-close">&times;</button>
+  </div>
+
+  <div class="panel-hero">
+    <div class="hero-top">
+      <div class="hero-title">
+        <h2 id="p-name">—</h2>
+        <div class="coop" id="p-coop">—</div>
+      </div>
+      <div class="perf-badge" id="p-badge">—</div>
+    </div>
+    <div class="hero-meta">
+      <span class="lot-chip" id="p-id">—</span>
+      <span class="loc-text" id="p-loc">—</span>
+    </div>
+  </div>
+
+  <!-- Photo strip -->
+  <div class="photo-strip" id="p-photos"></div>
+
+  <div class="panel-tabs">
+    <button class="tab-btn" data-tab="overview">Overview</button>
+    <button class="tab-btn active" data-tab="operations">Operations</button>
+    <button class="tab-btn" data-tab="profile">Profile</button>
+  </div>
+
+  <div class="panel-body">
+    <!-- OVERVIEW TAB -->
+    <div class="tab-pane" id="tab-overview">
+      <div class="sec-lbl" style="margin-top:4px">Season Comparison · FN → Dried Kernels</div>
+      <div class="yr-compare">
+        <div class="yr-tile y2526">
+          <div class="yt-season">2025 / 26</div>
+          <div class="yt-row-lbl">🌰 Fresh Nuts</div>
+          <div class="yt-kg" id="ov-fn2526">—</div>
+          <div class="yt-bags" id="ov-fnbags2526">—</div>
+          <div class="yt-divider"></div>
+          <div class="yt-row-lbl">⚗ Dried Kernels</div>
+          <div class="yt-kg-sm" id="ov-dry2526">—</div>
+          <div class="yt-bags-sm" id="ov-drybags2526">—</div>
+        </div>
+        <div class="yr-tile y2324">
+          <div class="yt-season">2023 / 24</div>
+          <div class="yt-row-lbl">🌰 Fresh Nuts</div>
+          <div class="yt-kg" id="ov-fn2324">—</div>
+          <div class="yt-bags" id="ov-fnbags2324">—</div>
+          <div class="yt-divider"></div>
+          <div class="yt-row-lbl">⚗ Dried Kernels</div>
+          <div class="yt-kg-sm" id="ov-dry2324">—</div>
+          <div class="yt-bags-sm" id="ov-drybags2324">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="margin-bottom:16px">
+        <div class="kpi-tile span2">
+          <div class="kt-lbl">Fresh Nuts Growth — 2025/26 vs 2023/24</div>
+          <div class="kt-val" id="ov-yoy">—</div>
+          <div class="kt-sub">Year on year</div>
+        </div>
+      </div>
+
+      <div class="sec-lbl">Network Position (KG)</div>
+      <div id="prog-section">
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Fresh Nuts 2025/26 vs Network Max (163,455 kg)</span><span class="prog-val" id="pr-bags-val">—</span></div>
+          <div class="prog-track"><div class="prog-fill green" id="pr-bags" style="width:0%"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Dried KG vs Network Max (53,125 kg)</span><span class="prog-val" id="pr-dry-val">—</span></div>
+          <div class="prog-track"><div class="prog-fill green" id="pr-dry" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+      <div class="sec-lbl">Tags</div>
+      <div class="tags-row" id="p-tags"></div>
+
+      <div class="div"></div>
+      <div class="sec-lbl">Processing Communities</div>
+      <div id="p-communities"></div>
+    </div>
+
+    <!-- OPERATIONS TAB -->
+    <div class="tab-pane active" id="tab-operations">
+      <div class="sec-lbl" style="margin-top:4px">Bottleneck</div>
+      <div id="p-bottleneck-box" class="alert-box warn">
+        <span class="alert-icon">⚠</span>
+        <div><div class="alert-lbl">Ops Team Note</div><div class="alert-text" id="p-bottleneck">—</div></div>
+      </div>
+
+      <div class="sec-lbl">Infrastructure (Per Centre)</div>
+      <div class="infra-grid" id="p-infra"></div>
+
+      <div class="sec-lbl">Workforce</div>
+      <div class="kpi-grid">
+        <div class="kpi-tile">
+          <div class="kt-lbl">Women Collectors</div>
+          <div class="kt-val" id="op-wc">—</div>
+          <div class="kt-sub">supplying FN</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kt-lbl">Processors / Day</div>
+          <div class="kt-val" id="op-wp">—</div>
+          <div class="kt-sub">at centre</div>
+        </div>
+      </div>
+
+      <div class="sec-lbl">Operational Cost (Season)</div>
+      <div class="kpi-tile span2" id="op-cost-tile" style="margin-bottom:16px">
+        <div class="kt-lbl">Actual Centre Cost</div>
+        <div class="kt-val" id="op-cost">—</div>
+        <div class="kt-sub">Operating Cost</div>
+      </div>
+
+      <div class="sec-lbl">2025/26 Volume Detail</div>
+      <div class="kpi-grid">
+        <div class="kpi-tile">
+          <div class="kt-lbl">FN (Fresh Nuts)</div>
+          <div class="kt-val" id="op-fn-kg">—</div>
+          <div class="kt-sub" id="op-fn-bags">—</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kt-lbl">Dried Nuts (Kernel)</div>
+          <div class="kt-val" id="op-dn-kg">—</div>
+          <div class="kt-sub" id="op-dn-bags">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="tab-pane" id="tab-profile">
+      <div class="sec-lbl" style="margin-top:4px">Cooperative Profile</div>
+      <div class="profile-grid">
+        <div class="pg-cell"><div class="pg-lbl">Founded</div><div class="pg-val" id="pp-founded">—</div></div>
+        <div class="pg-cell"><div class="pg-lbl">SFC Partner Since</div><div class="pg-val" id="pp-sfc">—</div></div>
+        <div class="pg-cell"><div class="pg-lbl">Secretary</div><div class="pg-val" id="pp-sec">—</div></div>
+        <div class="pg-cell"><div class="pg-lbl">Magazia</div><div class="pg-val" id="pp-mag">—</div></div>
+        <div class="pg-cell"><div class="pg-lbl">Total Members</div><div class="pg-val" id="pp-mem">—</div></div>
+        <div class="pg-cell"><div class="pg-lbl">Capacity</div><div class="pg-val" id="pp-cap">—</div></div>
+      </div>
+
+      <div class="sec-lbl">Operational Insights</div>
+      <div id="p-insights" style="margin-bottom:16px"></div>
+
+      <div class="sec-lbl">Cooperative Highlight</div>
+      <div class="hl-block">
+        <div class="hl-lbl">Field Story</div>
+        <div class="hl-txt" id="p-highlight">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Network Intelligence Dashboard</div>
+      <div class="dash-subtitle">SFC Shea Post-Harvest · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">⚡ Impact</button>
+      <button class="dash-close" id="dash-close">🗺 View Map</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="kpi-row">
+      <div class="dk">
+        <div class="dv">964 t</div><div class="dl">Fresh Nuts 2025–26</div><div class="dd">11,342 bags × 85 kg</div>
+        <div style="margin-top:6px;font-size:11px;color:rgba(240,242,245,.45)">→ Dried Kernels: <b style="color:rgba(240,242,245,.75)">323 t</b> &nbsp;3,802 bags</div>
+      </div>
+      <div class="dk">
+        <div class="dv">492 t</div><div class="dl">Fresh Nuts 2023–24</div><div class="dd">5,784 bags × 85 kg</div>
+        <div style="margin-top:6px;font-size:11px;color:rgba(240,242,245,.45)">→ Dried Kernels: <b style="color:rgba(240,242,245,.75)">164 t</b> &nbsp;1,928 bags</div>
+      </div>
+      <div class="dk"><div class="dv" style="color:#4ade80">+96%</div><div class="dl">YoY FN Growth</div><div class="dd">492 t → 964 t Fresh Nuts</div></div>
+      <div class="dk"><div class="dv">16,184</div><div class="dl">Women Engaged</div><div class="dd">Across 10 cooperatives</div></div>
+    </div>
+
+    <div class="charts-flex">
+      <div class="cc">
+        <div class="cc-title">FN Volume by Cooperative — 2023/24 vs 2025/26 (kg)</div>
+        <div class="cc-sub">Fresh Nuts purchased · 1 bag = 85 kg · Green = 2025/26 · Indigo = 2023/24</div>
+        <canvas id="ch-compare"></canvas>
+      </div>
+      <div class="right-col">
+        <div class="cc donut-card">
+          <div class="cc-title">Performance Distribution</div>
+          <div class="cc-sub">20 operational centres</div>
+          <canvas id="ch-donut"></canvas>
+        </div>
+        <div class="cc table-card">
+          <div class="cc-title">Centre Status — 2025/26</div>
+          <div class="cc-sub">FN kg · Status · Key bottleneck</div>
+          <div class="table-scroll">
+            <table class="bn-table" id="bn-table"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT CALCULATOR -->
+<div id="impact">
+  <div class="imp-header">
+    <div>
+      <div class="imp-title">SHEE Impact Calculator</div>
+      <div class="imp-subtitle">Social · Health · Economic · Environmental — Baseline vs Endline · SGG/SFC Ghana Data</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="imp-export-btn" class="disabled">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 1v8.586L4.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L9 9.586V1H7zm-5 12v1a1 1 0 001 1h10a1 1 0 001-1v-1h-2v.5H4V13H2z"/></svg>
+        Export PDF
+      </button>
+      <button class="dash-close" id="impact-close">← Back to Map</button>
+    </div>
+  </div>
+  <div class="imp-body">
+    <!-- LEFT: Inputs -->
+    <div class="imp-input">
+      <div class="inp-section">
+        <h3><span>🌰</span> Dried Nuts (Kernels)</h3>
+        <div class="inp-field">
+          <div class="inp-label">Total Dried Kernels</div>
+          <div class="inp-wrap">
+            <input type="number" id="inp-nuts" placeholder="e.g. 100" min="0" step="0.1">
+            <span class="inp-unit">tonnes</span>
+          </div>
+          <div class="inp-hint">1 bag FN ≈ 85 kg · ~3 kg FN → 1 kg dried kernel</div>
+        </div>
+        <div class="inp-quick" id="qk-nuts">
+          <button data-v="10">10t</button>
+          <button data-v="50">50t</button>
+          <button data-v="100">100t</button>
+          <button data-v="321">321t</button>
+          <button data-v="500">500t</button>
+          <button data-v="1000">1,000t</button>
+        </div>
+      </div>
+
+      <div class="inp-section">
+        <h3><span>🧈</span> Butter</h3>
+        <div class="inp-field">
+          <div class="inp-label">Total Raw Butter</div>
+          <div class="inp-wrap">
+            <input type="number" id="inp-butter" placeholder="e.g. 50" min="0" step="0.1">
+            <span class="inp-unit">tonnes</span>
+          </div>
+          <div class="inp-hint">Gate-to-gate: kernels received → finished butter</div>
+        </div>
+        <div class="inp-quick" id="qk-butter">
+          <button data-v="5">5t</button>
+          <button data-v="20">20t</button>
+          <button data-v="50">50t</button>
+          <button data-v="100">100t</button>
+          <button data-v="200">200t</button>
+        </div>
+      </div>
+
+      <div class="inp-section" style="background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.2)">
+        <h3><span>📐</span> About the Rates</h3>
+        <div class="inp-hint" style="margin-top:0;color:rgba(240,242,245,.45);line-height:1.55">
+          <b>Baseline</b> = Individual processing (pre-SFC)<br>
+          <b>Endline</b> = Collective processing (with SFC)<br><br>
+          Rates from SGG Project (Gushegu, Savelugu, Sagnarigu, Kanfehiyili, Bognayili, Gupanarigu).<br><br>
+          Firewood &amp; GHG show 43–66% improvement range.<br>
+          Women estimate ≈ 16.8 per tonne FN.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="imp-results" id="imp-results">
+      <!-- Print-only report header — hidden on screen -->
+      <div id="imp-print-header">
+        <div class="iph-title">SHEE Impact Report — SFC Shea Network, Northern Ghana</div>
+        <div class="iph-meta">Social · Health · Economic · Environmental · Baseline vs Endline (SGG/SFC Project Data)</div>
+        <div class="iph-inputs" id="iph-inputs-row"></div>
+      </div>
+
+      <div class="imp-empty" id="imp-empty">
+        <div class="ee-icon">🌍</div>
+        <div class="ee-text">Enter tonnes of dried kernels or butter to see full SHEE impact metrics auto-calculate</div>
+      </div>
+      <div id="imp-live" style="display:none">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="lib/leaflet.js"></script>
+<script src="lib/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  IMAGES — Google Drive thumbnails by cooperative key
+// ═══════════════════════════════════════════════════════════════════════
+const GD = id => `https://drive.google.com/thumbnail?id=${id}&sz=w500`;
+
+const COOP_IMGS = {
+  'Chiana': [
+    GD('1OhM3YqWcKYd0amAslpvyjlAqmMJnrV-i'),
+    GD('1S9DSGMKYhz0B6nf__fLeYWLO9JiJMZm8'),
+    GD('1CqTlPChjZkxYY-oQ1g8EYRS8P3iUi0Z-'),
+    GD('1xobJGdNFLjZRBIhStQQ3BHasLHnTWk-p')
+  ],
+  'Gushegu': [
+    GD('165eqfJ6O5BOL_ipqVMGQ4gXDiCBkEQvc'),
+    GD('1yHY5eqNf6DdTzHOfo-g1OvrWgAzDo822'),
+    GD('1_W5bcmiZ3h1MYNzh-tU5JIccl2HC2KM3'),
+    GD('11Pvt0_TWN0QJUycTlz8wHT33UElM-k6S')
+  ],
+  'Kpalbe': [
+    GD('1mjh6DDhMWSAGOm1E_HuXopCs4ES7JkSN'),
+    GD('1B62-5H2ByXDZ4r3eOkI-mMa_UUhoRhpP'),
+    GD('1HS467DKFRJOmnMMzoH3162pjXXE_43YL'),
+    GD('18a9zwj1e_vN4jIrcqEcUhoheHD4SxENJ')
+  ],
+  'Savelugu': [
+    GD('1xtZeK2z7AC6MRbq5sDwcwtBzuaRMnPR-'),
+    GD('1_lIJHXM8gWyv1In4WXArvQUgwuQBzHYK'),
+    GD('1NvfGnoZTzJk0_RXwZqquVkEHvpJZVv0O'),
+    GD('1xFA4P4yWTEntXSvniMRGztfg-KAGx7F0')
+  ],
+  'Tumu': [
+    GD('1_HUi4IqGBHwrZheOVDtKPz_dIOgYL93v'),
+    GD('1-U7pyKQ_7-lp7oLP114_F3YqKBwRpOCW'),
+    GD('16BHt45VyA1E-jUn3nLkPHOLC1ExplK6B')
+  ]
+};
+
+function getImgs(c) {
+  const n = c.cooperative;
+  if (n.includes('Chiana') || n.includes('Sandema')) return COOP_IMGS['Chiana'];
+  if (n.includes('Gushegu')) return COOP_IMGS['Gushegu'];
+  if (n.includes('Kpalbe')) return COOP_IMGS['Kpalbe'];
+  if (n.includes('Savelugu')) return COOP_IMGS['Savelugu'];
+  if (n.includes('Tumu') || n.includes('Gbele') || n.includes('Gbarakan')) return COOP_IMGS['Tumu'];
+  return [];
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════════════
+const CENTERS = [
+  // ── UPPER EAST ──────────────────────────────────────────────────────
+  {
+    id:"GHA-UE-001", centerName:"New Nakong Centre", community:"New Nakong",
+    cooperative:"Chiana-Sandema Nipoaba Sheanuts Pickers Cooperative",
+    lat:10.839816, lng:-1.383615, district:"Kassena-Nankana West", region:"Upper East Region",
+    performance:"high", established:2022, founded:2019, partneredSFC:2019, members:734,
+    secretary:"Alice", magazia:"Awaab Confort", productionCapacity:6,
+    ops:{ fnBags:762, dryNuts:254, womenColl:348, womenProc:35, stoves:6, drying:2, tricycles:1, cost:10933.54 },
+    prev2324coop:816, bottleneck:"Limited number of stoves, drying platforms & tricycle",
+    bottleneckType:"warn",
+    allCommunities:[{name:"New Nakong",established:2022},{name:"Longsa",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Collective Processing",c:"t-green"},{l:"Savings Group",c:"t-violet"}],
+    insights:[
+      {t:"good",x:"762 bags (64,770 kg) in 2025/26 — strong and consistent output."},
+      {t:"good",x:"Susu savings group provides year-round financial resilience for all 734 members."}
+    ],
+    highlight:"The women run their own susu savings group — pooled funds are lent out at a small interest charge and all contributions are shared at year-end, giving each member a financial boost to start the new year."
+  },
+  {
+    id:"GHA-UE-002", centerName:"Longsa Centre", community:"Longsa",
+    cooperative:"Chiana-Sandema Nipoaba Sheanuts Pickers Cooperative",
+    lat:10.761022, lng:-1.281632, district:"Kassena-Nankana West", region:"Upper East Region",
+    performance:"high", established:2023, founded:2019, partneredSFC:2019, members:734,
+    secretary:"Alice", magazia:"Awaab Confort", productionCapacity:6,
+    ops:{ fnBags:150, dryNuts:54, womenColl:48, womenProc:35, stoves:3, drying:1, tricycles:1, cost:20952.15 },
+    prev2324coop:816, bottleneck:"Limited number of stoves, drying platforms & tricycle constraining throughput",
+    bottleneckType:"warn",
+    allCommunities:[{name:"New Nakong",established:2022},{name:"Longsa",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Collective Processing",c:"t-green"},{l:"Needs Equipment",c:"t-amber"}],
+    insights:[
+      {t:"warn",x:"Only 150 bags (12,750 kg) in 2025/26 — below network average. Equipment constraints limit throughput."},
+      {t:"good",x:"Established 2023 — still scaling. Infrastructure investment would unlock rapid growth."}
+    ],
+    highlight:"Newest centre in the Chiana-Sandema cooperative. Despite limited equipment, the women's susu savings model continues to drive member engagement and financial inclusion."
+  },
+  {
+    id:"GHA-UE-003", centerName:"Naaga Centre", community:"Naaga (Chaaba)",
+    cooperative:"Navrongo Sheanuts Pickers Cooperative",
+    lat:10.602866, lng:-1.028475, district:"Kassena-Nankana East", region:"Upper East Region",
+    performance:"high", established:2021, founded:2018, partneredSFC:2018, members:801,
+    secretary:"Atiba Nancy", magazia:"Jennifer Adabi", productionCapacity:6,
+    ops:{ fnBags:492, dryNuts:167, womenColl:58, womenProc:30, stoves:4, drying:2, tricycles:1, cost:12177.71 },
+    prev2324coop:516, bottleneck:"Limited stoves, drying platforms & tricycle",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Naaga",established:2021},{name:"Kolemkgu",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Community-Led",c:"t-violet"},{l:"Welfare Model",c:"t-green"}],
+    insights:[
+      {t:"good",x:"492 bags (41,820 kg) in 2025/26 — strong output with active community engagement."},
+      {t:"good",x:"Active welfare system — leaders visit absent or sick members ensuring full inclusion."}
+    ],
+    highlight:"Magazia Jennifer Adabi personally visits members house-to-house before every meeting and, together with the secretary, checks on anyone absent or unwell — ensuring no woman feels left out."
+  },
+  {
+    id:"GHA-UE-004", centerName:"Kolemkgu Centre", community:"Kolemkgu",
+    cooperative:"Navrongo Sheanuts Pickers Cooperative",
+    lat:10.756706, lng:-1.077392, district:"Kassena-Nankana East", region:"Upper East Region",
+    performance:"high", established:2023, founded:2018, partneredSFC:2018, members:801,
+    secretary:"Atiba Nancy", magazia:"Jennifer Adabi", productionCapacity:6,
+    ops:{ fnBags:138, dryNuts:46, womenColl:79, womenProc:30, stoves:4, drying:3, tricycles:1, cost:20952.15 },
+    prev2324coop:516, bottleneck:"Limited stoves, drying platforms & tricycle",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Naaga",established:2021},{name:"Kolemkgu",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Community-Led",c:"t-violet"}],
+    insights:[
+      {t:"warn",x:"138 bags (11,730 kg) in 2025/26 — below target. Infrastructure gap is the primary constraint."},
+      {t:"good",x:"Established 2023 — benefits from Navrongo's proven leadership and care culture."}
+    ],
+    highlight:"Benefits from Navrongo's strong welfare model. With infrastructure investment, this centre has clear potential given the 79 active women collectors already engaged."
+  },
+  // ── UPPER WEST ──────────────────────────────────────────────────────
+  {
+    id:"GHA-UW-001", centerName:"Dasima Centre", community:"Dasima",
+    cooperative:"Tumu Gbarakan Sheanuts Pickers Cooperative",
+    lat:10.642556, lng:-2.234833, district:"Sissala East", region:"Upper West Region",
+    performance:"low", established:2022, founded:2014, partneredSFC:2014, members:1225,
+    secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
+    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    prev2324coop:null, bottleneck:"No processing recorded in 2025/26 season. Requires investigation.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Needs Review",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"Zero kg recorded in 2025/26 — urgent field review required."},
+      {t:"good",x:"Sentie centre (same cooperative) is a top performer at 1,350 bags (114,750 kg)."}
+    ],
+    highlight:"The women of Tumu Gbarakan have built strong support networks, organized into self-managing sub-groups. Despite Dasima showing zero output this season, the cooperative's proven governance model provides a clear pathway to recovery."
+  },
+  {
+    id:"GHA-UW-002", centerName:"Sentie Centre", community:"Sentie",
+    cooperative:"Tumu Gbarakan Sheanuts Pickers Cooperative",
+    lat:10.63118, lng:-2.074601, district:"Sissala East", region:"Upper West Region",
+    performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1225,
+    secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
+    ops:{ fnBags:1350, dryNuts:453, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20952.15 },
+    prev2324coop:null, bottleneck:"No bottleneck reported — well-performing centre.",
+    bottleneckType:"ok",
+    allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Top Performer",c:"t-green"},{l:"Logistics-Enabled",c:"t-amber"}],
+    insights:[
+      {t:"good",x:"1,350 bags (114,750 kg) in 2025/26 — among the top 3 centres in the network."},
+      {t:"good",x:"Cooperative organized into smaller self-managing sub-groups for efficient operations."}
+    ],
+    highlight:"The women of Tumu Gbarakan have built strong mutual support networks — financial help, communal labour, and unity on important occasions. Organized into smaller groups managing their affairs peacefully, it's a true example of women leading with purpose."
+  },
+  {
+    id:"GHA-UW-003", centerName:"Soma Centre", community:"Soma",
+    cooperative:"Suntaa Maal Sheanuts Pickers Cooperative",
+    lat:9.466129, lng:-2.490958, district:"Sissala West", region:"Upper West Region",
+    performance:"high", established:2022, founded:2016, partneredSFC:2016, members:1336,
+    secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
+    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    prev2324coop:135, bottleneck:"Women did not agree with market price — negotiations failed, no supply this season.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Price Dispute",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"Zero kg output — women refused to sell at offered market price in 2025/26."},
+      {t:"warn",x:"Price negotiation process needs review to prevent recurrence next season."}
+    ],
+    highlight:"A price dispute between the women and buyers resulted in zero supply this season. This highlights the importance of participatory pricing mechanisms and maintaining trust between collectors and buyers."
+  },
+  {
+    id:"GHA-UW-004", centerName:"Nakpala Centre", community:"Nakpala",
+    cooperative:"Suntaa Maal Sheanuts Pickers Cooperative",
+    lat:10.638152, lng:-2.234693, district:"Sawla-Tuna-Kalba", region:"Savannah Region",
+    performance:"high", established:2023, founded:2016, partneredSFC:2016, members:1336,
+    secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
+    ops:{ fnBags:51, dryNuts:17, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
+    prev2324coop:135, bottleneck:"Field Officer (FO) new to the project — limited mobilisation and technical capacity this season.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Needs FO Support",c:"t-amber"}],
+    insights:[
+      {t:"warn",x:"51 bags (4,335 kg) in 2025/26 — low output attributed to new FO with limited experience."},
+      {t:"good",x:"Clear pathway to improvement: experienced FO deployment or mentorship programme."}
+    ],
+    highlight:"[Note: GPS coordinates for Nakpala in source documents may require verification. Currently positioned near Sawla based on operations team data.]"
+  },
+  {
+    id:"GHA-UW-005", centerName:"Wechiau Centre", community:"Wechiau",
+    cooperative:"Wechiau Hippo Sanctuary Organic Shea Nuts Collectors Cooperative",
+    lat:9.824764, lng:-2.678125, district:"Wa West", region:"Upper West Region",
+    performance:"high", established:2021, founded:2014, partneredSFC:2014, members:2705,
+    secretary:"Winfred Donlare", magazia:"Comfort Kafile", productionCapacity:12,
+    ops:{ fnBags:212, dryNuts:74, womenColl:125, womenProc:35, stoves:3, drying:6, tricycles:2, cost:7539.16 },
+    prev2324coop:336, bottleneck:"Tribal conflict severely impacted operations and member safety.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Wechiau",established:2021},{name:"Kpanfa",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Organic Certified",c:"t-green"},{l:"Conflict Impact",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"212 bags (18,020 kg) — tribal conflict disrupted operations, well below 12 t/mo capacity."},
+      {t:"good",x:"Organic certification maintained — premium pricing pathway preserved for recovery season."}
+    ],
+    highlight:"The women of Wechiau skilfully juggle farming, household duties, and shea collection year-round, and pivot to pito brewing and market trading in off-season. The tribal conflict this season represents an external challenge to an otherwise resilient cooperative."
+  },
+  {
+    id:"GHA-UW-006", centerName:"Kpanfa Centre", community:"Kpanfa",
+    cooperative:"Wechiau Hippo Sanctuary Organic Shea Nuts Collectors Cooperative",
+    lat:9.814204, lng:-2.717232, district:"Wa West", region:"Upper West Region",
+    performance:"high", established:2023, founded:2014, partneredSFC:2014, members:2705,
+    secretary:"Winfred Donlare", magazia:"Comfort Kafile", productionCapacity:12,
+    ops:{ fnBags:202, dryNuts:67, womenColl:212, womenProc:30, stoves:2, drying:3, tricycles:1, cost:20586.99 },
+    prev2324coop:336, bottleneck:"Tribal conflict — same impact as Wechiau centre.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Wechiau",established:2021},{name:"Kpanfa",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Organic Certified",c:"t-green"},{l:"Conflict Impact",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"202 bags (17,170 kg) — tribal conflict constraining output far below cooperative capacity."},
+      {t:"good",x:"Adjacent to Hippo Sanctuary — eco-context reinforces organic premium positioning."}
+    ],
+    highlight:"Kpanfa centre, adjacent to the Wechiau Hippo Sanctuary, is strategically positioned for organic premium certification. Post-conflict recovery will be critical to unlocking this centre's full potential."
+  },
+  // ── NORTHERN REGION ──────────────────────────────────────────────────
+  {
+    id:"GHA-NR-001", centerName:"Kpugi Centre", community:"Kpugi",
+    cooperative:"Gushegu Kpugi Sheanuts Pickers Cooperative",
+    lat:9.874003, lng:-0.188964, district:"Gushegu", region:"Northern Region",
+    performance:"high", established:2021, founded:2012, partneredSFC:2016, members:2701,
+    secretary:"Abdulai Lukuman", magazia:"Zeligatu Yakubu", productionCapacity:11,
+    ops:{ fnBags:1587, dryNuts:474, womenColl:456, womenProc:40, stoves:6, drying:4, tricycles:1, cost:0 },
+    prev2324coop:870, bottleneck:"No dedicated centre at Bimbilla — nuts sent from Bimbilla to Kpugi for processing.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Kpugi",established:2021},{name:"Bulugu",established:2022}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Shared Facility",c:"t-amber"},{l:"High Throughput",c:"t-green"}],
+    insights:[
+      {t:"good",x:"1,587 bags (134,895 kg) processed in 2025/26 — includes Bimbilla cooperative nuts."},
+      {t:"warn",x:"Shared use creates logistics complexity — dedicated Bimbilla centre would improve efficiency."}
+    ],
+    highlight:"Beyond being Gushegu's primary centre, Kpugi also serves as a processing hub for the Bimbilla cooperative which lacks its own facility. The cooperative's leadership takes an active role in resolving community disputes, earning deep social trust."
+  },
+  {
+    id:"GHA-NR-002", centerName:"Bulugu Centre", community:"Bulugu",
+    cooperative:"Gushegu Kpugi Sheanuts Pickers Cooperative",
+    lat:9.782924, lng:-0.271541, district:"Gushegu", region:"Northern Region",
+    performance:"high", established:2022, founded:2012, partneredSFC:2016, members:2701,
+    secretary:"Abdulai Lukuman", magazia:"Zeligatu Yakubu", productionCapacity:11,
+    ops:{ fnBags:1923, dryNuts:625, womenColl:210, womenProc:40, stoves:6, drying:3, tricycles:2, cost:33685.98 },
+    prev2324coop:870, bottleneck:"Limited stoves and drying platforms — constraint on throughput.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Kpugi",established:2021},{name:"Bulugu",established:2022}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Network Leader",c:"t-green"},{l:"Community Welfare",c:"t-violet"}],
+    insights:[
+      {t:"good",x:"1,923 bags (163,455 kg) — highest single-centre FN output in the entire network."},
+      {t:"warn",x:"Despite leading output, stove and drying constraints indicate untapped potential."}
+    ],
+    highlight:"Bulugu is the network's top-performing centre. The cooperative's leadership visits members in domestic difficulty, making home visits to engage families in respectful dialogue — reinforcing their role as a community pillar beyond just shea processing."
+  },
+  {
+    id:"GHA-NR-003", centerName:"Dipali Centre", community:"Dipali",
+    cooperative:"Savelugu Suglo Mboribuni Sheanut Pickers and Marketing Society",
+    lat:9.803379, lng:-0.934043, district:"Savelugu/Nanton", region:"Northern Region",
+    performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1781,
+    secretary:"Mohammed Tahiru", magazia:"Mariama Zakaria", productionCapacity:3,
+    ops:{ fnBags:0, dryNuts:0, womenColl:60, womenProc:30, stoves:6, drying:1, tricycles:1, cost:10933.54 },
+    prev2324coop:513, bottleneck:"No processing due to damaged stoves — centre was non-operational all season.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Dipali",established:2022},{name:"Nyerko",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Equipment Failure",c:"t-rose"},{l:"Repair Needed",c:"t-amber"}],
+    insights:[
+      {t:"bad",x:"Zero kg — all 6 stoves damaged, centre non-operational in 2025/26."},
+      {t:"warn",x:"60 women collectors and 30 processors/day idle. Stove repair is critical-path item."}
+    ],
+    highlight:"\"We traveled long distances on foot to pick nuts. Since the post-harvest center and two motor king tricycles were provided, we bring back so much more.\" — Mariama Zakaria, Magazia. This season the centre was silent due to damaged stoves."
+  },
+  {
+    id:"GHA-NR-004", centerName:"Nyerko Centre", community:"Nyerko",
+    cooperative:"Savelugu Suglo Mboribuni Sheanut Pickers and Marketing Society",
+    lat:9.688706, lng:-0.665513, district:"Savelugu/Nanton", region:"Northern Region",
+    performance:"high", established:2023, founded:2012, partneredSFC:2016, members:1781,
+    secretary:"Mohammed Tahiru", magazia:"Mariama Zakaria", productionCapacity:3,
+    ops:{ fnBags:960, dryNuts:322, womenColl:192, womenProc:30, stoves:6, drying:2, tricycles:2, cost:33015.17 },
+    prev2324coop:513, bottleneck:"Limited stoves and drying platforms remain a throughput constraint.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Dipali",established:2022},{name:"Nyerko",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Organic Potential",c:"t-green"},{l:"Logistics-Enabled",c:"t-amber"}],
+    insights:[
+      {t:"good",x:"960 bags (81,600 kg) in 2025/26. 192 women collectors and 2 tricycles driving strong logistics."},
+      {t:"good",x:"7km from 51-hectare organic collection zone — organic certification pathway viable."}
+    ],
+    highlight:"Nyerko produced 4.351 tons of fresh nuts in its first year (2023). Now at 960 bags (81,600 kg) in 2025/26, it's the cooperative's star performer. Located 45 min from Savelugu, 7km from a designated organic collection area."
+  },
+  // ── SAVANNAH REGION ──────────────────────────────────────────────────
+  {
+    id:"GHA-SA-001", centerName:"Jinlo Centre", community:"Jinlo",
+    cooperative:"Kpalbe Timtooni Sheanuts Pickers Cooperative",
+    lat:9.0548833, lng:-0.63648, district:"East Gonja", region:"Savannah Region",
+    performance:"high", established:2022, founded:2020, partneredSFC:2020, members:2446,
+    secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
+    ops:{ fnBags:1242, dryNuts:414, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    prev2324coop:1068, bottleneck:"No bottleneck reported.",
+    bottleneckType:"ok",
+    allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"High Capacity",c:"t-green"},{l:"Collective Processing",c:"t-violet"}],
+    insights:[
+      {t:"good",x:"1,242 bags (105,570 kg) in 2025/26 — one of the top-performing centres."},
+      {t:"good",x:"17 t/month cooperative capacity — highest in the network."}
+    ],
+    highlight:"When a Kpalbe member begins treating fresh nuts at home, she is never alone — cooperative members carry water and firewood to her, ensuring the critical boiling process is completed correctly. Cooperation turned into quality assurance."
+  },
+  {
+    id:"GHA-SA-002", centerName:"Kanjayilli Centre", community:"Kanjayilli",
+    cooperative:"Kpalbe Timtooni Sheanuts Pickers Cooperative",
+    lat:9.275978, lng:-0.992374, district:"East Gonja", region:"Savannah Region",
+    performance:"high", established:2023, founded:2020, partneredSFC:2020, members:2446,
+    secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
+    ops:{ fnBags:1839, dryNuts:613, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20503.82 },
+    prev2324coop:1068, bottleneck:"No bottleneck reported.",
+    bottleneckType:"ok",
+    allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Network Champion",c:"t-rose"},{l:"Collective Processing",c:"t-violet"}],
+    insights:[
+      {t:"good",x:"1,839 bags (156,315 kg) — highest centre FN output in the entire network for 2025/26."},
+      {t:"good",x:"613 dried nuts batches — best processing output across all 20 centres."}
+    ],
+    highlight:"Kanjayilli is the network's highest-producing centre this season with 1,839 bags (156,315 kg). Combined with Jinlo, the Kpalbe cooperative contributes 3,081 bags — 27% of the entire network output for 2025/26."
+  },
+  {
+    id:"GHA-SA-003", centerName:"Murugu Centre", community:"Murugu",
+    cooperative:"Damongo-Sunkpa Sheanuts Pickers Co-Operative",
+    lat:9.28289, lng:-1.78024, district:"West Gonja", region:"Savannah Region",
+    performance:"high", established:2021, founded:2014, partneredSFC:2014, members:1364,
+    secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
+    ops:{ fnBags:47, dryNuts:16, womenColl:38, womenProc:30, stoves:null, drying:null, tricycles:null, cost:20503.82 },
+    prev2324coop:321, bottleneck:"Bad harvest — low nut availability in the collection zone this season.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Harvest Risk",c:"t-rose"},{l:"Quality Focused",c:"t-violet"}],
+    insights:[
+      {t:"bad",x:"Only 47 bags (3,995 kg) — extreme underperformance due to poor harvest season."},
+      {t:"good",x:"Members actively enforce SFC quality standards and accurate measurement practices."}
+    ],
+    highlight:"Members of Damongo-Sunkpa actively sensitise each other to sell only to SFC, recognising the benefits of accurate measurement, bonus payments per bag sold, and provision of PPE. The bad harvest this season is an external constraint, not a governance failure."
+  },
+  {
+    id:"GHA-SA-004", centerName:"Zowu Centre", community:"Zowu",
+    cooperative:"Damongo-Sunkpa Sheanuts Pickers Co-Operative",
+    lat:9.054, lng:-1.092, district:"West Gonja", region:"Savannah Region",
+    performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1364,
+    secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
+    ops:{ fnBags:117, dryNuts:39, womenColl:70, womenProc:30, stoves:null, drying:null, tricycles:null, cost:4177.34 },
+    prev2324coop:321, bottleneck:"Field Officer (FO) dismissal disrupted centre operations mid-season.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"FO Gap",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"117 bags (9,945 kg) only — FO dismissal caused significant operational disruption."},
+      {t:"warn",x:"GPS coordinates in source document may be inaccurate — pending field verification."}
+    ],
+    highlight:"Zowu's low output this season stems directly from the dismissal of the field officer mid-season. Rapid FO replacement and a structured handover protocol would mitigate this risk in future seasons."
+  },
+  {
+    id:"GHA-SA-005", centerName:"Bale Centre", community:"Bale",
+    cooperative:"Bole Noyini Shea Pickers Cooperative",
+    lat:9.081971, lng:-2.349196, district:"Bole", region:"Savannah Region",
+    performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1091,
+    secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
+    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
+    prev2324coop:75, bottleneck:"Tribal conflict required the Field Officer to leave the area — operations suspended.",
+    bottleneckType:"danger",
+    allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Conflict Impact",c:"t-rose"}],
+    insights:[
+      {t:"bad",x:"Zero kg — tribal conflict required FO evacuation, centre non-operational."},
+      {t:"good",x:"Bole cooperative has strong community bonds — conflict resolution support would accelerate recovery."}
+    ],
+    highlight:"Bole Cooperative is known for deep community bonds — members farm together, check on absent colleagues, and cook for community funerals. The tribal conflict this season is an external disruption to an otherwise cohesive cooperative."
+  },
+  {
+    id:"GHA-SA-006", centerName:"Sonyor Centre", community:"Sonyor",
+    cooperative:"Bole Noyini Shea Pickers Cooperative",
+    lat:9.084464, lng:-2.344458, district:"Bole", region:"Savannah Region",
+    performance:"high", established:2022, founded:2012, partneredSFC:2016, members:1091,
+    secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
+    ops:{ fnBags:270, dryNuts:91, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    prev2324coop:75, bottleneck:"Tribal conflict which required the FO to leave the area for a period.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Partial Operations",c:"t-amber"}],
+    insights:[
+      {t:"warn",x:"270 bags (22,950 kg) despite tribal conflict — partial operations showing cooperative resilience."},
+      {t:"good",x:"Strong YoY improvement from coop's 75-bag (6,375 kg) baseline in 2023/24."}
+    ],
+    highlight:"Sonyor maintained partial operations despite the same tribal conflict affecting Bale centre. Their susu savings group and strong member welfare culture provided resilience. Both Bole centres began in 2022 in a coordinated expansion."
+  },
+  // ── EXPANSION ──────────────────────────────────────────────────────
+  {
+    id:"GHA-EXP-001", centerName:"Bolgatanga Expansion Centre", community:"Bolgatanga",
+    cooperative:"[Cooperative TBD]",
+    lat:10.785, lng:-0.851, district:"Bolgatanga Municipal", region:"Upper East Region",
+    performance:"expansion", established:null, founded:null, partneredSFC:null, members:null,
+    secretary:"[TBD]", magazia:"[TBD]", productionCapacity:null,
+    ops:{ fnBags:null, dryNuts:null, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:null },
+    prev2324coop:null, bottleneck:"Pre-operational — site scoping in progress.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Bolgatanga",established:"TBD"}],
+    tags:[{l:"Expansion",c:"t-amber"},{l:"Planned",c:"t-amber"}],
+    insights:[{t:"warn",x:"Strategic Upper East hub — connects to Navrongo and Chiana-Sandema corridors."}],
+    highlight:"[Data collection in progress — contact field team for scoping details]"
+  },
+  {
+    id:"GHA-EXP-002", centerName:"Tamale Expansion Centre", community:"Tamale",
+    cooperative:"[Cooperative TBD]",
+    lat:9.403, lng:-0.849, district:"Tamale Metro", region:"Northern Region",
+    performance:"expansion", established:null, founded:null, partneredSFC:null, members:null,
+    secretary:"[TBD]", magazia:"[TBD]", productionCapacity:null,
+    ops:{ fnBags:null, dryNuts:null, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:null },
+    prev2324coop:null, bottleneck:"Pre-operational — feasibility study required.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Tamale",established:"TBD"}],
+    tags:[{l:"Expansion",c:"t-amber"},{l:"Urban Hub",c:"t-amber"}],
+    insights:[{t:"warn",x:"Tamale is the regional capital — critical logistics and transport node for Northern Region."}],
+    highlight:"[Data collection in progress — contact field team for scoping details]"
+  },
+  {
+    id:"GHA-EXP-003", centerName:"Wa Expansion Centre", community:"Wa",
+    cooperative:"[Cooperative TBD]",
+    lat:10.061, lng:-2.505, district:"Wa Municipal", region:"Upper West Region",
+    performance:"expansion", established:null, founded:null, partneredSFC:null, members:null,
+    secretary:"[TBD]", magazia:"[TBD]", productionCapacity:null,
+    ops:{ fnBags:null, dryNuts:null, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:null },
+    prev2324coop:null, bottleneck:"Pre-operational — cooperative identification in progress.",
+    bottleneckType:"warn",
+    allCommunities:[{name:"Wa",established:"TBD"}],
+    tags:[{l:"Expansion",c:"t-amber"},{l:"Planned",c:"t-amber"}],
+    insights:[{t:"warn",x:"Wa Municipal connects Upper West cooperatives to national export logistics."}],
+    highlight:"[Data collection in progress — contact field team for scoping details]"
+  }
+];
+
+// 2023/24 and 2025/26 cooperative totals — converted to KG (× 85)
+const DATA_2324 = [
+  {name:"Kpalbe",    kg:1068*85},{name:"Gbele",      kg:1134*85},
+  {name:"Navrongo",  kg:516*85}, {name:"Bolga/Chiana",kg:816*85},
+  {name:"Gushegu",   kg:870*85}, {name:"Savelugu",   kg:513*85},
+  {name:"Wechiau",   kg:336*85}, {name:"Bole",        kg:75*85},
+  {name:"Tuna/Sawla",kg:135*85}, {name:"Crema",       kg:321*85}
+];
+const DATA_2526 = [
+  {name:"Kpalbe",    kg:(1242+1839)*85},{name:"Gbele",      kg:0},
+  {name:"Navrongo",  kg:(492+138)*85},  {name:"Bolga/Chiana",kg:(762+150)*85},
+  {name:"Gushegu",   kg:(1923+1587)*85},{name:"Savelugu",   kg:(960+0)*85},
+  {name:"Wechiau",   kg:(212+202)*85},  {name:"Bole",       kg:(270+0)*85},
+  {name:"Tuna/Sawla",kg:(0+51)*85},     {name:"Crema",      kg:(47+117)*85},
+  {name:"Tumu",      kg:(1350+0)*85}
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+//  MAP INIT — multi-layer professional setup
+// ═══════════════════════════════════════════════════════════════════════
+const topo = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+  {maxZoom:20,subdomains:'abcd',attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}
+);
+const satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {maxZoom:19,attribution:'Tiles &copy; Esri, Maxar, GeoEye, Earthstar Geographics, CNES/Airbus DS'}
+);
+const terrain = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}',
+  {maxZoom:13,attribution:'Tiles &copy; Esri &mdash; Source: Esri'}
+);
+
+const map = L.map('map',{center:[9.9,-1.35],zoom:7,layers:[topo],zoomControl:false,attributionControl:true});
+L.control.zoom({position:'bottomright'}).addTo(map);
+L.control.scale({imperial:false,metric:true,position:'bottomleft'}).addTo(map);
+
+// ═══════════════════════════════════════════════════════════════════════
+//  OVERLAY LAYER GROUPS
+// ═══════════════════════════════════════════════════════════════════════
+// Protected Areas & Districts: NOT added to map by default — only on toggle
+const lgProtected   = L.layerGroup();
+const lgDistricts   = L.layerGroup();
+// Collection Areas: visible by default
+const lgCollection  = L.layerGroup().addTo(map);
+
+// Layer control — bottomleft, always expanded so it never disappears
+L.control.layers(
+  {'🗺 Street':topo,'🛰 Satellite':satellite,'⛰ Terrain':terrain},
+  {'🌿 Protected Areas':lgProtected,'🗂 District Boundaries':lgDistricts,'🟡 Collection Areas':lgCollection},
+  {position:'bottomleft',collapsed:false}
+).addTo(map);
+
+// Coordinate display
+const coordEl=document.getElementById('coords');
+const northEl=document.getElementById('north');
+map.on('mousemove',e=>{
+  const la=e.latlng.lat.toFixed(4),ln=e.latlng.lng.toFixed(4);
+  coordEl.textContent=`${la>0?la+'°N':Math.abs(la)+'°S'}  ${ln<0?Math.abs(ln)+'°W':ln+'°E'}`;
+});
+// Sync north/coord with panel
+map.on('resize',()=>{const po=document.getElementById('panel').classList.contains('open');[coordEl,northEl].forEach(el=>el.classList.toggle('panel-open',po));});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PROTECTED AREAS — National Parks, Reserves, Sanctuaries
+// ═══════════════════════════════════════════════════════════════════════
+const PROTECTED = [
+  {name:"Mole National Park", type:"national_park", coords:[
+    [9.17,-2.12],[9.28,-2.09],[9.48,-2.11],[9.72,-2.13],
+    [10.05,-2.04],[10.12,-1.82],[10.08,-1.60],[10.00,-1.48],
+    [9.70,-1.46],[9.48,-1.55],[9.25,-1.70],[9.10,-1.90]]},
+  {name:"Gbele Resource Reserve", type:"game_reserve", coords:[
+    [10.28,-2.14],[10.40,-2.20],[10.58,-2.22],[10.74,-2.17],
+    [10.80,-2.02],[10.76,-1.93],[10.60,-1.90],[10.40,-1.96],[10.26,-2.05]]},
+  {name:"Wechiau Community Hippo Sanctuary", type:"sanctuary", coords:[
+    [9.70,-2.62],[9.84,-2.68],[9.96,-2.78],[9.98,-2.92],
+    [9.87,-2.98],[9.74,-2.92],[9.62,-2.82],[9.60,-2.68]]},
+  {name:"Bui National Park", type:"national_park", coords:[
+    [8.08,-2.52],[8.18,-2.44],[8.42,-2.46],[8.56,-2.52],
+    [8.62,-2.72],[8.52,-2.90],[8.30,-2.92],[8.10,-2.80]]},
+  {name:"Kulmasa Forest Reserve", type:"game_reserve", coords:[
+    [9.40,-1.84],[9.52,-1.80],[9.62,-1.85],[9.64,-1.98],
+    [9.54,-2.06],[9.40,-2.02],[9.32,-1.94]]},
+  {name:"Tintillim Forest Reserve", type:"game_reserve", coords:[
+    [9.38,-0.70],[9.50,-0.68],[9.58,-0.74],[9.56,-0.86],
+    [9.44,-0.90],[9.34,-0.84],[9.30,-0.76]]},
+  {name:"Nkoranza Forest Reserve", type:"game_reserve", coords:[
+    [8.60,-1.02],[8.72,-1.00],[8.80,-1.06],[8.78,-1.18],
+    [8.65,-1.22],[8.54,-1.16],[8.50,-1.08]]}
+];
+
+const protStyles = {
+  national_park: {fillColor:'#14532d',fillOpacity:.40,color:'#16a34a',weight:2,dashArray:null},
+  game_reserve:  {fillColor:'#14532d',fillOpacity:.22,color:'#4ade80',weight:1.5,dashArray:'6 3'},
+  sanctuary:     {fillColor:'#134e4a',fillOpacity:.25,color:'#2dd4bf',weight:1.5,dashArray:'4 4'}
+};
+
+PROTECTED.forEach(p=>{
+  const st=protStyles[p.type]||protStyles.game_reserve;
+  L.polygon(p.coords,{...st,interactive:true})
+    .addTo(lgProtected)
+    .bindTooltip(`<b>${p.name}</b><br><i>${p.type.replace('_',' ')}</i>`,
+      {sticky:true,className:'protect-tip'});
+});
+
+
+// ═══════════════════════════════════════════════════════════════════════
+//  DISTRICT BOUNDARIES
+// ═══════════════════════════════════════════════════════════════════════
+const DISTRICTS = [
+  {name:"Tolon", region:"Northern", coords:[
+    [9.284756,-1.242512],[9.303454,-1.211398],[9.304038,-1.197604],[9.311888,-1.188242],[9.314919,-1.179033],[9.320207,-1.165086],[9.319408,-1.153563],[9.319184,-1.141463],[9.319110,-1.132713],[9.317969,-1.123444],[9.313994,-1.109301],[9.309288,-1.101013],[9.316275,-1.094177],[9.321884,-1.082751],[9.326137,-1.074082],[9.326999,-1.062365],[9.333067,-1.054968],[9.342755,-1.043696],[9.337395,-1.024829],[9.324579,-1.002068],[9.334710,-0.964708],[9.352890,-0.950177],[9.413929,-0.997845],[9.599340,-1.104818],[9.615115,-1.142241],[9.628060,-1.143259],[9.646297,-1.146898],[9.719671,-1.159831],[9.737266,-1.155365],[9.751686,-1.156309],[9.777215,-1.162889],[9.794997,-1.179785],[9.796689,-1.200025],[9.812854,-1.218543],[9.825501,-1.246569],[9.801639,-1.275300],[9.817913,-1.309236],[9.803122,-1.310569],[9.801568,-1.349158],[9.751596,-1.346158],[9.735746,-1.347030],[9.723591,-1.346226],[9.709224,-1.339324],[9.697980,-1.328044],[9.684854,-1.319967],[9.667053,-1.319875],[9.656063,-1.323026],[9.636992,-1.328374],[9.552018,-1.317585],[9.538020,-1.311657],[9.526315,-1.300945],[9.516009,-1.287302],[9.401730,-1.244586],[9.385789,-1.245982],[9.371503,-1.252181],[9.358908,-1.257029],[9.346157,-1.260796],[9.333024,-1.265911],[9.315155,-1.257804],[9.300957,-1.252555],[9.286403,-1.241597],[9.284756,-1.242512]]},
+  {name:"Savelugu", region:"Northern", coords:[
+    [9.567462,-0.884156],[9.716179,-0.694058],[9.732214,-0.692271],[9.749580,-0.699218],[9.765870,-0.702772],[9.781047,-0.699940],[9.790015,-0.689011],[9.803374,-0.687609],[9.819311,-0.692478],[9.819090,-0.708708],[9.818413,-0.723685],[9.818118,-0.737078],[9.829457,-0.747030],[9.861636,-0.764971],[9.880895,-0.812937],[9.884331,-0.800428],[9.894705,-0.792994],[9.902984,-0.789183],[9.908815,-0.781382],[9.913840,-0.770512],[9.930684,-0.770055],[9.944639,-0.763426],[9.956165,-0.755541],[9.968684,-0.748564],[9.975239,-0.737573],[9.989108,-0.726885],[10.055022,-0.688533],[10.099392,-0.669579],[10.133169,-0.655568],[10.181803,-0.682115],[10.180589,-0.715948],[10.164424,-0.734899],[10.160549,-0.766335],[10.150711,-0.785459],[10.143165,-0.809439],[10.122147,-0.831627],[10.120960,-0.852424],[10.091641,-0.864376],[10.054741,-0.870821],[10.034012,-0.889451],[10.011405,-0.911508],[10.005713,-0.928122],[9.980244,-0.965848],[9.941796,-0.979560],[9.889992,-1.015306],[9.860313,-1.007962],[9.827899,-0.970920],[9.802891,-0.955117],[9.748353,-0.943692],[9.720375,-0.974893],[9.690449,-0.976612],[9.678804,-1.000540],[9.670113,-0.987473],[9.663929,-0.973433],[9.659870,-0.958311],[9.660464,-0.944483],[9.660977,-0.930499],[9.647119,-0.927532],[9.634830,-0.920918],[9.622325,-0.913125],[9.571392,-0.893218],[9.567462,-0.884156]]},
+  {name:"West Mamprusi Municipal", region:"North East", coords:[
+    [10.497258,-1.066024],[10.377205,-1.053591],[10.283705,-1.047233],[10.192949,-1.009448],[10.110408,-1.063519],[10.098417,-1.027796],[10.070237,-1.026097],[10.024240,-1.010321],[9.996036,-0.988236],[9.966284,-1.002315],[9.948930,-0.983453],[9.965277,-0.972503],[9.993391,-0.939900],[10.001913,-0.925205],[10.011021,-0.907609],[10.024766,-0.904340],[10.034320,-0.888161],[10.054503,-0.881910],[10.062188,-0.866074],[10.089285,-0.860338],[10.110262,-0.857993],[10.128428,-0.853781],[10.122447,-0.837667],[10.125999,-0.819466],[10.150225,-0.806750],[10.146290,-0.793051],[10.147681,-0.780078],[10.164442,-0.764749],[10.163878,-0.739918],[10.168929,-0.722367],[10.180589,-0.715948],[10.186485,-0.692212],[10.179518,-0.668145],[10.182856,-0.633210],[10.162382,-0.607667],[10.176572,-0.581992],[10.200519,-0.555142],[10.267124,-0.534302],[10.244451,-0.504447],[10.270782,-0.503896],[10.283790,-0.498182],[10.296799,-0.504199],[10.318640,-0.511667],[10.326806,-0.526569],[10.344429,-0.578855],[10.361998,-0.592163],[10.381685,-0.602182],[10.397240,-0.615309],[10.417263,-0.649903],[10.444799,-0.655439],[10.536427,-0.686125],[10.543222,-0.705821],[10.595076,-0.700987],[10.645146,-0.717560],[10.651811,-0.775818],[10.609959,-0.811873],[10.579233,-0.847814],[10.487820,-0.933919],[10.525446,-0.933798],[10.536879,-0.966599],[10.522174,-1.037664],[10.497258,-1.066024]]},
+  {name:"Bolgatanga Municipal", region:"Upper East", coords:[
+    [10.828540,-0.807028],[10.841230,-0.818717],[10.845793,-0.846705],[10.844731,-0.866100],[10.853353,-0.883808],[10.868641,-0.915637],[10.878338,-0.930450],[10.867480,-0.936941],[10.859000,-0.942048],[10.852320,-0.947944],[10.850696,-0.962538],[10.843669,-0.971698],[10.836335,-0.981452],[10.831118,-0.987703],[10.821011,-0.995061],[10.811526,-0.999581],[10.803777,-1.003430],[10.795122,-1.001473],[10.788356,-1.003876],[10.779164,-1.007935],[10.767268,-1.009604],[10.757701,-1.012087],[10.746273,-1.012474],[10.736186,-1.007268],[10.730387,-0.997928],[10.726182,-0.989759],[10.717830,-0.984059],[10.714278,-0.975169],[10.714425,-0.967452],[10.707923,-0.959418],[10.702439,-0.965257],[10.695982,-0.972189],[10.690929,-0.968435],[10.686011,-0.976776],[10.680672,-0.982501],[10.671212,-0.977981],[10.664443,-0.974340],[10.653979,-0.968113],[10.646873,-0.961167],[10.641020,-0.953976],[10.626429,-0.953238],[10.617870,-0.943396],[10.627606,-0.932757],[10.639201,-0.922996],[10.647498,-0.916713],[10.658862,-0.916055],[10.669032,-0.915952],[10.678697,-0.909573],[10.686962,-0.908208],[10.692369,-0.901381],[10.698181,-0.902993],[10.703126,-0.901793],[10.707297,-0.901366],[10.716714,-0.900510],[10.719315,-0.897627],[10.721493,-0.893814],[10.727944,-0.888226],[10.734592,-0.880670],[10.741959,-0.873947],[10.738175,-0.861571],[10.742497,-0.848584],[10.828540,-0.807028]]},
+  {name:"Kasena Nankana East", region:"Upper East", coords:[
+    [10.852225,-0.964519],[10.867436,-0.977244],[10.871629,-1.000821],[10.884689,-1.004645],[10.906071,-1.014774],[10.926036,-1.017349],[10.942048,-1.001304],[10.943070,-0.945475],[10.975820,-0.912394],[10.982337,-1.032315],[10.970254,-1.041075],[10.951624,-1.064021],[10.949321,-1.083540],[10.920425,-1.138066],[10.900787,-1.161790],[10.874628,-1.150193],[10.851363,-1.120940],[10.829898,-1.115405],[10.810200,-1.121289],[10.799054,-1.128011],[10.790068,-1.135227],[10.772732,-1.133859],[10.762769,-1.125368],[10.742031,-1.119675],[10.713219,-1.106671],[10.699316,-1.120284],[10.680447,-1.116140],[10.679114,-1.098108],[10.661794,-1.086894],[10.647153,-1.096406],[10.643389,-1.113601],[10.624694,-1.107587],[10.600814,-1.091776],[10.579543,-1.090737],[10.555577,-1.076464],[10.541612,-1.069679],[10.524498,-1.079154],[10.509454,-1.082456],[10.500081,-1.066832],[10.534949,-0.990253],[10.528274,-0.940702],[10.547298,-0.932577],[10.571915,-0.955444],[10.606417,-0.949677],[10.627410,-0.954943],[10.646702,-0.961050],[10.663472,-0.972292],[10.678875,-0.978248],[10.687752,-0.972228],[10.698622,-0.970853],[10.708381,-0.959978],[10.714278,-0.975381],[10.725301,-0.989179],[10.729691,-1.006246],[10.752185,-1.012595],[10.771699,-1.008584],[10.790259,-1.002428],[10.804215,-1.003191],[10.820857,-0.995836],[10.833342,-0.980638],[10.850033,-0.967052],[10.852225,-0.964519]]},
+  {name:"Wa West", region:"Upper West", coords:[
+    [9.943382,-2.460153],[9.956975,-2.479832],[9.953552,-2.494235],[9.945006,-2.515608],[9.935361,-2.531613],[9.925875,-2.562655],[9.928615,-2.576623],[9.937792,-2.589153],[9.987313,-2.585885],[9.992806,-2.596019],[10.041961,-2.599039],[10.059899,-2.582078],[10.078970,-2.589290],[10.094883,-2.583986],[10.145024,-2.613996],[10.165535,-2.623490],[10.156376,-2.640433],[10.154647,-2.656340],[10.163731,-2.678121],[10.164095,-2.692164],[10.179842,-2.698599],[10.187813,-2.712895],[10.195547,-2.727349],[10.202756,-2.740988],[10.201455,-2.752073],[10.193724,-2.758024],[10.190922,-2.766478],[10.187819,-2.777815],[10.183285,-2.783453],[10.178543,-2.790894],[10.156927,-2.790714],[10.132261,-2.790955],[10.108948,-2.792263],[10.089121,-2.788908],[10.064659,-2.789312],[10.043565,-2.782502],[10.021245,-2.777442],[10.002587,-2.770201],[9.972273,-2.747675],[9.936020,-2.755255],[9.887983,-2.762749],[9.827285,-2.726796],[9.795663,-2.759906],[9.749673,-2.787273],[9.724639,-2.783320],[9.692841,-2.786128],[9.682896,-2.765555],[9.661697,-2.755561],[9.641806,-2.741971],[9.643466,-2.731836],[9.633929,-2.723534],[9.633880,-2.708526],[9.630991,-2.696034],[9.632692,-2.683871],[9.634826,-2.671208],[9.641143,-2.656066],[9.643937,-2.641004],[9.649797,-2.622583],[9.778775,-2.494967],[9.839854,-2.469710],[9.884842,-2.461915],[9.943382,-2.460153]]},
+  {name:"Lambussie-Karni", region:"Upper West", coords:[
+    [10.741148,-2.433882],[10.777630,-2.451596],[10.797408,-2.470907],[10.800570,-2.445771],[10.815506,-2.444342],[10.838853,-2.454862],[10.862124,-2.459850],[10.905862,-2.480956],[10.932186,-2.530937],[10.934320,-2.566197],[10.948372,-2.595891],[10.958210,-2.606421],[10.968733,-2.616120],[10.978317,-2.633502],[11.019376,-2.739604],[11.003446,-2.767502],[10.975921,-2.749664],[10.963441,-2.747418],[10.931396,-2.744967],[10.888626,-2.725451],[10.879137,-2.739384],[10.855761,-2.730900],[10.851031,-2.717533],[10.838012,-2.708920],[10.831107,-2.712487],[10.822467,-2.712123],[10.812338,-2.708329],[10.814914,-2.696678],[10.811335,-2.686731],[10.801066,-2.687385],[10.796331,-2.687269],[10.780464,-2.691657],[10.781248,-2.680977],[10.787115,-2.669531],[10.781575,-2.660598],[10.773390,-2.661659],[10.767453,-2.657999],[10.763877,-2.654739],[10.757649,-2.654255],[10.747810,-2.669034],[10.746659,-2.689572],[10.733398,-2.688362],[10.713465,-2.680111],[10.713510,-2.692150],[10.714827,-2.701812],[10.707541,-2.707192],[10.713350,-2.710391],[10.713989,-2.718961],[10.714825,-2.729390],[10.705098,-2.729059],[10.687658,-2.725029],[10.675975,-2.714908],[10.665008,-2.706033],[10.657745,-2.699616],[10.664648,-2.660185],[10.661398,-2.628520],[10.686483,-2.595915],[10.701908,-2.591738],[10.724803,-2.597808],[10.752110,-2.580612],[10.731987,-2.467299],[10.726971,-2.441932],[10.741148,-2.433882]]},
+  {name:"West Gonja", region:"Savannah", coords:[
+    [9.154682,-2.258849],[9.142773,-2.233563],[9.120890,-2.206829],[9.104217,-2.180571],[9.075257,-2.162283],[9.052837,-2.127420],[9.029298,-2.087301],[9.020875,-2.042721],[9.035328,-2.015131],[9.042610,-1.975540],[9.041927,-1.924179],[9.041183,-1.865122],[9.013355,-1.836417],[8.931213,-1.861527],[8.914111,-1.665097],[8.929630,-1.588298],[8.977525,-1.577626],[9.019729,-1.560841],[9.076381,-1.502272],[9.090899,-1.485706],[9.105956,-1.474519],[9.112966,-1.454599],[9.114062,-1.435014],[9.118025,-1.419055],[9.130083,-1.403381],[9.128111,-1.386355],[9.129847,-1.374572],[9.164233,-1.350425],[9.157287,-1.329348],[9.159487,-1.310436],[9.170158,-1.295962],[9.184008,-1.280142],[9.184194,-1.263864],[9.198732,-1.248320],[9.218318,-1.237991],[9.241743,-1.240088],[9.283042,-1.241737],[9.370529,-1.372652],[9.343822,-1.407862],[9.319645,-1.454492],[9.307410,-1.501708],[9.316599,-1.545179],[9.292097,-1.599963],[9.365926,-1.701293],[9.470364,-1.750358],[9.561087,-1.918991],[9.572116,-1.966749],[9.584374,-2.018838],[9.578032,-2.054229],[9.564429,-2.086907],[9.532528,-2.104795],[9.493501,-2.143426],[9.449743,-2.134554],[9.428882,-2.128190],[9.392855,-2.118325],[9.383964,-2.157585],[9.360203,-2.182626],[9.350128,-2.201189],[9.262971,-2.254988],[9.217545,-2.268740],[9.167227,-2.258850],[9.154682,-2.258849]]},
+  {name:"Bole", region:"Savannah", coords:[
+    [9.210179,-2.711552],[9.176825,-2.727429],[9.137477,-2.774839],[9.064858,-2.781890],[9.026523,-2.733332],[9.016377,-2.689177],[8.989638,-2.657084],[8.955285,-2.652994],[8.933324,-2.638115],[8.912849,-2.615830],[8.883830,-2.622264],[8.863673,-2.614379],[8.838048,-2.599292],[8.818747,-2.603617],[8.804863,-2.623779],[8.788197,-2.598268],[8.772414,-2.569727],[8.761680,-2.543265],[8.691061,-2.489359],[8.627654,-2.438864],[8.566219,-2.409113],[8.517037,-2.358614],[8.456295,-2.342793],[8.387715,-2.304076],[8.300016,-2.288797],[8.261146,-2.218307],[8.201677,-2.166100],[8.156138,-2.119246],[8.170447,-1.959386],[8.258896,-1.749400],[8.373184,-1.895768],[8.629086,-1.873040],[8.703377,-1.874924],[8.744826,-1.912818],[8.745031,-1.963433],[8.769201,-2.008038],[8.793837,-2.011875],[8.826124,-2.052904],[8.822487,-2.110180],[8.847081,-2.143712],[8.889847,-2.181701],[8.952132,-2.253716],[8.984012,-2.169817],[8.986639,-2.127003],[8.992547,-2.092659],[8.999924,-2.053961],[9.015921,-2.035586],[9.030766,-2.080105],[9.051207,-2.126092],[9.077039,-2.164760],[9.107272,-2.182777],[9.125924,-2.218157],[9.145814,-2.243569],[9.154388,-2.273807],[9.152392,-2.303448],[9.154929,-2.349690],[9.234616,-2.439176],[9.187997,-2.605082],[9.186608,-2.637867],[9.196831,-2.670705],[9.202192,-2.703263],[9.210179,-2.711552]]}
+];
+
+const DISTRICT_COLORS=[
+  '#ef4444','#f97316','#eab308','#22c55e','#10b981','#06b6d4',
+  '#3b82f6','#8b5cf6','#ec4899'
+];
+DISTRICTS.forEach((d,i)=>{
+  const clr=DISTRICT_COLORS[i%DISTRICT_COLORS.length];
+  const poly=L.polygon(d.coords,{
+    fillColor:clr,fillOpacity:0.07,
+    color:clr,weight:2.5,
+    interactive:true
+  }).addTo(lgDistricts);
+  poly.bindTooltip(`<b>${d.name} District</b><br>${d.region} Region`,
+    {sticky:true,className:'dist-tip'});
+});
+
+
+// ═══════════════════════════════════════════════════════════════════════
+//  COLLECTION AREAS — polygon catchments matched from ZIP files
+// ═══════════════════════════════════════════════════════════════════════
+// GeoJSON coords are [lng,lat]; convert to Leaflet [lat,lng]
+function gjToLL(coords){return coords.map(([lng,lat])=>[lat,lng]);}
+
+const COLLECTION_AREAS=[
+  // Bale Centre — NW04-CA01
+  {centerIds:["GHA-SA-005"],name:"Bale Collection Area",coords:gjToLL([[-2.592729,9.081540],[-2.591365,9.080144],[-2.591607,9.078218],[-2.590035,9.077493],[-2.587906,9.079273],[-2.587250,9.076536],[-2.586074,9.075125],[-2.583972,9.075114],[-2.582584,9.075282],[-2.581017,9.079391],[-2.579682,9.081339],[-2.577978,9.085219],[-2.574734,9.088061],[-2.574545,9.089490],[-2.576358,9.088707],[-2.577364,9.089958],[-2.575544,9.091774],[-2.574371,9.091225],[-2.573377,9.088895],[-2.567565,9.089740],[-2.563806,9.090855],[-2.564118,9.093287],[-2.566366,9.094297],[-2.568154,9.094988],[-2.569364,9.094103],[-2.567182,9.092300],[-2.568834,9.091242],[-2.571874,9.092075],[-2.571444,9.094532],[-2.575687,9.098231],[-2.577566,9.095546],[-2.579602,9.094197],[-2.579450,9.091444],[-2.582460,9.088146],[-2.583801,9.085875],[-2.584547,9.080669],[-2.585526,9.080371],[-2.586846,9.080766],[-2.590697,9.081812],[-2.592729,9.081540]])},
+  // Sonyor Centre — NW04-CA13
+  {centerIds:["GHA-SA-006"],name:"Sonyor Collection Area",coords:gjToLL([[-2.314810,9.130948],[-2.319221,9.132064],[-2.321832,9.131860],[-2.322017,9.127478],[-2.320721,9.119355],[-2.322539,9.108755],[-2.318166,9.101278],[-2.310374,9.098016],[-2.314540,9.089369],[-2.312564,9.080035],[-2.308879,9.076027],[-2.305910,9.070775],[-2.300125,9.065433],[-2.307308,9.063328],[-2.309391,9.061165],[-2.307867,9.054253],[-2.303334,9.049726],[-2.304616,9.045401],[-2.308459,9.039442],[-2.304667,9.038070],[-2.297458,9.046298],[-2.293276,9.049830],[-2.290659,9.046455],[-2.291834,9.041972],[-2.290979,9.036223],[-2.286771,9.031494],[-2.274259,9.028338],[-2.253082,9.037404],[-2.240227,9.035653],[-2.236459,9.015734],[-2.211192,9.003037],[-2.163879,9.026596],[-2.151945,9.071932],[-2.145371,9.122653],[-2.150851,9.123145],[-2.159078,9.123525],[-2.172057,9.124688],[-2.183086,9.125734],[-2.194086,9.127367],[-2.202768,9.128925],[-2.211411,9.130302],[-2.226669,9.133186],[-2.233438,9.132685],[-2.243317,9.131646],[-2.255762,9.130198],[-2.264595,9.128211],[-2.271197,9.126884],[-2.278211,9.125628],[-2.288401,9.123265],[-2.296749,9.126021],[-2.302912,9.127624],[-2.308994,9.129291],[-2.314810,9.130948]])},
+  // New Nakong Centre — NE10-CA01
+  {centerIds:["GHA-UE-001"],name:"New Nakong Collection Area",coords:gjToLL([[-1.424459,10.829990],[-1.422261,10.829248],[-1.419346,10.830872],[-1.408794,10.831356],[-1.405140,10.832865],[-1.401874,10.834677],[-1.397178,10.837592],[-1.399504,10.842987],[-1.406672,10.840791],[-1.423438,10.839487],[-1.426581,10.835414],[-1.429761,10.833887],[-1.431187,10.833210],[-1.431210,10.832308],[-1.432403,10.831363],[-1.431828,10.829276],[-1.439095,10.825528],[-1.445374,10.822684],[-1.450245,10.820981],[-1.455026,10.820570],[-1.457273,10.835045],[-1.447768,10.849161],[-1.436511,10.873561],[-1.346628,10.873901],[-1.332167,10.875194],[-1.331182,10.877472],[-1.332890,10.880175],[-1.333833,10.884155],[-1.338090,10.896681],[-1.359365,10.900096],[-1.458549,10.900163],[-1.475967,10.888145],[-1.484711,10.870633],[-1.486319,10.850633],[-1.492141,10.821217],[-1.488678,10.811130],[-1.486428,10.806468],[-1.481157,10.804518],[-1.459339,10.811204],[-1.453517,10.813140],[-1.439344,10.816499],[-1.431188,10.819688],[-1.429688,10.823714],[-1.426941,10.826026],[-1.426569,10.828643],[-1.424459,10.829990]])},
+  // Longsa Centre — NE10-CA02
+  {centerIds:["GHA-UE-002"],name:"Longsa Collection Area",coords:gjToLL([[-1.316520,10.778690],[-1.299982,10.785327],[-1.306267,10.792813],[-1.312724,10.789077],[-1.317891,10.802483],[-1.312890,10.805547],[-1.306990,10.806277],[-1.300529,10.795302],[-1.306240,10.792866],[-1.304183,10.790631],[-1.303287,10.789584],[-1.302524,10.788589],[-1.299853,10.785480],[-1.281076,10.787741],[-1.277057,10.787160],[-1.275188,10.788933],[-1.270628,10.789063],[-1.269126,10.788193],[-1.265219,10.791975],[-1.265872,10.797272],[-1.281387,10.798179],[-1.283907,10.806511],[-1.285450,10.818899],[-1.297278,10.825077],[-1.311939,10.820397],[-1.334143,10.815323],[-1.355701,10.815212],[-1.380242,10.816818],[-1.477488,10.783010],[-1.497899,10.776222],[-1.496910,10.769653],[-1.491418,10.764564],[-1.486090,10.764631],[-1.481750,10.767321],[-1.476009,10.765464],[-1.464824,10.762851],[-1.451442,10.757629],[-1.441989,10.752193],[-1.422364,10.745390],[-1.380330,10.759773],[-1.339150,10.774178],[-1.316520,10.778690]])},
+  // Naaga Centre — NE08-CA11
+  {centerIds:["GHA-UE-003"],name:"Naaga Collection Area",coords:gjToLL([[-0.989517,10.621731],[-0.983334,10.643085],[-1.024858,10.630092],[-1.026250,10.630225],[-1.028155,10.629787],[-1.031563,10.629109],[-1.034110,10.629013],[-1.047098,10.630111],[-1.052233,10.626990],[-1.054389,10.623681],[-1.051457,10.619337],[-1.046181,10.622552],[-1.046266,10.617304],[-1.042513,10.616733],[-1.034098,10.621142],[-1.033185,10.620245],[-1.031925,10.620021],[-1.031677,10.621325],[-1.031650,10.621463],[-1.032453,10.621877],[-1.032597,10.622700],[-1.032697,10.623372],[-1.031744,10.623738],[-1.030487,10.623045],[-1.030192,10.620137],[-0.989517,10.621731]])},
+  // Kolemkgu Centre — NE08-CA08
+  {centerIds:["GHA-UE-004"],name:"Kolemgu Collection Area",coords:gjToLL([[-1.114674,10.684371],[-1.106850,10.683853],[-1.103722,10.694949],[-1.107581,10.693781],[-1.110626,10.693124],[-1.116451,10.691774],[-1.115292,10.688810],[-1.114674,10.684371]])},
+  // Dasima & Sentie — NE03-CA01 (shared big polygon)
+  {centerIds:["GHA-UW-001","GHA-UW-002"],name:"Gbele/Tumu Collection Area",coords:gjToLL([[-2.106824,10.710899],[-2.090473,10.731916],[-2.087995,10.743372],[-2.102175,10.744273],[-2.118535,10.741829],[-2.137306,10.742191],[-2.158671,10.734592],[-2.168965,10.723580],[-2.174280,10.711035],[-2.179269,10.698433],[-2.179795,10.687485],[-2.164860,10.679165],[-2.163485,10.669539],[-2.158786,10.659959],[-2.173644,10.641861],[-2.178921,10.639944],[-2.185258,10.637543],[-2.190816,10.638299],[-2.194383,10.637390],[-2.196818,10.635251],[-2.197457,10.632717],[-2.197686,10.627377],[-2.197242,10.623576],[-2.195593,10.611611],[-2.208757,10.602654],[-2.209217,10.593362],[-2.186911,10.577683],[-2.169113,10.553536],[-2.174285,10.546117],[-2.196414,10.544428],[-2.204051,10.539438],[-2.215785,10.535245],[-2.231007,10.534687],[-2.247788,10.531444],[-2.258689,10.531909],[-2.267866,10.542964],[-2.269271,10.556052],[-2.261039,10.565113],[-2.260979,10.574388],[-2.273988,10.584698],[-2.292298,10.603878],[-2.318391,10.622783],[-2.316220,10.645926],[-2.322534,10.661222],[-2.330326,10.670439],[-2.353296,10.675401],[-2.368737,10.667598],[-2.372649,10.650742],[-2.372650,10.630176],[-2.352470,10.615175],[-2.360705,10.577971],[-2.362857,10.498953],[-2.331180,10.453173],[-2.255692,10.395723],[-2.199871,10.406606],[-2.156209,10.399176],[-2.130375,10.387117],[-2.092241,10.398234],[-2.044420,10.424336],[-2.054584,10.482763],[-2.054507,10.530191],[-2.111989,10.528113],[-2.104413,10.561227],[-2.088643,10.577566],[-2.092678,10.584425],[-2.092842,10.591288],[-2.100867,10.597186],[-2.104095,10.610774],[-2.108287,10.623576],[-2.106824,10.710899]])},
+  // Soma Centre — NW05-CA16
+  {centerIds:["GHA-UW-003"],name:"Soma & Badige Collection Area",coords:gjToLL([[-2.290509,9.460555],[-2.285348,9.445431],[-2.280540,9.442470],[-2.271916,9.443639],[-2.269310,9.434184],[-2.257842,9.429312],[-2.257728,9.443254],[-2.275967,9.455670],[-2.283981,9.462764],[-2.288629,9.467062],[-2.288946,9.472460],[-2.289863,9.475709],[-2.291432,9.476141],[-2.291627,9.475942],[-2.291752,9.475757],[-2.292349,9.475143],[-2.292620,9.474337],[-2.292990,9.473312],[-2.293432,9.472259],[-2.290509,9.460555]])},
+  // Nakpala Centre — NW05-CA14
+  {centerIds:["GHA-UW-004"],name:"Nakpala Collection Area",coords:gjToLL([[-2.508827,9.293824],[-2.506055,9.294323],[-2.504289,9.295586],[-2.507564,9.297221],[-2.511323,9.296936],[-2.515504,9.297433],[-2.519658,9.296758],[-2.523055,9.290886],[-2.523524,9.288228],[-2.525254,9.286908],[-2.520764,9.279546],[-2.521345,9.277795],[-2.523550,9.276606],[-2.522761,9.274085],[-2.518973,9.274870],[-2.518352,9.273765],[-2.516300,9.273701],[-2.516556,9.275647],[-2.514046,9.276804],[-2.514298,9.277325],[-2.516284,9.277273],[-2.518208,9.277286],[-2.519467,9.278103],[-2.519930,9.281657],[-2.516084,9.279615],[-2.514743,9.280747],[-2.513121,9.281106],[-2.512112,9.281079],[-2.511685,9.280092],[-2.511532,9.278853],[-2.510098,9.278761],[-2.509352,9.280771],[-2.508958,9.282873],[-2.509475,9.284801],[-2.509016,9.285684],[-2.508510,9.285477],[-2.507935,9.285195],[-2.507204,9.286375],[-2.506551,9.287151],[-2.506895,9.288376],[-2.508415,9.288536],[-2.509648,9.289445],[-2.510848,9.289333],[-2.511532,9.288883],[-2.511363,9.288366],[-2.510597,9.288772],[-2.510139,9.288876],[-2.509890,9.288481],[-2.509959,9.288114],[-2.509718,9.287875],[-2.508795,9.287676],[-2.508423,9.286700],[-2.509192,9.286098],[-2.510283,9.286923],[-2.510784,9.288318],[-2.511440,9.288045],[-2.510219,9.286403],[-2.510642,9.284243],[-2.511589,9.284347],[-2.511793,9.283206],[-2.512277,9.282479],[-2.513086,9.282585],[-2.516635,9.282703],[-2.515358,9.284141],[-2.515958,9.285230],[-2.519796,9.284759],[-2.521850,9.285774],[-2.522743,9.287218],[-2.522875,9.289051],[-2.522115,9.289740],[-2.520103,9.289628],[-2.515161,9.291560],[-2.513823,9.295866],[-2.508827,9.293824]])},
+  // Wechiau & Kpanfa — NW01-CA05 (shared)
+  {centerIds:["GHA-UW-005","GHA-UW-006"],name:"Wechiau Collection Area",coords:gjToLL([[-2.666337,9.847519],[-2.674999,9.849706],[-2.672558,9.840034],[-2.671584,9.832195],[-2.668325,9.831479],[-2.664305,9.835366],[-2.661822,9.834647],[-2.659414,9.828860],[-2.658875,9.831902],[-2.658811,9.836385],[-2.656988,9.837378],[-2.657544,9.843417],[-2.656434,9.848368],[-2.657027,9.850847],[-2.661588,9.850947],[-2.659107,9.860771],[-2.658309,9.862839],[-2.651638,9.864495],[-2.642600,9.863627],[-2.630295,9.866623],[-2.634175,9.877175],[-2.644090,9.875620],[-2.650920,9.873171],[-2.653865,9.867918],[-2.656181,9.869161],[-2.657056,9.867230],[-2.658442,9.866767],[-2.661760,9.868893],[-2.665351,9.860178],[-2.668688,9.852798],[-2.666337,9.847519]])},
+  // Kpugi & Bulugu — NE06-CA01 (shared)
+  {centerIds:["GHA-NR-001","GHA-NR-002"],name:"Gushegu Collection Area",coords:gjToLL([[-0.382404,9.903481],[-0.390619,9.894538],[-0.385656,9.881415],[-0.399384,9.883551],[-0.406706,9.874341],[-0.400631,9.861251],[-0.378442,9.849630],[-0.378842,9.858827],[-0.365658,9.852436],[-0.351144,9.855861],[-0.323077,9.853544],[-0.316492,9.856944],[-0.314111,9.862134],[-0.315295,9.866911],[-0.308894,9.871292],[-0.305626,9.870353],[-0.300083,9.874041],[-0.294349,9.874533],[-0.290763,9.864877],[-0.304747,9.858987],[-0.310475,9.857163],[-0.313560,9.852343],[-0.312861,9.850171],[-0.288848,9.852054],[-0.273104,9.837274],[-0.254623,9.834620],[-0.251887,9.852996],[-0.251846,9.863154],[-0.255139,9.871742],[-0.243484,9.865864],[-0.241780,9.866625],[-0.239784,9.866501],[-0.239298,9.863658],[-0.236236,9.863244],[-0.234946,9.860469],[-0.236450,9.855479],[-0.237256,9.855011],[-0.237856,9.852655],[-0.238779,9.852069],[-0.237659,9.851729],[-0.238063,9.850050],[-0.236760,9.850019],[-0.235350,9.849933],[-0.233702,9.849934],[-0.233398,9.850662],[-0.232862,9.851710],[-0.232379,9.853011],[-0.231997,9.853652],[-0.231642,9.854433],[-0.231324,9.855166],[-0.231134,9.855736],[-0.230813,9.856379],[-0.230605,9.856905],[-0.230242,9.857620],[-0.230052,9.858331],[-0.229684,9.858938],[-0.229505,9.859355],[-0.229339,9.859695],[-0.229261,9.859856],[-0.229058,9.860355],[-0.228355,9.861999],[-0.228209,9.862266],[-0.228083,9.862643],[-0.227899,9.863009],[-0.227607,9.863683],[-0.227104,9.864827],[-0.226869,9.865353],[-0.226632,9.865955],[-0.226147,9.866875],[-0.225857,9.867555],[-0.225577,9.868127],[-0.225040,9.869251],[-0.226705,9.870254],[-0.227235,9.873508],[-0.227164,9.876064],[-0.227147,9.878092],[-0.227280,9.881228],[-0.227273,9.883328],[-0.227249,9.885670],[-0.227562,9.888027],[-0.227448,9.888998],[-0.224923,9.889201],[-0.224078,9.889220],[-0.223759,9.888685],[-0.223893,9.887905],[-0.223826,9.886418],[-0.222021,9.886461],[-0.220224,9.886115],[-0.382404,9.903481]])},
+  // Dipali Centre — NE07-CA01
+  {centerIds:["GHA-NR-003"],name:"Dipali Collection Area",coords:gjToLL([[-0.931410,9.802807],[-0.932079,9.802560],[-0.932599,9.802547],[-0.932445,9.800992],[-0.932451,9.799565],[-0.929983,9.799338],[-0.927304,9.799469],[-0.922448,9.799748],[-0.922022,9.797263],[-0.918928,9.797722],[-0.918033,9.791546],[-0.917639,9.788227],[-0.919596,9.787257],[-0.921552,9.786910],[-0.923920,9.786337],[-0.921585,9.783543],[-0.922206,9.782697],[-0.922472,9.782146],[-0.922132,9.781564],[-0.922207,9.780939],[-0.921750,9.780596],[-0.920542,9.780589],[-0.920318,9.778670],[-0.918734,9.779672],[-0.917979,9.780912],[-0.917404,9.782747],[-0.917762,9.783533],[-0.917121,9.785658],[-0.916768,9.787902],[-0.916164,9.789253],[-0.915834,9.790294],[-0.916781,9.790611],[-0.916781,9.792146],[-0.915883,9.792467],[-0.915236,9.793728],[-0.914510,9.794827],[-0.915441,9.795957],[-0.914613,9.796576],[-0.916059,9.797783],[-0.914777,9.798683],[-0.912640,9.799743],[-0.912099,9.799654],[-0.911568,9.798825],[-0.910475,9.800618],[-0.911309,9.801741],[-0.911644,9.803126],[-0.912989,9.803998],[-0.915117,9.804630],[-0.916257,9.804168],[-0.916774,9.803374],[-0.918239,9.802772],[-0.919565,9.802482],[-0.921358,9.802633],[-0.923235,9.802456],[-0.924385,9.803438],[-0.928715,9.804010],[-0.929649,9.804015],[-0.930427,9.803981],[-0.931135,9.803926],[-0.931554,9.803855],[-0.932000,9.803782],[-0.932119,9.803585],[-0.931886,9.803545],[-0.931410,9.803458],[-0.931410,9.802807]])},
+  // Nyerko Centre — NE07-CA02
+  {centerIds:["GHA-NR-004"],name:"Nyerko Collection Area",coords:gjToLL([[-0.655368,9.699497],[-0.655182,9.696609],[-0.652402,9.696728],[-0.650275,9.697644],[-0.648163,9.697063],[-0.647980,9.698285],[-0.646862,9.698239],[-0.646120,9.697570],[-0.644759,9.697402],[-0.642883,9.697134],[-0.643112,9.699029],[-0.642047,9.700984],[-0.643544,9.701175],[-0.645358,9.699809],[-0.647086,9.700332],[-0.647875,9.700259],[-0.648891,9.699122],[-0.650973,9.700131],[-0.649938,9.701705],[-0.650250,9.702206],[-0.651170,9.702159],[-0.652754,9.701981],[-0.653316,9.701412],[-0.655368,9.699497]])},
+  // Jinlo Centre — NE09-CA02
+  {centerIds:["GHA-SA-001"],name:"Jinlo Collection Area",coords:gjToLL([[-0.637863,9.057287],[-0.636780,9.057969],[-0.635677,9.057785],[-0.635288,9.056559],[-0.632697,9.058016],[-0.631122,9.058738],[-0.629457,9.059524],[-0.626635,9.060683],[-0.623658,9.062799],[-0.626077,9.074435],[-0.631366,9.072969],[-0.636656,9.070204],[-0.637910,9.068020],[-0.638254,9.067481],[-0.638632,9.067264],[-0.639094,9.067303],[-0.639480,9.067220],[-0.639969,9.067043],[-0.641607,9.066795],[-0.645525,9.065892],[-0.647104,9.063787],[-0.647491,9.061012],[-0.649339,9.060339],[-0.649446,9.058962],[-0.647659,9.057146],[-0.644910,9.058477],[-0.643154,9.058712],[-0.640864,9.059150],[-0.638944,9.058129],[-0.637863,9.057287]])},
+  // Kanjayilli Centre — NE09-CA22
+  {centerIds:["GHA-SA-002"],name:"Kanjayili Collection Area",coords:gjToLL([[-0.841441,9.223262],[-0.837514,9.222251],[-0.834591,9.227061],[-0.831838,9.223855],[-0.829649,9.221492],[-0.828216,9.221357],[-0.830196,9.226116],[-0.831584,9.228394],[-0.830583,9.234244],[-0.833527,9.233027],[-0.835144,9.228623],[-0.838438,9.233685],[-0.837755,9.236301],[-0.839020,9.237178],[-0.835436,9.240270],[-0.836418,9.242738],[-0.834344,9.244596],[-0.838040,9.245935],[-0.836267,9.249168],[-0.840650,9.251652],[-0.843612,9.252891],[-0.843155,9.255035],[-0.844367,9.255775],[-0.843969,9.257242],[-0.843708,9.258673],[-0.844690,9.259252],[-0.848521,9.260701],[-0.846734,9.255726],[-0.846935,9.251326],[-0.849411,9.248009],[-0.851968,9.249918],[-0.852673,9.253466],[-0.851944,9.256583],[-0.852219,9.260988],[-0.854430,9.259652],[-0.856790,9.257563],[-0.856067,9.246874],[-0.855886,9.243013],[-0.854056,9.243431],[-0.853385,9.248377],[-0.850086,9.246423],[-0.849800,9.243231],[-0.847898,9.242602],[-0.845997,9.241755],[-0.843589,9.240692],[-0.844623,9.237229],[-0.844281,9.234191],[-0.844983,9.232148],[-0.843528,9.229162],[-0.842075,9.226173],[-0.841441,9.223262]])},
+  // Murugu Centre — NW02-CA01
+  {centerIds:["GHA-SA-003"],name:"Murugu Collection Area",coords:gjToLL([[-1.824780,9.327913],[-1.839210,9.305931],[-1.842806,9.291175],[-1.833513,9.274200],[-1.825970,9.270824],[-1.816969,9.271669],[-1.810680,9.275689],[-1.805903,9.279888],[-1.798074,9.284162],[-1.793595,9.287231],[-1.789698,9.293226],[-1.785289,9.300145],[-1.783788,9.309799],[-1.771549,9.314452],[-1.764915,9.323317],[-1.763333,9.331927],[-1.752991,9.343676],[-1.743585,9.350746],[-1.727028,9.359508],[-1.717514,9.367607],[-1.716828,9.386748],[-1.707967,9.396297],[-1.700941,9.397689],[-1.689384,9.402235],[-1.679884,9.411281],[-1.671701,9.419073],[-1.659470,9.436425],[-1.656018,9.448555],[-1.658646,9.456242],[-1.665377,9.458822],[-1.674137,9.457469],[-1.692445,9.454323],[-1.708308,9.471811],[-1.720544,9.486148],[-1.722168,9.505369],[-1.705418,9.518675],[-1.696764,9.549098],[-1.720090,9.567833],[-1.710496,9.586010],[-1.689617,9.580075],[-1.684538,9.603630],[-1.690593,9.626429],[-1.654644,9.633951],[-1.626617,9.606131],[-1.641439,9.576982],[-1.631234,9.561702],[-1.615659,9.561590],[-1.611754,9.580502],[-1.605313,9.580695],[-1.594636,9.592929],[-1.576955,9.592744],[-1.574321,9.590518],[-1.561154,9.594042],[-1.551370,9.579198],[-1.536133,9.590327],[-1.534252,9.608688],[-1.559701,9.624032],[-1.614451,9.641096],[-1.664376,9.676796],[-1.727822,9.683239],[-1.747955,9.632747],[-1.743010,9.574236],[-1.773485,9.566421],[-1.781099,9.546062],[-1.798208,9.466719],[-1.825975,9.390610],[-1.830824,9.358657],[-1.826437,9.346776],[-1.824780,9.327913]])},
+  // Zowu Centre — NW02-CA14
+  {centerIds:["GHA-SA-004"],name:"Zowu Collection Area",coords:gjToLL([[-1.154811,9.100815],[-1.153830,9.099282],[-1.153061,9.100161],[-1.151130,9.098241],[-1.150619,9.096491],[-1.151808,9.094856],[-1.152976,9.092159],[-1.154867,9.088621],[-1.156720,9.088856],[-1.157062,9.089403],[-1.156872,9.089928],[-1.156603,9.090479],[-1.157021,9.090831],[-1.156963,9.093527],[-1.157932,9.093209],[-1.158235,9.092568],[-1.158255,9.091818],[-1.158443,9.090309],[-1.158443,9.089214],[-1.157370,9.088587],[-1.157561,9.087341],[-1.158325,9.086330],[-1.156294,9.085454],[-1.156084,9.086778],[-1.155371,9.086763],[-1.154432,9.087054],[-1.153317,9.087058],[-1.152401,9.087848],[-1.149402,9.090690],[-1.148430,9.093390],[-1.147873,9.096069],[-1.149054,9.094787],[-1.150283,9.095515],[-1.148732,9.097090],[-1.148632,9.098421],[-1.149410,9.100690],[-1.151097,9.101644],[-1.150628,9.102955],[-1.151465,9.103478],[-1.151888,9.104209],[-1.152505,9.104005],[-1.153549,9.103168],[-1.154602,9.103546],[-1.154723,9.105199],[-1.156316,9.104681],[-1.156806,9.105869],[-1.158140,9.105688],[-1.158991,9.105711],[-1.159498,9.106114],[-1.158902,9.107980],[-1.160249,9.108036],[-1.161582,9.109242],[-1.160895,9.111636],[-1.159717,9.112729],[-1.161585,9.114303],[-1.162604,9.113201],[-1.163911,9.111742],[-1.163638,9.110059],[-1.162877,9.108797],[-1.162994,9.107547],[-1.161338,9.106267],[-1.159893,9.105159],[-1.160466,9.103838],[-1.161332,9.103683],[-1.161472,9.102162],[-1.154811,9.100815]])}
+];
+
+// Draw collection areas on map
+const FILL_CLR={high:"#22c55e",low:"#ef4444",expansion:"#f59e0b"};
+COLLECTION_AREAS.forEach(area=>{
+  // determine color from first center's performance
+  const firstC=CENTERS.find(c=>area.centerIds.includes(c.id));
+  const perf=firstC?firstC.performance:'high';
+  const clr=FILL_CLR[perf];
+  const names=area.centerIds.map(id=>{
+    const c=CENTERS.find(x=>x.id===id);
+    return c?c.centerName.replace(' Centre',''):'';
+  }).join(' & ');
+  L.polygon(area.coords,{
+    fillColor:clr,fillOpacity:.13,
+    color:clr,weight:1.8,dashArray:'5 4',opacity:.6
+  }).addTo(lgCollection)
+    .bindTooltip(`<b>${names}</b><br><span style="opacity:.7">${area.name}</span>`,
+      {sticky:true,className:'zone-tip'});
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  MARKERS
+// ═══════════════════════════════════════════════════════════════════════
+const PERF_CLR={high:"#22c55e",low:"#ef4444",expansion:"#f59e0b"};
+const PERF_GLOW={high:"rgba(34,197,94,.45)",low:"rgba(239,68,68,.45)",expansion:"rgba(245,158,11,.45)"};
+
+function mkIcon(perf,sel){
+  const c=PERF_CLR[perf]||PERF_CLR.low,g=PERF_GLOW[perf]||PERF_GLOW.low;
+  const sz=sel?20:13,bw=sel?3:2;
+  const sh=sel?`0 0 0 4px ${g},0 3px 10px rgba(0,0,0,.3)`:`0 1px 5px rgba(0,0,0,.28)`;
+  return L.divIcon({
+    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${c};border:${bw}px solid #fff;box-shadow:${sh};transition:all .22s cubic-bezier(.16,1,.3,1);cursor:pointer"></div>`,
+    className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+  });
+}
+
+const mIdx=new Map();
+CENTERS.forEach(c=>{
+  const m=L.marker([c.lat,c.lng],{icon:mkIcon(c.performance,false)}).addTo(map);
+  m.on('click',e=>{L.DomEvent.stopPropagation(e);openPanel(c,m);});
+  mIdx.set(c.id,{m,c});
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PANEL STATE
+// ═══════════════════════════════════════════════════════════════════════
+let activeMkr=null,activeC=null,filterPerf='all';
+let visibleCenters=()=>CENTERS.filter(c=>filterPerf==='all'||c.performance===filterPerf);
+
+function currentIdx(){return visibleCenters().findIndex(c=>c.id===(activeC&&activeC.id))}
+
+function openPanel(c,m){
+  if(activeMkr&&activeMkr!==m){
+    const prev=mIdx.get(activeC?.id);
+    if(prev)prev.m.setIcon(mkIcon(activeC.performance,false));
+  }
+  activeMkr=m; activeC=c;
+  m.setIcon(mkIcon(c.performance,true));
+  // Zoom to show the zone area — level 9 shows context around the lot
+  map.flyTo([c.lat,c.lng],14,{animate:true,duration:.8});
+  renderPanel(c);
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('map').classList.add('panel-open');
+  document.getElementById('stats').classList.add('hide');
+  updateNavCounter();
+}
+
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('map').classList.remove('panel-open');
+  document.getElementById('stats').classList.remove('hide');
+  if(activeMkr&&activeC){activeMkr.setIcon(mkIcon(activeC.performance,false));activeMkr=null;activeC=null;}
+}
+
+function updateNavCounter(){
+  const vc=visibleCenters(),idx=currentIdx();
+  document.getElementById('nav-ctr').textContent=`${idx+1} / ${vc.length}`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  RENDER PANEL
+// ═══════════════════════════════════════════════════════════════════════
+// 2023/24 dried kernel bags per cooperative (Sheet 4 — SGG project data)
+// Each bag = 85 kg (same as FN)
+function get2324DryBags(c){
+  const n=c.cooperative||'';
+  if(n.includes('Chiana')||n.includes('Sandema')) return 272;  // BOLGA/CHAINA
+  if(n.includes('Navrongo'))                      return 172;  // NAVRONGO
+  if(n.includes('Tumu')||n.includes('Gbarakan'))  return 378;  // GBELE
+  if(n.includes('Suntaa')||n.includes('Maal'))    return 45;   // TUNA/SAWLA
+  if(n.includes('Wechiau'))                       return 112;  // WECHIAU
+  if(n.includes('Gushegu')||n.includes('Kpugi'))  return 290;  // GUSHEGU
+  if(n.includes('Savelugu'))                      return 171;  // SAVELUGU
+  if(n.includes('Kpalbe'))                        return 356;  // KPALBE 1&2
+  if(n.includes('Damongo')||n.includes('Sunkpa')) return 107;  // CREMA
+  if(n.includes('Bole')||n.includes('Noyini'))    return 25;   // BOLE
+  return null;
+}
+
+const MAX_FN_KG = 1923*85;  // 163,455 kg
+const MAX_DN_KG = 625*85;   // 53,125 kg
+const PERF_LABEL={high:"High Performance",low:"Low Performance",expansion:"Expansion"};
+
+function fmtKg(kg){
+  if(kg==null||isNaN(kg)) return null;
+  if(kg>=1000) return (kg/1000).toFixed(1)+' t';
+  return kg.toLocaleString()+' kg';
+}
+
+function renderPanel(c){
+  // Hero
+  document.getElementById('p-name').textContent=c.centerName;
+  document.getElementById('p-coop').textContent=c.cooperative;
+  const b=document.getElementById('p-badge');
+  b.textContent=PERF_LABEL[c.performance];b.className=`perf-badge ${c.performance}`;
+  document.getElementById('p-id').textContent=c.id;
+  document.getElementById('p-loc').textContent=`${c.district} · ${c.region}`;
+
+  // Photo strip
+  const strip=document.getElementById('p-photos');
+  const imgs=getImgs(c);
+  if(imgs.length>0){
+    strip.className='photo-strip has-images';
+    strip.innerHTML=imgs.slice(0,4).map(url=>
+      `<img src="${url}" alt="${c.centerName}" loading="lazy" onerror="this.style.display='none'">`
+    ).join('');
+  } else {
+    strip.className='photo-strip';
+    strip.innerHTML='';
+  }
+
+  const o=c.ops;
+  const fnBags=o.fnBags, dnBags=o.dryNuts;
+  const fnKg=fnBags!=null?fnBags*85:null;
+  const dnKg=dnBags!=null?dnBags*85:null;
+  const prevKg=c.prev2324coop!=null?c.prev2324coop*85:null;
+
+  // ── Season comparison tiles (FN + Dry Kernels for both years) ──────────
+  function setYrVal(kgId,bagsId,kg,bags,smClass){
+    const ke=document.getElementById(kgId),be=document.getElementById(bagsId);
+    if(!ke||!be) return;
+    if(kg!=null){ke.textContent=fmtKg(kg);ke.className=smClass||'yt-kg';}
+    else{ke.textContent='—';ke.className=(smClass||'yt-kg')+' nil';}
+    be.textContent=bags!=null?`${bags.toLocaleString()} bags`:'No data';
+  }
+
+  // 2025/26 FN
+  setYrVal('ov-fn2526','ov-fnbags2526',fnKg,fnBags);
+  // 2025/26 Dried Kernels
+  setYrVal('ov-dry2526','ov-drybags2526',dnKg,dnBags,'yt-kg-sm');
+
+  // 2023/24 FN (cooperative total)
+  setYrVal('ov-fn2324','ov-fnbags2324',prevKg,c.prev2324coop);
+  // 2023/24 Dried Kernels (cooperative total — from Sheet 4 SGG data)
+  const dry2324bags=get2324DryBags(c);
+  const dry2324kg=dry2324bags!=null?dry2324bags*85:null;
+  setYrVal('ov-dry2324','ov-drybags2324',dry2324kg,dry2324bags,'yt-kg-sm');
+
+  // YoY vs coop
+  const yoyEl=document.getElementById('ov-yoy');
+  if(fnKg!=null&&prevKg!=null&&prevKg>0){
+    const pct=((fnKg-prevKg)/prevKg*100).toFixed(0);
+    yoyEl.textContent=(pct>=0?'+':'')+pct+'%';
+    yoyEl.className=pct>=0?'yt-kg':'yt-kg';
+    yoyEl.style.color=pct>=0?'#15803d':'#dc2626';
+  } else {
+    yoyEl.textContent='—';
+    yoyEl.style.color='';
+  }
+
+  // Progress bars (KG)
+  const pFill=document.getElementById('pr-bags');
+  const pFillD=document.getElementById('pr-dry');
+  const pv=document.getElementById('pr-bags-val');
+  const pvd=document.getElementById('pr-dry-val');
+  const pct=fnKg!=null?Math.min(100,(fnKg/MAX_FN_KG)*100):0;
+  const pctd=dnKg!=null?Math.min(100,(dnKg/MAX_DN_KG)*100):0;
+  const col=c.performance==='high'?'green':'red';
+  pFill.style.width=pct+'%';pFill.className=`prog-fill ${col}`;
+  pFillD.style.width=pctd+'%';pFillD.className=`prog-fill ${col}`;
+  pv.textContent=fnKg!=null?fmtKg(fnKg):'—';
+  pvd.textContent=dnKg!=null?fmtKg(dnKg):'—';
+
+  // Tags
+  document.getElementById('p-tags').innerHTML=c.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('');
+
+  // Communities
+  document.getElementById('p-communities').innerHTML=c.allCommunities.map(cm=>
+    `<div class="comm-item"><div class="c-pip ${c.performance}"></div><span class="c-nm">${cm.name}</span><span class="c-est">Est. ${cm.established}</span></div>`
+  ).join('');
+
+  // Operations tab
+  const bBox=document.getElementById('p-bottleneck-box');
+  bBox.className=`alert-box ${c.bottleneckType}`;
+  const ic={ok:'✓',warn:'⚠',danger:'✕'};
+  bBox.querySelector('.alert-icon').textContent=ic[c.bottleneckType]||'!';
+  document.getElementById('p-bottleneck').textContent=c.bottleneck||'No data.';
+
+  document.getElementById('p-infra').innerHTML=[
+    {v:o.stoves,l:'Stoves'},{v:o.drying,l:'Drying Areas'},{v:o.tricycles,l:'Tricycles'}
+  ].map(i=>`<div class="infra-cell"><div class="ic-val">${i.v??'—'}</div><div class="ic-lbl">${i.l}</div></div>`).join('');
+
+  setVal('op-wc',o.womenColl);setVal('op-wp',o.womenProc);
+  const costEl=document.getElementById('op-cost');
+  costEl.textContent=o.cost!=null?`USD ${o.cost.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'—';
+  costEl.className=o.cost!=null?'kt-val':'kt-val nil';
+
+  // Ops volume detail (KG focus)
+  const fnKgEl=document.getElementById('op-fn-kg');
+  const fnBagsEl=document.getElementById('op-fn-bags');
+  const dnKgEl=document.getElementById('op-dn-kg');
+  const dnBagsEl=document.getElementById('op-dn-bags');
+  fnKgEl.textContent=fnKg!=null?fmtKg(fnKg):'—';
+  fnKgEl.className=fnKg!=null?'kt-val':'kt-val nil';
+  fnBagsEl.textContent=fnBags!=null?`${fnBags} bags`:'';
+  dnKgEl.textContent=dnKg!=null?fmtKg(dnKg):'—';
+  dnKgEl.className=dnKg!=null?'kt-val':'kt-val nil';
+  dnBagsEl.textContent=dnBags!=null?`${dnBags} bags`:'';
+
+  // Profile tab
+  setVal('pp-founded',c.founded);setVal('pp-sfc',c.partneredSFC);
+  setVal('pp-sec',c.secretary);setVal('pp-mag',c.magazia);
+  setVal('pp-mem',c.members?c.members.toLocaleString():null);
+  document.getElementById('pp-cap').textContent=c.productionCapacity?`${c.productionCapacity} t/mo`:'—';
+  document.getElementById('p-insights').innerHTML=c.insights.map(i=>
+    `<div class="ins-row"><div class="ins-ic ${i.t}">${{good:'✓',warn:'!',bad:'✕'}[i.t]}</div><span class="ins-txt">${i.x}</span></div>`
+  ).join('');
+  document.getElementById('p-highlight').textContent=c.highlight||'—';
+}
+
+function setVal(id,v){
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=v??'—';el.className=v!=null?'kt-val':'kt-val nil';
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+  });
+});
+
+// Navigation
+document.getElementById('btn-prev').addEventListener('click',()=>{
+  const vc=visibleCenters(),idx=currentIdx();
+  const next=vc[(idx-1+vc.length)%vc.length];
+  const e=mIdx.get(next.id);if(e)openPanel(e.c,e.m);
+});
+document.getElementById('btn-next').addEventListener('click',()=>{
+  const vc=visibleCenters(),idx=currentIdx();
+  const next=vc[(idx+1)%vc.length];
+  const e=mIdx.get(next.id);if(e)openPanel(e.c,e.m);
+});
+
+document.getElementById('panel-close').addEventListener('click',closePanel);
+map.on('click',closePanel);
+
+// ═══════════════════════════════════════════════════════════════════════
+//  FILTER
+// ═══════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.glass-btn[data-filter]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.glass-btn[data-filter]').forEach(x=>x.classList.remove('active-filter'));
+    b.classList.add('active-filter');
+    filterPerf=b.dataset.filter;
+    mIdx.forEach(({m,c})=>{
+      const show=filterPerf==='all'||c.performance===filterPerf;
+      show?(!map.hasLayer(m)&&map.addLayer(m)):map.removeLayer(m);
+    });
+    if(activeC&&filterPerf!=='all'&&activeC.performance!==filterPerf)closePanel();
+    else if(activeC)updateNavCounter();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════════════════════
+let dashCharts={};
+
+function openDash(){
+  document.getElementById('dash').classList.add('open');
+  setTimeout(buildDashCharts,80);
+}
+function closeDash(){document.getElementById('dash').classList.remove('open');}
+
+document.getElementById('dash-btn').addEventListener('click',openDash);
+document.getElementById('dash-close').addEventListener('click',closeDash);
+document.getElementById('dash-impact-btn').addEventListener('click',()=>{closeDash();openImpact();});
+
+// Open dashboard on page load instead of map
+openDash();
+
+function destroyChart(key){if(dashCharts[key]){dashCharts[key].destroy();delete dashCharts[key];}}
+
+function buildDashCharts(){
+  const coops=DATA_2324.map(d=>d.name);
+  const d2526map=Object.fromEntries(DATA_2526.map(d=>[d.name,d.kg]));
+  const d2526vals=coops.map(n=>d2526map[n]||0);
+
+  // Chart 1: Grouped bar — cooperative comparison KG
+  destroyChart('compare');
+  dashCharts.compare=new Chart(document.getElementById('ch-compare'),{
+    type:'bar',
+    data:{
+      labels:coops,
+      datasets:[
+        {
+          label:'2023–24 FN (kg)',
+          data:DATA_2324.map(d=>d.kg),
+          backgroundColor:'rgba(99,102,241,.7)',
+          borderRadius:3,borderSkipped:false
+        },
+        {
+          label:'2025–26 FN (kg)',
+          data:d2526vals,
+          backgroundColor:'rgba(34,197,94,.75)',
+          borderRadius:3,borderSkipped:false
+        }
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{color:'rgba(240,242,245,.75)',font:{size:11},usePointStyle:true,padding:16}},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const kg=ctx.raw;
+            const bags=Math.round(kg/85);
+            return `${ctx.dataset.label}: ${kg.toLocaleString()} kg (${bags.toLocaleString()} bags)`;
+          }
+        }}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'rgba(240,242,245,.55)',font:{size:10},maxRotation:35}},
+        y:{
+          grid:{color:'rgba(255,255,255,.06)'},
+          ticks:{color:'rgba(240,242,245,.5)',font:{size:10},callback:v=>v>=1000?(v/1000).toFixed(0)+'t':v}
+        }
+      }
+    }
+  });
+
+  // Chart 2: Donut — performance distribution
+  destroyChart('donut');
+  dashCharts.donut=new Chart(document.getElementById('ch-donut'),{
+    type:'doughnut',
+    data:{
+      labels:['High','Low'],
+      datasets:[{
+        data:[
+          CENTERS.filter(c=>c.performance==='high').length,
+          CENTERS.filter(c=>c.performance==='low').length
+        ],
+        backgroundColor:['rgba(34,197,94,.8)','rgba(239,68,68,.75)'],
+        borderWidth:0,hoverOffset:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'65%',
+      plugins:{
+        legend:{position:'bottom',labels:{color:'rgba(240,242,245,.7)',font:{size:10},padding:10,usePointStyle:true}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} centres`}}
+      }
+    }
+  });
+
+  // Status table (KG) — clickable rows navigate to map + open card
+  const bt=document.getElementById('bn-table');
+  const rows=CENTERS.map(c=>{
+    const kg=c.ops.fnBags!=null?c.ops.fnBags*85:null;
+    const kgStr=kg!=null?(kg>=1000?(kg/1000).toFixed(1)+'t':kg.toLocaleString()+' kg'):'—';
+    const badge=c.performance==='high'?'High':c.performance==='low'?'Low':'Exp.';
+    return `<tr data-cid="${c.id}" style="cursor:pointer" title="Click to view on map">
+      <td style="white-space:nowrap">${c.centerName.replace(' Centre','')}</td>
+      <td>${kgStr}</td>
+      <td><span class="bn-badge ${c.performance}">${badge}</span></td>
+    </tr>`;
+  }).join('');
+  bt.innerHTML=`<thead><tr><th>Centre</th><th>FN KG 25/26</th><th>Status</th></tr></thead><tbody>${rows}</tbody>`;
+
+  // Wire row clicks
+  bt.querySelectorAll('tr[data-cid]').forEach(tr=>{
+    tr.addEventListener('click',()=>{
+      const id=tr.dataset.cid;
+      const entry=mIdx.get(id);
+      if(!entry)return;
+      closeDash();
+      setTimeout(()=>openPanel(entry.c,entry.m),120);
+    });
+    tr.addEventListener('mouseenter',()=>tr.style.background='rgba(255,255,255,.06)');
+    tr.addEventListener('mouseleave',()=>tr.style.background='');
+  });
+}
+
+// Zone tooltip style
+const style=document.createElement('style');
+style.textContent=`.zone-tip{background:rgba(13,15,20,.85);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;font-size:11px;padding:4px 9px;border-radius:6px;font-weight:600}`;
+document.head.appendChild(style);
+
+// ═══════════════════════════════════════════════════════════════════════
+//  IMPACT CALCULATOR
+// ═══════════════════════════════════════════════════════════════════════
+function openImpact(){document.getElementById('impact').classList.add('open');}
+function closeImpact(){document.getElementById('impact').classList.remove('open');}
+document.getElementById('impact-btn').addEventListener('click',openImpact);
+document.getElementById('impact-close').addEventListener('click',closeImpact);
+
+// SGG baseline/endline rates — NUTS (per kg dried kernel)
+const NR = {
+  fw_base: 0.63,    // kg firewood / kg kernel (avg Gushegu 0.70 + Savelugu 0.55)
+  fw_end_lo: 0.63*(1-0.43), // 43% reduction
+  fw_end_hi: 0.63*(1-0.66), // 66% reduction
+  water_base: 0.91,  // L / kg kernel
+  water_end: 1.10,   // L / kg kernel (increases slightly with collective)
+  ghg_base: 0.521,   // kg CO2eq / kg kernel (avg 0.55+0.492)
+  ghg_end_lo: 0.521*(1-0.43),
+  ghg_end_hi: 0.521*(1-0.66),
+  rev_base: 4.71,    // GHS / kg kernel
+  rev_end: 7.50,     // GHS / kg kernel (collective gets premium)
+  work_base: 16.5,   // min / kg kernel
+  work_end: 20.3,    // min / kg kernel (slightly more with collective QA)
+  women_per_t_fn: 16.8 // women per tonne fresh nuts
+};
+
+// SGG baseline/endline rates — BUTTER (per kg butter)
+const BR = {
+  fw_base: 0.797,   // kg firewood / kg butter (avg across 4 centres)
+  fw_end: 0.797*(1-0.35), // ~35% reduction with improved equipment
+  water_base: 6.925, // L / kg butter
+  water_end: 5.54,   // ~20% reduction
+  waste_base: 9.575, // kg waste / kg butter
+  ghg_base: 0.65,    // kg CO2eq / kg butter (estimated from firewood rate + NCV)
+  ghg_end: 0.65*(1-0.40),
+  women_per_t: 25    // approx women per tonne butter
+};
+
+function fmtN(n,d=1){
+  if(n==null||isNaN(n)) return '—';
+  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(d)+'M';
+  if(Math.abs(n)>=1e3) return (n/1e3).toFixed(d)+'k';
+  return n.toFixed(d);
+}
+function fmtT(n){
+  if(n==null||isNaN(n)) return '—';
+  if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k t';
+  return n.toFixed(1)+' t';
+}
+
+function calcImpact(){
+  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
+  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
+
+  const empty = document.getElementById('imp-empty');
+  const live = document.getElementById('imp-live');
+
+  const exportBtn = document.getElementById('imp-export-btn');
+  if(nutT<=0 && butT<=0){
+    empty.style.display='flex';
+    live.style.display='none';
+    exportBtn.classList.add('disabled');
+    return;
+  }
+  empty.style.display='none';
+  live.style.display='block';
+  exportBtn.classList.remove('disabled');
+
+  const nutKg = nutT*1000;
+  const butKg = butT*1000;
+  const fnKg = nutKg*3; // approx fresh nuts = 3x dried kernels
+  const fnT = fnKg/1000;
+
+  // NUTS calculations
+  const n_fw_base = nutKg * NR.fw_base / 1000;
+  const n_fw_end_avg = nutKg * ((NR.fw_end_lo+NR.fw_end_hi)/2) / 1000;
+  const n_fw_saved = n_fw_base - n_fw_end_avg;
+  const n_water_base = nutKg * NR.water_base / 1000; // m³
+  const n_water_end = nutKg * NR.water_end / 1000;
+  const n_ghg_base = nutKg * NR.ghg_base / 1000; // tonnes CO2
+  const n_ghg_end_avg = nutKg * ((NR.ghg_end_lo+NR.ghg_end_hi)/2) / 1000;
+  const n_ghg_saved = n_ghg_base - n_ghg_end_avg;
+  const n_rev_base = nutKg * NR.rev_base; // GHS
+  const n_rev_end = nutKg * NR.rev_end;
+  const n_rev_gain = n_rev_end - n_rev_base;
+  const n_work_base = nutKg * NR.work_base / 60; // hours
+  const n_work_end = nutKg * NR.work_end / 60;
+
+  // BUTTER calculations
+  const b_fw_base = butKg * BR.fw_base / 1000;
+  const b_fw_end = butKg * BR.fw_end / 1000;
+  const b_fw_saved = b_fw_base - b_fw_end;
+  const b_water_base = butKg * BR.water_base / 1000;
+  const b_water_end = butKg * BR.water_end / 1000;
+  const b_water_saved = b_water_base - b_water_end;
+  const b_waste = butKg * BR.waste_base / 1000;
+  const b_ghg_base = butKg * BR.ghg_base / 1000;
+  const b_ghg_end = butKg * BR.ghg_end / 1000;
+  const b_ghg_saved = b_ghg_base - b_ghg_end;
+
+  // Combined totals
+  const tot_fw_saved = n_fw_saved + b_fw_saved;
+  const tot_ghg_saved = n_ghg_saved + b_ghg_saved;
+  const tot_water_base = n_water_base + b_water_base;
+  const tot_water_end = n_water_end + b_water_end;
+  const women_est = Math.round(fnT * NR.women_per_t_fn + butT * BR.women_per_t);
+
+  // Equivalences
+  const trees_saved = Math.round(tot_fw_saved / 0.012); // ~12 kg usable firewood per tree
+  const cars_eq = (tot_ghg_saved / 4.6).toFixed(1); // 4.6 t CO2/year per avg car
+
+  live.innerHTML = `
+    <!-- HEADLINE METRICS -->
+    <div class="imp-divider">Headline Impact</div>
+    <div class="imp-row">
+      <div class="imp-card highlight">
+        <div class="ic-icon">👩‍🌾</div>
+        <div class="ic-val green">${women_est>0?women_est.toLocaleString():'—'}</div>
+        <div class="ic-lbl">Women Impacted</div>
+        <div class="ic-sub">Est. collectors &amp; processors</div>
+      </div>
+      <div class="imp-card highlight">
+        <div class="ic-icon">🌳</div>
+        <div class="ic-val green">${fmtT(tot_fw_saved)}</div>
+        <div class="ic-lbl">Firewood Saved</div>
+        <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved</div>
+      </div>
+      <div class="imp-card highlight">
+        <div class="ic-icon">💨</div>
+        <div class="ic-val green">${fmtT(tot_ghg_saved)}</div>
+        <div class="ic-lbl">GHG Avoided</div>
+        <div class="ic-sub">≈ ${cars_eq} cars off road / year</div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💰</div>
+        <div class="ic-val blue">${nutT>0?'GHS '+fmtN(n_rev_gain,0):'—'}</div>
+        <div class="ic-lbl">Extra Revenue</div>
+        <div class="ic-sub">Endline vs baseline pricing</div>
+      </div>
+    </div>
+
+    ${nutT>0?`
+    <!-- NUTS SECTION -->
+    <div class="imp-divider">🌰 Nuts — ${nutT} tonnes dried kernels ≈ ${fnT.toFixed(0)} t fresh nuts</div>
+
+    <div class="imp-row">
+      <div class="imp-card">
+        <div class="ic-icon">🔥</div>
+        <div class="ic-lbl">Firewood</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_fw_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_avg.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved/n_fw_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💧</div>
+        <div class="ic-lbl">Water Use</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_water_base.toFixed(0)} m³</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_water_end.toFixed(0)} m³</div></div>
+        </div>
+        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💨</div>
+        <div class="ic-lbl">GHG Emissions</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_ghg_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end_avg.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved/n_ghg_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">⏱</div>
+        <div class="ic-lbl">Person-Hours</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${fmtN(n_work_base)}h</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${fmtN(n_work_end)}h</div></div>
+        </div>
+        <div class="bve-saving neg">▲ Collective QA adds time but improves quality</div>
+      </div>
+    </div>
+
+    <div class="imp-row three">
+      <div class="imp-card">
+        <div class="ic-icon">💵</div>
+        <div class="ic-lbl">Revenue to Collectors</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">GHS ${fmtN(n_rev_base,0)}</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">GHS ${fmtN(n_rev_end,0)}</div></div>
+        </div>
+        <div class="bve-saving pos">+GHS ${fmtN(n_rev_gain,0)} extra income (+${((n_rev_gain/n_rev_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((n_rev_gain/n_rev_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">📊</div>
+        <div class="ic-lbl">Unit Rates — Nuts</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b>${NR.fw_base}</b> → <b>${((NR.fw_end_lo+NR.fw_end_hi)/2).toFixed(2)}</b> kg/kg<br>
+          Water: <b>${NR.water_base}</b> → <b>${NR.water_end}</b> L/kg<br>
+          GHG: <b>${NR.ghg_base}</b> → <b>${((NR.ghg_end_lo+NR.ghg_end_hi)/2).toFixed(3)}</b> kg CO₂/kg<br>
+          Revenue: <b>${NR.rev_base}</b> → <b>${NR.rev_end}</b> GHS/kg
+        </div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">🎯</div>
+        <div class="ic-lbl">Improvement Range</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
+          GHG: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
+          Revenue: <b style="color:#60a5fa">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> premium<br>
+          Water: <b style="color:#fbbf24">+21%</b> (more QA rinsing)
+        </div>
+      </div>
+    </div>
+    `:''}
+
+    ${butT>0?`
+    <!-- BUTTER SECTION -->
+    <div class="imp-divider">🧈 Butter — ${butT} tonnes raw butter</div>
+
+    <div class="imp-row">
+      <div class="imp-card">
+        <div class="ic-icon">🔥</div>
+        <div class="ic-lbl">Firewood</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_fw_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved/b_fw_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💧</div>
+        <div class="ic-lbl">Water Use</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_water_base.toFixed(0)} m³</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_water_end.toFixed(0)} m³</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((b_water_saved/b_water_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💨</div>
+        <div class="ic-lbl">GHG Emissions</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_ghg_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved/b_ghg_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">🗑</div>
+        <div class="ic-lbl">Waste Generated</div>
+        <div class="ic-val amber" style="margin-top:8px">${b_waste.toFixed(1)} t</div>
+        <div class="ic-sub">At ${BR.waste_base} kg waste / kg butter</div>
+        <div class="ic-sub">Effluent treatment recommended</div>
+      </div>
+    </div>
+    `:''}
+
+    <!-- COMBINED SUMMARY -->
+    ${(nutT>0||butT>0)?`
+    <div class="imp-divider">Combined Environmental Scorecard</div>
+    <div class="imp-row">
+      <div class="imp-card highlight" style="grid-column:span 2">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:42px">🌍</div>
+          <div>
+            <div class="ic-val green" style="font-size:32px">${fmtT(tot_ghg_saved)} CO₂eq</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Greenhouse Gas Avoided</div>
+            <div class="ic-sub">Equivalent to taking ${cars_eq} cars off the road for a year</div>
+          </div>
+        </div>
+      </div>
+      <div class="imp-card highlight" style="grid-column:span 2">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:42px">🌳</div>
+          <div>
+            <div class="ic-val green" style="font-size:32px">${fmtT(tot_fw_saved)}</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided</div>
+            <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved · Reduced deforestation pressure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `:''}
+  `;
+}
+
+// ── PDF Export ────────────────────────────────────────────────────────────
+const exportBtn = document.getElementById('imp-export-btn');
+
+function updatePrintHeader(){
+  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
+  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
+  const row = document.getElementById('iph-inputs-row');
+  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  let html = `<div class="iph-inp"><span>Generated:</span>${date}</div>`;
+  if(nutT>0) html += `<div class="iph-inp"><span>Dried Kernels:</span>${nutT} tonnes</div>`;
+  if(butT>0) html += `<div class="iph-inp"><span>Butter:</span>${butT} tonnes</div>`;
+  row.innerHTML = html;
+}
+
+function exportImpactPDF(){
+  updatePrintHeader();
+  // Brief delay to ensure DOM is updated, then print
+  setTimeout(()=>{
+    window.print();
+  }, 80);
+}
+
+exportBtn.addEventListener('click', exportImpactPDF);
+
+// Wire up inputs
+document.getElementById('inp-nuts').addEventListener('input',calcImpact);
+document.getElementById('inp-butter').addEventListener('input',calcImpact);
+
+// Quick buttons
+document.getElementById('qk-nuts').addEventListener('click',e=>{
+  if(e.target.tagName==='BUTTON'){
+    document.getElementById('inp-nuts').value=e.target.dataset.v;
+    calcImpact();
+  }
+});
+document.getElementById('qk-butter').addEventListener('click',e=>{
+  if(e.target.tagName==='BUTTON'){
+    document.getElementById('inp-butter').value=e.target.dataset.v;
+    calcImpact();
+  }
+});
+</script>
+</body>
+</html>
