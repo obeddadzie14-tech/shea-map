@@ -772,7 +772,8 @@ body{background:var(--dark);color:#f0f2f5}
   <div class="s-pill"><strong>964</strong> t FN 25/26</div>
   <div class="s-pill"><strong>492</strong> t FN 23/24</div>
   <div class="s-pill"><strong>+96%</strong> YoY growth</div>
-  <div class="s-pill"><strong>16,184</strong> women</div>
+  <div class="s-pill"><strong>2,249</strong> women benefited</div>
+  <div class="s-pill"><strong>16,184</strong> coop members</div>
 </div>
 
 <!-- Side Panel -->
@@ -879,6 +880,11 @@ body{background:var(--dark);color:#f0f2f5}
       <div class="sec-lbl">Workforce</div>
       <div class="kpi-grid">
         <div class="kpi-tile">
+          <div class="kt-lbl">Women Benefited</div>
+          <div class="kt-val" id="op-wb" style="color:#f9a8d4">—</div>
+          <div class="kt-sub">direct beneficiaries</div>
+        </div>
+        <div class="kpi-tile">
           <div class="kt-lbl">Women Collectors</div>
           <div class="kt-val" id="op-wc">—</div>
           <div class="kt-sub">supplying FN</div>
@@ -959,7 +965,8 @@ body{background:var(--dark);color:#f0f2f5}
         <div style="margin-top:6px;font-size:11px;color:rgba(240,242,245,.45)">→ Dried Kernels: <b style="color:rgba(240,242,245,.75)">164 t</b> &nbsp;1,928 bags</div>
       </div>
       <div class="dk"><div class="dv" style="color:#4ade80">+96%</div><div class="dl">YoY FN Growth</div><div class="dd">492 t → 964 t Fresh Nuts</div></div>
-      <div class="dk"><div class="dv">16,184</div><div class="dl">Women Engaged</div><div class="dd">Across 10 cooperatives</div></div>
+      <div class="dk"><div class="dv" style="color:#f9a8d4">2,249</div><div class="dl">Women Benefited</div><div class="dd">From 20 piloted centres</div></div>
+      <div class="dk"><div class="dv">16,184</div><div class="dl">Coop Members</div><div class="dd">Total across 10 cooperatives</div></div>
     </div>
 
     <div class="charts-flex">
@@ -1136,7 +1143,7 @@ const CENTERS = [
     lat:10.839816, lng:-1.383615, district:"Kassena-Nankana West", region:"Upper East Region",
     performance:"high", established:2022, founded:2019, partneredSFC:2019, members:734,
     secretary:"Alice", magazia:"Awaab Confort", productionCapacity:6,
-    ops:{ fnBags:762, dryNuts:254, womenColl:348, womenProc:35, stoves:6, drying:2, tricycles:1, cost:10933.54 },
+    ops:{ fnBags:762, dryNuts:254, womenBenef:39, womenColl:348, womenProc:35, stoves:6, drying:2, tricycles:1, cost:10933.54 },
     prev2324coop:816, bottleneck:"Limited number of stoves, drying platforms & tricycle",
     bottleneckType:"warn",
     allCommunities:[{name:"New Nakong",established:2022},{name:"Longsa",established:2023}],
@@ -1153,7 +1160,7 @@ const CENTERS = [
     lat:10.761022, lng:-1.281632, district:"Kassena-Nankana West", region:"Upper East Region",
     performance:"high", established:2023, founded:2019, partneredSFC:2019, members:734,
     secretary:"Alice", magazia:"Awaab Confort", productionCapacity:6,
-    ops:{ fnBags:150, dryNuts:54, womenColl:48, womenProc:35, stoves:3, drying:1, tricycles:1, cost:20952.15 },
+    ops:{ fnBags:150, dryNuts:54, womenBenef:35, womenColl:48, womenProc:35, stoves:3, drying:1, tricycles:1, cost:20952.15 },
     prev2324coop:816, bottleneck:"Limited number of stoves, drying platforms & tricycle constraining throughput",
     bottleneckType:"warn",
     allCommunities:[{name:"New Nakong",established:2022},{name:"Longsa",established:2023}],
@@ -1170,7 +1177,7 @@ const CENTERS = [
     lat:10.602866, lng:-1.028475, district:"Kassena-Nankana East", region:"Upper East Region",
     performance:"high", established:2021, founded:2018, partneredSFC:2018, members:801,
     secretary:"Atiba Nancy", magazia:"Jennifer Adabi", productionCapacity:6,
-    ops:{ fnBags:492, dryNuts:167, womenColl:58, womenProc:30, stoves:4, drying:2, tricycles:1, cost:12177.71 },
+    ops:{ fnBags:492, dryNuts:167, womenBenef:85, womenColl:58, womenProc:30, stoves:4, drying:2, tricycles:1, cost:12177.71 },
     prev2324coop:516, bottleneck:"Limited stoves, drying platforms & tricycle",
     bottleneckType:"warn",
     allCommunities:[{name:"Naaga",established:2021},{name:"Kolemkgu",established:2023}],
@@ -1187,7 +1194,7 @@ const CENTERS = [
     lat:10.756706, lng:-1.077392, district:"Kassena-Nankana East", region:"Upper East Region",
     performance:"high", established:2023, founded:2018, partneredSFC:2018, members:801,
     secretary:"Atiba Nancy", magazia:"Jennifer Adabi", productionCapacity:6,
-    ops:{ fnBags:138, dryNuts:46, womenColl:79, womenProc:30, stoves:4, drying:3, tricycles:1, cost:20952.15 },
+    ops:{ fnBags:138, dryNuts:46, womenBenef:58, womenColl:79, womenProc:30, stoves:4, drying:3, tricycles:1, cost:20952.15 },
     prev2324coop:516, bottleneck:"Limited stoves, drying platforms & tricycle",
     bottleneckType:"warn",
     allCommunities:[{name:"Naaga",established:2021},{name:"Kolemkgu",established:2023}],
@@ -1205,7 +1212,7 @@ const CENTERS = [
     lat:10.642556, lng:-2.234833, district:"Sissala East", region:"Upper West Region",
     performance:"low", established:2022, founded:2014, partneredSFC:2014, members:1225,
     secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
-    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    ops:{ fnBags:0, dryNuts:0, womenBenef:246, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
     prev2324coop:null, bottleneck:"No processing recorded in 2025/26 season. Requires investigation.",
     bottleneckType:"danger",
     allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
@@ -1222,7 +1229,7 @@ const CENTERS = [
     lat:10.63118, lng:-2.074601, district:"Sissala East", region:"Upper West Region",
     performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1225,
     secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
-    ops:{ fnBags:1350, dryNuts:453, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20952.15 },
+    ops:{ fnBags:1350, dryNuts:453, womenBenef:100, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20952.15 },
     prev2324coop:null, bottleneck:"No bottleneck reported — well-performing centre.",
     bottleneckType:"ok",
     allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
@@ -1239,7 +1246,7 @@ const CENTERS = [
     lat:9.466129, lng:-2.490958, district:"Sissala West", region:"Upper West Region",
     performance:"high", established:2022, founded:2016, partneredSFC:2016, members:1336,
     secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
-    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    ops:{ fnBags:0, dryNuts:0, womenBenef:146, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
     prev2324coop:135, bottleneck:"Women did not agree with market price — negotiations failed, no supply this season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
@@ -1256,7 +1263,7 @@ const CENTERS = [
     lat:10.638152, lng:-2.234693, district:"Sawla-Tuna-Kalba", region:"Savannah Region",
     performance:"high", established:2023, founded:2016, partneredSFC:2016, members:1336,
     secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
-    ops:{ fnBags:51, dryNuts:17, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
+    ops:{ fnBags:51, dryNuts:17, womenBenef:46, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
     prev2324coop:135, bottleneck:"Field Officer (FO) new to the project — limited mobilisation and technical capacity this season.",
     bottleneckType:"warn",
     allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
@@ -1273,7 +1280,7 @@ const CENTERS = [
     lat:9.824764, lng:-2.678125, district:"Wa West", region:"Upper West Region",
     performance:"high", established:2021, founded:2014, partneredSFC:2014, members:2705,
     secretary:"Winfred Donlare", magazia:"Comfort Kafile", productionCapacity:12,
-    ops:{ fnBags:212, dryNuts:74, womenColl:125, womenProc:35, stoves:3, drying:6, tricycles:2, cost:7539.16 },
+    ops:{ fnBags:212, dryNuts:74, womenBenef:282, womenColl:125, womenProc:35, stoves:3, drying:6, tricycles:2, cost:7539.16 },
     prev2324coop:336, bottleneck:"Tribal conflict severely impacted operations and member safety.",
     bottleneckType:"danger",
     allCommunities:[{name:"Wechiau",established:2021},{name:"Kpanfa",established:2023}],
@@ -1290,7 +1297,7 @@ const CENTERS = [
     lat:9.814204, lng:-2.717232, district:"Wa West", region:"Upper West Region",
     performance:"high", established:2023, founded:2014, partneredSFC:2014, members:2705,
     secretary:"Winfred Donlare", magazia:"Comfort Kafile", productionCapacity:12,
-    ops:{ fnBags:202, dryNuts:67, womenColl:212, womenProc:30, stoves:2, drying:3, tricycles:1, cost:20586.99 },
+    ops:{ fnBags:202, dryNuts:67, womenBenef:158, womenColl:212, womenProc:30, stoves:2, drying:3, tricycles:1, cost:20586.99 },
     prev2324coop:336, bottleneck:"Tribal conflict — same impact as Wechiau centre.",
     bottleneckType:"danger",
     allCommunities:[{name:"Wechiau",established:2021},{name:"Kpanfa",established:2023}],
@@ -1308,7 +1315,7 @@ const CENTERS = [
     lat:9.874003, lng:-0.188964, district:"Gushegu", region:"Northern Region",
     performance:"high", established:2021, founded:2012, partneredSFC:2016, members:2701,
     secretary:"Abdulai Lukuman", magazia:"Zeligatu Yakubu", productionCapacity:11,
-    ops:{ fnBags:1587, dryNuts:474, womenColl:456, womenProc:40, stoves:6, drying:4, tricycles:1, cost:0 },
+    ops:{ fnBags:1587, dryNuts:474, womenBenef:122, womenColl:456, womenProc:40, stoves:6, drying:4, tricycles:1, cost:0 },
     prev2324coop:870, bottleneck:"No dedicated centre at Bimbilla — nuts sent from Bimbilla to Kpugi for processing.",
     bottleneckType:"warn",
     allCommunities:[{name:"Kpugi",established:2021},{name:"Bulugu",established:2022}],
@@ -1325,7 +1332,7 @@ const CENTERS = [
     lat:9.782924, lng:-0.271541, district:"Gushegu", region:"Northern Region",
     performance:"high", established:2022, founded:2012, partneredSFC:2016, members:2701,
     secretary:"Abdulai Lukuman", magazia:"Zeligatu Yakubu", productionCapacity:11,
-    ops:{ fnBags:1923, dryNuts:625, womenColl:210, womenProc:40, stoves:6, drying:3, tricycles:2, cost:33685.98 },
+    ops:{ fnBags:1923, dryNuts:625, womenBenef:127, womenColl:210, womenProc:40, stoves:6, drying:3, tricycles:2, cost:33685.98 },
     prev2324coop:870, bottleneck:"Limited stoves and drying platforms — constraint on throughput.",
     bottleneckType:"warn",
     allCommunities:[{name:"Kpugi",established:2021},{name:"Bulugu",established:2022}],
@@ -1342,7 +1349,7 @@ const CENTERS = [
     lat:9.803379, lng:-0.934043, district:"Savelugu/Nanton", region:"Northern Region",
     performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1781,
     secretary:"Mohammed Tahiru", magazia:"Mariama Zakaria", productionCapacity:3,
-    ops:{ fnBags:0, dryNuts:0, womenColl:60, womenProc:30, stoves:6, drying:1, tricycles:1, cost:10933.54 },
+    ops:{ fnBags:0, dryNuts:0, womenBenef:116, womenColl:60, womenProc:30, stoves:6, drying:1, tricycles:1, cost:10933.54 },
     prev2324coop:513, bottleneck:"No processing due to damaged stoves — centre was non-operational all season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Dipali",established:2022},{name:"Nyerko",established:2023}],
@@ -1359,7 +1366,7 @@ const CENTERS = [
     lat:9.688706, lng:-0.665513, district:"Savelugu/Nanton", region:"Northern Region",
     performance:"high", established:2023, founded:2012, partneredSFC:2016, members:1781,
     secretary:"Mohammed Tahiru", magazia:"Mariama Zakaria", productionCapacity:3,
-    ops:{ fnBags:960, dryNuts:322, womenColl:192, womenProc:30, stoves:6, drying:2, tricycles:2, cost:33015.17 },
+    ops:{ fnBags:960, dryNuts:322, womenBenef:128, womenColl:192, womenProc:30, stoves:6, drying:2, tricycles:2, cost:33015.17 },
     prev2324coop:513, bottleneck:"Limited stoves and drying platforms remain a throughput constraint.",
     bottleneckType:"warn",
     allCommunities:[{name:"Dipali",established:2022},{name:"Nyerko",established:2023}],
@@ -1377,7 +1384,7 @@ const CENTERS = [
     lat:9.0548833, lng:-0.63648, district:"East Gonja", region:"Savannah Region",
     performance:"high", established:2022, founded:2020, partneredSFC:2020, members:2446,
     secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
-    ops:{ fnBags:1242, dryNuts:414, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    ops:{ fnBags:1242, dryNuts:414, womenBenef:106, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
     prev2324coop:1068, bottleneck:"No bottleneck reported.",
     bottleneckType:"ok",
     allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
@@ -1394,7 +1401,7 @@ const CENTERS = [
     lat:9.275978, lng:-0.992374, district:"East Gonja", region:"Savannah Region",
     performance:"high", established:2023, founded:2020, partneredSFC:2020, members:2446,
     secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
-    ops:{ fnBags:1839, dryNuts:613, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20503.82 },
+    ops:{ fnBags:1839, dryNuts:613, womenBenef:48, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20503.82 },
     prev2324coop:1068, bottleneck:"No bottleneck reported.",
     bottleneckType:"ok",
     allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
@@ -1411,7 +1418,7 @@ const CENTERS = [
     lat:9.28289, lng:-1.78024, district:"West Gonja", region:"Savannah Region",
     performance:"high", established:2021, founded:2014, partneredSFC:2014, members:1364,
     secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
-    ops:{ fnBags:47, dryNuts:16, womenColl:38, womenProc:30, stoves:null, drying:null, tricycles:null, cost:20503.82 },
+    ops:{ fnBags:47, dryNuts:16, womenBenef:120, womenColl:38, womenProc:30, stoves:null, drying:null, tricycles:null, cost:20503.82 },
     prev2324coop:321, bottleneck:"Bad harvest — low nut availability in the collection zone this season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
@@ -1428,7 +1435,7 @@ const CENTERS = [
     lat:9.054, lng:-1.092, district:"West Gonja", region:"Savannah Region",
     performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1364,
     secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
-    ops:{ fnBags:117, dryNuts:39, womenColl:70, womenProc:30, stoves:null, drying:null, tricycles:null, cost:4177.34 },
+    ops:{ fnBags:117, dryNuts:39, womenBenef:59, womenColl:70, womenProc:30, stoves:null, drying:null, tricycles:null, cost:4177.34 },
     prev2324coop:321, bottleneck:"Field Officer (FO) dismissal disrupted centre operations mid-season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
@@ -1445,7 +1452,7 @@ const CENTERS = [
     lat:9.081971, lng:-2.349196, district:"Bole", region:"Savannah Region",
     performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1091,
     secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
-    ops:{ fnBags:0, dryNuts:0, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
+    ops:{ fnBags:0, dryNuts:0, womenBenef:41, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
     prev2324coop:75, bottleneck:"Tribal conflict required the Field Officer to leave the area — operations suspended.",
     bottleneckType:"danger",
     allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
@@ -1462,7 +1469,7 @@ const CENTERS = [
     lat:9.084464, lng:-2.344458, district:"Bole", region:"Savannah Region",
     performance:"high", established:2022, founded:2012, partneredSFC:2016, members:1091,
     secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
-    ops:{ fnBags:270, dryNuts:91, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    ops:{ fnBags:270, dryNuts:91, womenBenef:187, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
     prev2324coop:75, bottleneck:"Tribal conflict which required the FO to leave the area for a period.",
     bottleneckType:"warn",
     allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
@@ -1908,7 +1915,7 @@ function renderPanel(c){
     {v:o.stoves,l:'Stoves'},{v:o.drying,l:'Drying Areas'},{v:o.tricycles,l:'Tricycles'}
   ].map(i=>`<div class="infra-cell"><div class="ic-val">${i.v??'—'}</div><div class="ic-lbl">${i.l}</div></div>`).join('');
 
-  setVal('op-wc',o.womenColl);setVal('op-wp',o.womenProc);
+  setVal('op-wb',o.womenBenef);setVal('op-wc',o.womenColl);setVal('op-wp',o.womenProc);
   const costEl=document.getElementById('op-cost');
   costEl.textContent=o.cost!=null?`USD ${o.cost.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'—';
   costEl.className=o.cost!=null?'kt-val':'kt-val nil';
