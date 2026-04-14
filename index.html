@@ -839,10 +839,6 @@ body{background:var(--dark);color:#f0f2f5}
     <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM7.25 4v4.75H12v-1.5H8.75V4h-1.5z"/></svg>
     Impact
   </button>
-  <button class="glass-btn" id="expansion-btn" style="margin-left:2px;border-color:rgba(16,185,129,.4);color:#34d399">
-    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 14h14v-1.5H1V14zm0-4h9V8.5H1V10zm0-4h6V4.5H1V6zm11-4v8l3-4-3-4z"/></svg>
-    Expansion
-  </button>
 </div>
 
 <!-- Legend -->
@@ -1058,6 +1054,7 @@ body{background:var(--dark);color:#f0f2f5}
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">⚡ Impact</button>
+      <button class="dash-close" id="dash-expansion-btn" style="background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.4);color:#34d399">📈 Expansion</button>
       <button class="dash-close" id="dash-close">🗺 View Map</button>
     </div>
   </div>
@@ -2458,8 +2455,8 @@ document.getElementById('impact-close').addEventListener('click',closeImpact);
 
 function openExpansion(){document.getElementById('exp-dash').classList.add('open');}
 function closeExpansion(){document.getElementById('exp-dash').classList.remove('open');}
-document.getElementById('expansion-btn').addEventListener('click',openExpansion);
-document.getElementById('exp-close').addEventListener('click',closeExpansion);
+document.getElementById('dash-expansion-btn').addEventListener('click',()=>{closeDash();openExpansion();});
+document.getElementById('exp-close').addEventListener('click',()=>{closeExpansion();openDash();});
 
 // SGG baseline/endline rates — NUTS (per kg dried kernel)
 const NR = {
