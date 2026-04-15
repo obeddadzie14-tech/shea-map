@@ -1566,9 +1566,9 @@ const CENTERS = [
     id:"GHA-UW-003", centerName:"Soma Centre", community:"Soma",
     cooperative:"Suntaa Maal Sheanuts Pickers Cooperative",
     lat:9.466129, lng:-2.490958, district:"Sissala West", region:"Upper West Region",
-    performance:"high", established:2022, founded:2016, partneredSFC:2016, members:1336,
+    performance:"low", established:2022, founded:2016, partneredSFC:2016, members:1336,
     secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
-    ops:{ fnBags:0, dryNuts:0, womenBenef:146, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
+    ops:{ fnBags:0, dryNuts:0, womenBenef:146, womenColl:null, womenProc:null, stoves:4, drying:2, tricycles:1, cost:10933.54 },
     prev2324coop:135, bottleneck:"Women did not agree with market price — negotiations failed, no supply this season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
@@ -1772,7 +1772,7 @@ const CENTERS = [
     id:"GHA-SA-005", centerName:"Bale Centre", community:"Bale",
     cooperative:"Bole Noyini Shea Pickers Cooperative",
     lat:9.081971, lng:-2.349196, district:"Bole", region:"Savannah Region",
-    performance:"high", established:2022, founded:2012, partneredSFC:2016, members:1091,
+    performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1091,
     secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
     ops:{ fnBags:270, dryNuts:91, womenBenef:41, womenColl:123, womenProc:30, stoves:4, drying:2, tricycles:1, cost:10933.54 },
     prev2324coop:75, bottleneck:"Tribal conflict accounted for the low numbers. Stoves and tricycle are also limited for increased production.",
@@ -2105,7 +2105,7 @@ function get2324DryBags(c){
 
 const MAX_FN_KG = 1923*85;  // 163,455 kg
 const MAX_DN_KG = 625*85;   // 53,125 kg
-const PERF_LABEL={high:"High Performance",low:"Low Performance",expansion:"Expansion"};
+const PERF_LABEL={high:"Good",low:"Bad",expansion:"Expansion"};
 
 function fmtKg(kg){
   if(kg==null||isNaN(kg)) return null;
@@ -2380,7 +2380,7 @@ function buildDashCharts(){
   const rows=CENTERS.map(c=>{
     const kg=c.ops.fnBags!=null?c.ops.fnBags*85:null;
     const kgStr=kg!=null?(kg>=1000?(kg/1000).toFixed(1)+'t':kg.toLocaleString()+' kg'):'—';
-    const badge=c.performance==='high'?'High':c.performance==='low'?'Low':'Exp.';
+    const badge=c.performance==='high'?'Good':c.performance==='low'?'Bad':'Exp.';
     return `<tr data-cid="${c.id}" style="cursor:pointer" title="Click to view on map">
       <td style="white-space:nowrap">${c.centerName.replace(' Centre','')}</td>
       <td>${kgStr}</td>
