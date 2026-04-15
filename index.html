@@ -953,10 +953,7 @@ body{background:var(--dark);color:#111827}
       <button class="shc-tab-btn" data-tab="coop">② Co-op Info</button>
       <button class="shc-tab-btn" data-tab="gov">③ Governance</button>
       <button class="shc-tab-btn" data-tab="inputs">④ Inputs</button>
-      <button class="shc-tab-btn" data-tab="anchors">⑤ Anchors &amp; Weights</button>
-      <button class="shc-tab-btn" data-tab="results">⑥ Results</button>
-      <button class="shc-tab-btn" data-tab="scorecard">⑦ Scorecard</button>
-      <button class="shc-tab-btn" data-tab="print">⑧ Export</button>
+      <button class="shc-tab-btn" data-tab="results">⑤ Score</button>
     </nav>
 
     <!-- PANEL SCROLL AREA -->
@@ -968,11 +965,39 @@ body{background:var(--dark);color:#111827}
         <div class="shc-card-title">SHEE Cooperative Calculator &amp; Scorecard</div>
         <p style="font-size:12.5px;color:#374151;line-height:1.7;margin:0 0 14px">This tool calculates SHEE performance scores for shea cooperatives. It is an <strong>internal assessment tool only</strong> — not a certification system. Scores are used for internal monitoring, buyer-facing summaries, and season-on-season improvement tracking.</p>
         <div class="method-info"><h4>Three Scorecard Types</h4><p><strong>A. Nut — Individual Processing</strong> · <strong>B. Nut — Collective Processing</strong> · <strong>C. Butter — Collective Processing</strong><br>Select your type on the Co-op Info tab. Functional unit: Nuts = per 1 kg dried kernels · Butter = per 1 kg raw butter.</p></div>
-        <div class="method-info"><h4>Four Pillars</h4><p><strong>Social (S)</strong> · <strong>Health (H)</strong> · <strong>Economic (E)</strong> · <strong>Environmental (En)</strong><br>Default weights: Social 20% · Health 20% · Economic 25% · Environmental 35% — adjustable in Anchors &amp; Weights tab.</p></div>
+        <div class="method-info"><h4>Four Pillars</h4><p><strong>Social (S)</strong> · <strong>Health (H)</strong> · <strong>Economic (E)</strong> · <strong>Environmental (En)</strong><br>Default weights: Social 20% · Health 20% · Economic 25% · Environmental 35% — see reference table below.</p></div>
         <div class="method-info"><h4>Aggregation — Geometric Mean</h4><p>Pillar scores are combined using a <strong>weighted geometric mean</strong> — not a simple sum. This means a very low score on one pillar cannot be compensated by high scores elsewhere.</p></div>
         <div class="method-formula">Overall = 100 × (S/100)^wS × (H/100)^wH × (E/100)^wE × (En/100)^wEn</div>
         <div class="method-info"><h4>Governance Gate</h4><p>Before the score is published, four governance criteria (G1–G4) must be assessed. A <strong>Fail</strong> blocks external use. A <strong>Conditional Pass</strong> allows the score with a caveat tag.</p></div>
         <div class="method-info"><h4>Grade Bands</h4><p>A (85–100) Leading · B (70–84) Strong · C (55–69) Moderate · D (40–54) Weak · E (&lt;40) Critical<br>If any pillar scores below 40, grade is capped at C. Below 25 caps at D.</p></div>
+      </div>
+      <div class="shc-card">
+        <div class="shc-card-title">Default Pillar Weights</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:4px">
+          <div style="text-align:center;padding:10px;background:#f0edff;border-radius:8px"><div style="font-size:18px;font-weight:900;color:#5b21b6">20%</div><div style="font-size:10px;font-weight:700;color:#7c3aed;margin-top:2px">Social</div></div>
+          <div style="text-align:center;padding:10px;background:#fff3ed;border-radius:8px"><div style="font-size:18px;font-weight:900;color:#9a3412">20%</div><div style="font-size:10px;font-weight:700;color:#ea580c;margin-top:2px">Health</div></div>
+          <div style="text-align:center;padding:10px;background:#ecfdf5;border-radius:8px"><div style="font-size:18px;font-weight:900;color:#065f46">25%</div><div style="font-size:10px;font-weight:700;color:#059669;margin-top:2px">Economic</div></div>
+          <div style="text-align:center;padding:10px;background:#eff6ff;border-radius:8px"><div style="font-size:18px;font-weight:900;color:#1e40af">35%</div><div style="font-size:10px;font-weight:700;color:#2563eb;margin-top:2px">Environmental</div></div>
+        </div>
+      </div>
+      <div class="shc-card">
+        <div class="shc-card-title">Default Indicator Weights &amp; Normalization Anchors</div>
+        <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+          <thead><tr style="background:#f3f4f6;border-bottom:1px solid #e5e7eb"><th style="padding:6px 10px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af">Indicator</th><th style="padding:6px 10px;text-align:right;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af">Weight</th><th style="padding:6px 10px;text-align:right;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af">Target</th><th style="padding:6px 10px;text-align:right;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af">Worst</th><th style="padding:6px 10px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af">Mode</th></tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">S1 — Social relations</td><td style="padding:6px 10px;text-align:right;color:#7c3aed;font-weight:700">8%</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;color:#6b7280">Checklist 0–100</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">S2 — Women satisfaction</td><td style="padding:6px 10px;text-align:right;color:#7c3aed;font-weight:700">5%</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;color:#6b7280">Ordinal</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">S3 — Collective contribution</td><td style="padding:6px 10px;text-align:right;color:#7c3aed;font-weight:700">7%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">30%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">0%</td><td style="padding:6px 10px;color:#6b7280">Higher ↑</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">H1 — Equipment use</td><td style="padding:6px 10px;text-align:right;color:#ea580c;font-weight:700">40%</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;color:#6b7280">Equipment score</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">H2 — Smoke exposure</td><td style="padding:6px 10px;text-align:right;color:#ea580c;font-weight:700">60%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">0.05</td><td style="padding:6px 10px;text-align:right;color:#6b7280">2.0</td><td style="padding:6px 10px;color:#6b7280">Lower ↓</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">E1 — Income / hour</td><td style="padding:6px 10px;text-align:right;color:#059669;font-weight:700">60%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">15 GHS</td><td style="padding:6px 10px;text-align:right;color:#6b7280">2 GHS</td><td style="padding:6px 10px;color:#6b7280">Higher ↑</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">E2 — Processing time</td><td style="padding:6px 10px;text-align:right;color:#059669;font-weight:700">40%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">12 min/kg</td><td style="padding:6px 10px;text-align:right;color:#6b7280">35 min/kg</td><td style="padding:6px 10px;color:#6b7280">Lower ↓</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">N1 / B1 — Carbon footprint</td><td style="padding:6px 10px;text-align:right;color:#2563eb;font-weight:700">43% / 34%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">0.1</td><td style="padding:6px 10px;text-align:right;color:#6b7280">1.5</td><td style="padding:6px 10px;color:#6b7280">Lower ↓</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">N2 / B2 — Water use</td><td style="padding:6px 10px;text-align:right;color:#2563eb;font-weight:700">23%</td><td style="padding:6px 10px;text-align:right;color:#6b7280">0.5 L/kg</td><td style="padding:6px 10px;text-align:right;color:#6b7280">3.0 L/kg</td><td style="padding:6px 10px;color:#6b7280">Lower ↓</td></tr>
+            <tr style="border-bottom:1px solid #f3f4f6"><td style="padding:6px 10px;font-weight:600">N3 / B3 — Waste management</td><td style="padding:6px 10px;text-align:right;color:#2563eb;font-weight:700">14% / 23%</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;color:#6b7280">Ordinal</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:600">N4 / B4 — Biodiversity</td><td style="padding:6px 10px;text-align:right;color:#2563eb;font-weight:700">20%</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;text-align:right;color:#9ca3af">—</td><td style="padding:6px 10px;color:#6b7280">Ordinal</td></tr>
+          </tbody>
+        </table>
       </div>
       <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcGoTab('coop')">Start — Enter Co-op Info →</button><button class="shc-btn secondary" onclick="shcLoadSample()">Load Sample Data</button></div>
     </div>
@@ -1062,67 +1087,17 @@ body{background:var(--dark);color:#111827}
       </div>
       <div id="shc-input-banners"></div>
       <div id="shc-ind-blocks"></div>
-      <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcGoTab('anchors')">Next — Anchors &amp; Weights →</button><button class="shc-btn secondary" onclick="shcCalculate()">⚡ Calculate Now</button></div>
+      <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcCalculate();shcGoTab('results')">⚡ Calculate &amp; View Score →</button></div>
     </div>
 
-    <!-- ⑤ ANCHORS & WEIGHTS -->
-    <div class="shc-panel" id="shc-anchors">
-      <div class="shc-card">
-        <div class="shc-card-title">Pillar Weights (must sum to 100)</div>
-        <div id="pillar-wt-editor"></div>
-        <div id="pillar-wt-total" class="wt-total ok">Total: 100</div>
-      </div>
-      <div class="shc-card">
-        <div class="shc-card-title">Indicator Weights within Pillars (each pillar must sum to 100)</div>
-        <div id="ind-wt-editor"></div>
-      </div>
-      <div class="shc-card">
-        <div class="shc-card-title">Normalization Anchors — Numeric Indicators</div>
-        <p style="font-size:11px;color:#9ca3af;margin:0 0 10px">Set target (best achievable) and worst-case anchor values. Lower-is-better: worst &gt; target. Higher-is-better: target &gt; floor.</p>
-        <div style="display:grid;grid-template-columns:140px 1fr 1fr 1fr 80px;gap:8px;padding:6px 0;border-bottom:1px solid #e5e7eb;font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em">
-          <span>Indicator</span><span>Target / Best</span><span>Worst Case</span><span>Floor (higher↑)</span><span>Mode</span>
-        </div>
-        <div id="anchor-editor"></div>
-      </div>
-      <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcCalculate();shcGoTab('results')">⚡ Calculate &amp; View Results →</button><button class="shc-btn secondary" onclick="shcResetAnchors()">Reset to Defaults</button></div>
-    </div>
-
-    <!-- ⑥ RESULTS -->
+    <!-- ⑤ SCORE -->
     <div class="shc-panel" id="shc-results">
       <div id="results-gov-banner"></div>
       <div id="results-warn-banners"></div>
       <div id="results-content"><p style="font-size:13px;color:#9ca3af;padding:24px 0">No results yet — complete the Inputs tab and click Calculate.</p></div>
-    </div>
-
-    <!-- ⑦ SCORECARD -->
-    <div class="shc-panel" id="shc-scorecard">
-      <div id="scorecard-gov-banner"></div>
-      <div class="sc-out" id="scorecard-out"><p style="font-size:13px;color:#9ca3af;padding:24px 0">No scorecard yet — complete the Inputs tab and click Calculate.</p></div>
-      <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcPrint()">🖨 Print / Export PDF</button><button class="shc-btn secondary" onclick="shcGoTab('results')">← Back to Results</button></div>
-    </div>
-
-    <!-- ⑧ EXPORT -->
-    <div class="shc-panel" id="shc-print">
-      <div class="shc-card">
-        <div class="shc-card-title">Export &amp; Print</div>
-        <p style="font-size:12.5px;color:#374151;line-height:1.7;margin:0 0 14px">The print view opens the scorecard in a clean A4-optimised layout with all scoring controls hidden. Use your browser's print function to save as PDF.</p>
-        <div class="shc-btn-row">
-          <button class="shc-btn primary" onclick="shcPrint()">🖨 Open Print / PDF View</button>
-          <button class="shc-btn secondary" onclick="shcExportJSON()">⬇ Export Data as JSON</button>
-        </div>
-        <div style="margin-top:16px;padding:12px 14px;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb">
-          <div style="font-size:11px;font-weight:700;color:#374151;margin-bottom:8px">Print includes:</div>
-          <ul style="font-size:11.5px;color:#6b7280;margin:0;padding-left:16px;line-height:1.9">
-            <li>Cooperative header and metadata</li>
-            <li>Governance gate result</li>
-            <li>Overall score, grade and confidence grade</li>
-            <li>Baseline vs endline delta (if baseline entered)</li>
-            <li>Pillar scores with progress bars</li>
-            <li>Full indicator scores with evidence status</li>
-            <li>Top 3 strengths and improvement priorities</li>
-            <li>Caveats and provisional flags</li>
-          </ul>
-        </div>
+      <div class="shc-btn-row" style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb">
+        <button class="shc-btn primary" onclick="shcPrint()">🖨 Print / Export PDF</button>
+        <button class="shc-btn secondary" onclick="shcExportJSON()">⬇ Export JSON</button>
       </div>
     </div>
 
@@ -2313,8 +2288,6 @@ function shcInit(){
   document.getElementById('ci-date').value = new Date().toISOString().slice(0,10);
   shcUpdateGovBanner();
   shcRebuildInputs();
-  shcRebuildWeightEditor();
-  shcRebuildAnchorEditor();
 }
 
 function shcGoTab(tab){
@@ -2322,7 +2295,6 @@ function shcGoTab(tab){
   document.querySelectorAll('.shc-tab-btn').forEach(b=>b.classList.toggle('act', b.dataset.tab===tab));
   document.querySelectorAll('.shc-panel').forEach(p=>p.classList.toggle('act', p.id==='shc-'+tab));
   if(tab==='results') shcRenderResults();
-  if(tab==='scorecard') shcRenderScorecard();
 }
 
 // ── Governance gate ───────────────────────────────────────────────
@@ -2343,7 +2315,7 @@ function shcUpdateGovBanner(){
     conditional:'⚠️ Governance Gate: CONDITIONAL PASS — Score visible with caveat tag.',
     fail:'🚫 Governance Gate: FAIL — Score is INTERNAL ONLY. External publication blocked.'
   };
-  ['gov-result-banner','results-gov-banner','scorecard-gov-banner'].forEach(id=>{
+  ['gov-result-banner','results-gov-banner'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el) return;
     el.className=`gov-banner ${result}`;
@@ -3006,8 +2978,9 @@ function shcPrint(){
   const ci = SHC.cooperativeInfo;
   const r  = SHC.results;
   if(!r){ alert('Please complete inputs and calculate before printing.'); return; }
-  const scorecardEl = document.getElementById('scorecard-out');
-  const govBanner   = document.getElementById('scorecard-gov-banner');
+  shcRenderResults();
+  const scorecardEl = document.getElementById('results-content');
+  const govBanner   = document.getElementById('results-gov-banner');
   const printContent= (govBanner?govBanner.outerHTML:'') + (scorecardEl?scorecardEl.innerHTML:'');
   const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
