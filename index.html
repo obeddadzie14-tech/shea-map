@@ -1534,13 +1534,13 @@ const CENTERS = [
     lat:10.642556, lng:-2.234833, district:"Sissala East", region:"Upper West Region",
     performance:"low", established:2022, founded:2014, partneredSFC:2014, members:1225,
     secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
-    ops:{ fnBags:0, dryNuts:0, womenBenef:246, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
-    prev2324coop:null, bottleneck:"No processing recorded in 2025/26 season. Requires investigation.",
-    bottleneckType:"danger",
+    ops:{ fnBags:0, dryNuts:0, womenBenef:246, womenColl:10, womenProc:10, stoves:6, drying:2, tricycles:1, cost:10933.54 },
+    prev2324coop:1134, bottleneck:"Assessment in progress — no processing recorded this season.",
+    bottleneckType:"warn",
     allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Needs Review",c:"t-rose"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Assessment in Progress",c:"t-amber"}],
     insights:[
-      {t:"bad",x:"Zero kg recorded in 2025/26 — urgent field review required."},
+      {t:"bad",x:"Zero kg recorded in 2025/26 — no processing this season, reason under assessment."},
       {t:"good",x:"Sentie centre (same cooperative) is a top performer at 1,350 bags (114,750 kg)."}
     ],
     highlight:"The women of Tumu Gbarakan have built strong support networks, organized into self-managing sub-groups. Despite Dasima showing zero output this season, the cooperative's proven governance model provides a clear pathway to recovery."
@@ -1551,8 +1551,8 @@ const CENTERS = [
     lat:10.63118, lng:-2.074601, district:"Sissala East", region:"Upper West Region",
     performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1225,
     secretary:"Suara Zenabu", magazia:"Alidu Latifa", productionCapacity:9,
-    ops:{ fnBags:1350, dryNuts:453, womenBenef:100, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20952.15 },
-    prev2324coop:null, bottleneck:"No bottleneck reported — well-performing centre.",
+    ops:{ fnBags:1350, dryNuts:453, womenBenef:100, womenColl:10, womenProc:10, stoves:3, drying:0, tricycles:1, cost:20952.15 },
+    prev2324coop:1134, bottleneck:"Assessment in progress.",
     bottleneckType:"ok",
     allCommunities:[{name:"Dasima",established:2022},{name:"Sentie",established:2023}],
     tags:[{l:"Traceable",c:"t-blue"},{l:"Top Performer",c:"t-green"},{l:"Logistics-Enabled",c:"t-amber"}],
@@ -1585,7 +1585,7 @@ const CENTERS = [
     lat:10.638152, lng:-2.234693, district:"Sawla-Tuna-Kalba", region:"Savannah Region",
     performance:"high", established:2023, founded:2016, partneredSFC:2016, members:1336,
     secretary:"Kaapri Florence", magazia:"Abdullai Rukaya", productionCapacity:9,
-    ops:{ fnBags:51, dryNuts:17, womenBenef:46, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
+    ops:{ fnBags:51, dryNuts:17, womenBenef:46, womenColl:37, womenProc:10, stoves:4, drying:2, tricycles:1, cost:20586.99 },
     prev2324coop:135, bottleneck:"Field Officer (FO) new to the project — limited mobilisation and technical capacity this season.",
     bottleneckType:"warn",
     allCommunities:[{name:"Soma",established:2022},{name:"Nakpala",established:2023}],
@@ -1706,14 +1706,14 @@ const CENTERS = [
     lat:9.0548833, lng:-0.63648, district:"East Gonja", region:"Savannah Region",
     performance:"high", established:2022, founded:2020, partneredSFC:2020, members:2446,
     secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
-    ops:{ fnBags:1242, dryNuts:414, womenBenef:106, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
-    prev2324coop:1068, bottleneck:"No bottleneck reported.",
-    bottleneckType:"ok",
+    ops:{ fnBags:1242, dryNuts:414, womenBenef:106, womenColl:570, womenProc:30, stoves:4, drying:6, tricycles:1, cost:10933.54 },
+    prev2324coop:1068, bottleneck:"Limited number of stoves constraining throughput.",
+    bottleneckType:"warn",
     allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"High Capacity",c:"t-green"},{l:"Collective Processing",c:"t-violet"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"High Capacity",c:"t-green"},{l:"Needs Equipment",c:"t-amber"}],
     insights:[
-      {t:"good",x:"1,242 bags (105,570 kg) in 2025/26 — one of the top-performing centres."},
-      {t:"good",x:"17 t/month cooperative capacity — highest in the network."}
+      {t:"good",x:"1,242 bags (105,570 kg) in 2025/26 — one of the top 4 centres in the network."},
+      {t:"warn",x:"570 collectors active but only 4 stoves — stove investment would significantly increase throughput."}
     ],
     highlight:"When a Kpalbe member begins treating fresh nuts at home, she is never alone — cooperative members carry water and firewood to her, ensuring the critical boiling process is completed correctly. Cooperation turned into quality assurance."
   },
@@ -1723,16 +1723,16 @@ const CENTERS = [
     lat:9.275978, lng:-0.992374, district:"East Gonja", region:"Savannah Region",
     performance:"high", established:2023, founded:2020, partneredSFC:2020, members:2446,
     secretary:"Alhassan Ayisha", magazia:"Hawa Yakubu", productionCapacity:17,
-    ops:{ fnBags:1839, dryNuts:613, womenBenef:48, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20503.82 },
-    prev2324coop:1068, bottleneck:"No bottleneck reported.",
+    ops:{ fnBags:1839, dryNuts:613, womenBenef:48, womenColl:491, womenProc:30, stoves:3, drying:1, tricycles:1, cost:20503.82 },
+    prev2324coop:1068, bottleneck:"Assessment in progress.",
     bottleneckType:"ok",
     allCommunities:[{name:"Jinlo",established:2022},{name:"Kanjayilli",established:2023}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Network Champion",c:"t-rose"},{l:"Collective Processing",c:"t-violet"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Network Champion",c:"t-green"},{l:"Collective Processing",c:"t-violet"}],
     insights:[
-      {t:"good",x:"1,839 bags (156,315 kg) — highest centre FN output in the entire network for 2025/26."},
-      {t:"good",x:"613 dried nuts batches — best processing output across all 20 centres."}
+      {t:"good",x:"1,839 bags (156,315 kg) — second-highest centre FN output in the network for 2025/26."},
+      {t:"good",x:"491 collectors active. Combined with Jinlo, Kpalbe cooperative delivers 3,081 bags — 27% of network total."}
     ],
-    highlight:"Kanjayilli is the network's highest-producing centre this season with 1,839 bags (156,315 kg). Combined with Jinlo, the Kpalbe cooperative contributes 3,081 bags — 27% of the entire network output for 2025/26."
+    highlight:"Kanjayilli is the network's second-highest producing centre this season with 1,839 bags (156,315 kg). Combined with Jinlo, the Kpalbe cooperative contributes 3,081 bags — 27% of the entire network output for 2025/26."
   },
   {
     id:"GHA-SA-003", centerName:"Murugu Centre", community:"Murugu",
@@ -1740,7 +1740,7 @@ const CENTERS = [
     lat:9.28289, lng:-1.78024, district:"West Gonja", region:"Savannah Region",
     performance:"high", established:2021, founded:2014, partneredSFC:2014, members:1364,
     secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
-    ops:{ fnBags:47, dryNuts:16, womenBenef:120, womenColl:38, womenProc:30, stoves:null, drying:null, tricycles:null, cost:20503.82 },
+    ops:{ fnBags:47, dryNuts:16, womenBenef:120, womenColl:38, womenProc:10, stoves:6, drying:4, tricycles:0, cost:20503.82 },
     prev2324coop:321, bottleneck:"Bad harvest — low nut availability in the collection zone this season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
@@ -1757,7 +1757,7 @@ const CENTERS = [
     lat:9.054, lng:-1.092, district:"West Gonja", region:"Savannah Region",
     performance:"high", established:2023, founded:2014, partneredSFC:2014, members:1364,
     secretary:"Abdulai Sofia", magazia:"Ibrahima Memuna", productionCapacity:9,
-    ops:{ fnBags:117, dryNuts:39, womenBenef:59, womenColl:70, womenProc:30, stoves:null, drying:null, tricycles:null, cost:4177.34 },
+    ops:{ fnBags:117, dryNuts:39, womenBenef:59, womenColl:70, womenProc:null, stoves:4, drying:null, tricycles:1, cost:4177.34 },
     prev2324coop:321, bottleneck:"Field Officer (FO) dismissal disrupted centre operations mid-season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
@@ -1772,18 +1772,18 @@ const CENTERS = [
     id:"GHA-SA-005", centerName:"Bale Centre", community:"Bale",
     cooperative:"Bole Noyini Shea Pickers Cooperative",
     lat:9.081971, lng:-2.349196, district:"Bole", region:"Savannah Region",
-    performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1091,
+    performance:"high", established:2022, founded:2012, partneredSFC:2016, members:1091,
     secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
-    ops:{ fnBags:0, dryNuts:0, womenBenef:41, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:20586.99 },
-    prev2324coop:75, bottleneck:"Tribal conflict required the Field Officer to leave the area — operations suspended.",
-    bottleneckType:"danger",
+    ops:{ fnBags:270, dryNuts:91, womenBenef:41, womenColl:123, womenProc:30, stoves:4, drying:2, tricycles:1, cost:10933.54 },
+    prev2324coop:75, bottleneck:"Tribal conflict accounted for the low numbers. Stoves and tricycle are also limited for increased production.",
+    bottleneckType:"warn",
     allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Conflict Impact",c:"t-rose"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Conflict Impact",c:"t-rose"},{l:"Partial Operations",c:"t-amber"}],
     insights:[
-      {t:"bad",x:"Zero kg — tribal conflict required FO evacuation, centre non-operational."},
-      {t:"good",x:"Bole cooperative has strong community bonds — conflict resolution support would accelerate recovery."}
+      {t:"warn",x:"270 bags (22,950 kg) in 2025/26 — partial operations maintained despite tribal conflict."},
+      {t:"warn",x:"Stoves and tricycle constraints limit throughput further — equipment investment needed for full recovery."}
     ],
-    highlight:"Bole Cooperative is known for deep community bonds — members farm together, check on absent colleagues, and cook for community funerals. The tribal conflict this season is an external disruption to an otherwise cohesive cooperative."
+    highlight:"Bole Cooperative is known for deep community bonds — members farm together, check on absent colleagues, and cook for community funerals. Despite the tribal conflict, Bale centre maintained partial operations with 270 bags this season."
   },
   {
     id:"GHA-SA-006", centerName:"Sonyor Centre", community:"Sonyor",
@@ -1791,16 +1791,16 @@ const CENTERS = [
     lat:9.084464, lng:-2.344458, district:"Bole", region:"Savannah Region",
     performance:"low", established:2022, founded:2012, partneredSFC:2016, members:1091,
     secretary:"Mumuni Ayaa", magazia:"Yussif Yaa", productionCapacity:7,
-    ops:{ fnBags:270, dryNuts:91, womenBenef:187, womenColl:null, womenProc:null, stoves:null, drying:null, tricycles:null, cost:10933.54 },
-    prev2324coop:75, bottleneck:"Tribal conflict which required the FO to leave the area for a period.",
-    bottleneckType:"warn",
+    ops:{ fnBags:0, dryNuts:0, womenBenef:187, womenColl:null, womenProc:30, stoves:4, drying:2, tricycles:1, cost:20586.99 },
+    prev2324coop:75, bottleneck:"Tribal conflict accounted for the low numbers. Stoves and tricycle are also limited for increased production.",
+    bottleneckType:"danger",
     allCommunities:[{name:"Bale",established:2022},{name:"Sonyor",established:2022}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Partial Operations",c:"t-amber"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Conflict Impact",c:"t-rose"},{l:"Equipment Gap",c:"t-amber"}],
     insights:[
-      {t:"warn",x:"270 bags (22,950 kg) despite tribal conflict — partial operations showing cooperative resilience."},
-      {t:"good",x:"Strong YoY improvement from coop's 75-bag (6,375 kg) baseline in 2023/24."}
+      {t:"bad",x:"Zero kg output in 2025/26 — tribal conflict prevented processing at this centre entirely."},
+      {t:"warn",x:"Equipment gaps (stoves, tricycle) will also need addressing before operations can resume."}
     ],
-    highlight:"Sonyor maintained partial operations despite the same tribal conflict affecting Bale centre. Their susu savings group and strong member welfare culture provided resilience. Both Bole centres began in 2022 in a coordinated expansion."
+    highlight:"Sonyor centre was non-operational this season due to tribal conflict. With equipment gaps also present, targeted conflict resolution support and stove provision would be needed before Sonyor can contribute output in the next season."
   },
 ];
 
@@ -1817,8 +1817,7 @@ const DATA_2526 = [
   {name:"Navrongo",  kg:(492+138)*85},  {name:"Bolga/Chiana",kg:(762+150)*85},
   {name:"Gushegu",   kg:(1923+1587)*85},{name:"Savelugu",   kg:(960+0)*85},
   {name:"Wechiau",   kg:(212+202)*85},  {name:"Bole",       kg:(270+0)*85},
-  {name:"Tuna/Sawla",kg:(0+51)*85},     {name:"Crema",      kg:(47+117)*85},
-  {name:"Tumu",      kg:(1350+0)*85}
+  {name:"Tuna/Sawla",kg:(0+51)*85},     {name:"Crema",      kg:(47+117)*85}
 ];
 
 // ═══════════════════════════════════════════════════════════════════════
