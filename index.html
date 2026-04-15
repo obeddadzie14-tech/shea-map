@@ -309,7 +309,7 @@ body{background:var(--dark);color:#111827}
   @page{margin:12mm 14mm;size:A4}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,
-  .imp-input,#impact-close,#imp-export-btn{display:none!important}
+  #impact-close{display:none!important}
   body,html{background:#fff!important;height:auto!important;overflow:visible!important}
   #impact{position:static!important;transform:none!important;background:#fff!important;
     height:auto!important;overflow:visible!important;z-index:0!important}
@@ -317,64 +317,8 @@ body{background:var(--dark);color:#111827}
     border-radius:0!important;border:none!important;-webkit-print-color-adjust:exact!important}
   .imp-title{color:#fff!important;font-size:16px!important}
   .imp-subtitle{color:rgba(255,255,255,.7)!important}
-  .imp-body{display:block!important;height:auto!important;overflow:visible!important}
-  .imp-results{overflow:visible!important;height:auto!important;padding:14px 18px!important}
-  #imp-print-header{display:block!important}
-  .imp-row{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;page-break-inside:avoid}
-  .imp-row.three{grid-template-columns:repeat(3,1fr)!important}
-  .imp-card{background:#f3f4f6!important;border:1px solid #d1d5db!important;border-radius:10px!important;padding:10px 12px!important;page-break-inside:avoid}
-  .imp-card.highlight{background:#f0fdf4!important;border-color:#86efac!important}
-  .imp-card.warn-card{background:#fffbeb!important;border-color:#fde68a!important}
-  .ic-val{color:#111827!important;font-size:20px!important}
-  .ic-val.green{color:#15803d!important}
-  .ic-val.red{color:#dc2626!important}
-  .ic-val.blue{color:#1d4ed8!important}
-  .ic-val.amber{color:#b45309!important}
-  .ic-lbl{color:#6b7280!important}
-  .ic-sub{color:#9ca3af!important}
-  .ic-bar{background:#e5e7eb!important}
-  .ic-bar-fill.g{background:#22c55e!important}
-  .ic-bar-fill.b{background:#6366f1!important}
-  .ic-bar-fill.a{background:#f59e0b!important}
-  .bve-col.baseline .bve-val{color:#dc2626!important}
-  .bve-col.endline .bve-val{color:#15803d!important}
-  .bve-col .bve-lbl{color:#9ca3af!important}
-  .bve-saving.pos{color:#15803d!important}
-  .bve-saving.neg{color:#b45309!important}
-  .bve-arrow{color:#d1d5db!important}
-  .imp-divider{color:#374151!important;border-bottom-color:#d1d5db!important;font-size:9px!important}
-  .imp-empty{display:none!important}
 }
 
-/* Print-only header (hidden on screen) */
-#imp-print-header{
-  display:none;
-  background:#1a2744;color:#fff;
-  padding:10px 18px 12px;margin-bottom:14px;border-radius:8px;
-  font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif
-}
-#imp-print-header .iph-title{font-size:13px;font-weight:800;letter-spacing:-.01em}
-#imp-print-header .iph-meta{font-size:10px;color:rgba(255,255,255,.6);margin-top:3px}
-#imp-print-header .iph-inputs{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
-#imp-print-header .iph-inp{background:rgba(0,0,0,.09);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600}
-#imp-print-header .iph-inp span{color:rgba(255,255,255,.55);font-weight:400;margin-right:4px}
-
-/* Export button */
-#imp-export-btn{
-  background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);
-  border-radius:9px;padding:7px 14px;font-size:11px;font-weight:700;
-  color:#fbbf24;cursor:pointer;display:flex;align-items:center;gap:6px;
-  transition:all .15s;letter-spacing:.02em
-}
-#imp-export-btn:hover{background:rgba(245,158,11,.25);color:#fde68a}
-#imp-export-btn svg{width:13px;height:13px;flex-shrink:0}
-#imp-export-btn.disabled{opacity:.35;pointer-events:none}
-
-/* ── IMPACT TAB NAV ── */
-.imp-tab-nav{display:flex;gap:4px;background:rgba(0,0,0,.05);border-radius:8px;padding:3px}
-.imp-tab{background:none;border:none;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:700;color:rgba(17,24,39,.45);cursor:pointer;transition:all .15s;font-family:inherit}
-.imp-tab.active{background:rgba(0,0,0,.09);color:#111827}
-.imp-tab:hover:not(.active){color:rgba(17,24,39,.75)}
 
 /* ── SHEE CALCULATOR ── */
 #imp-score-pane{display:flex;flex-direction:column;height:100%;overflow:hidden}
@@ -549,117 +493,6 @@ body{background:var(--dark);color:#111827}
 .imp-title{font-size:14px;font-weight:800;letter-spacing:-.01em}
 .imp-subtitle{font-size:10px;color:rgba(17,24,39,.5);margin-top:2px}
 
-.imp-body{
-  flex:1;min-height:0;
-  display:grid;grid-template-columns:clamp(280px,22vw,480px) 1fr;
-  gap:0;overflow:hidden
-}
-
-/* Left: Input panel */
-.imp-input{
-  background:rgba(0,0,0,.02);
-  border-right:1px solid var(--border);
-  padding:20px 18px;
-  overflow-y:auto;
-  display:flex;flex-direction:column;gap:18px
-}
-.imp-input::-webkit-scrollbar{width:3px}
-.imp-input::-webkit-scrollbar-thumb{background:rgba(0,0,0,.07);border-radius:2px}
-
-.inp-section{
-  background:rgba(0,0,0,.03);
-  border:1px solid var(--border);
-  border-radius:14px;padding:16px
-}
-.inp-section h3{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.inp-section h3 span{font-size:18px}
-
-.inp-field{margin-bottom:14px}
-.inp-field:last-child{margin-bottom:0}
-.inp-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px}
-.inp-wrap{position:relative}
-.inp-wrap input{
-  width:100%;padding:11px 14px 11px 14px;
-  background:rgba(0,0,0,.05);border:1.5px solid var(--border);
-  border-radius:10px;color:#111827;font-size:18px;font-weight:700;
-  font-family:inherit;outline:none;
-  transition:border-color .2s,box-shadow .2s
-}
-.inp-wrap input:focus{border-color:rgba(99,102,241,.6);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
-.inp-wrap input::placeholder{color:rgba(17,24,39,.2);font-weight:400;font-size:14px}
-.inp-unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:rgba(17,24,39,.35);pointer-events:none}
-
-.inp-hint{font-size:10px;color:rgba(17,24,39,.3);margin-top:6px;line-height:1.4}
-
-.inp-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.inp-quick button{
-  padding:5px 10px;border-radius:8px;border:1px solid var(--border);
-  background:rgba(0,0,0,.03);color:rgba(17,24,39,.6);
-  font-size:10px;font-weight:600;cursor:pointer;transition:all .15s
-}
-.inp-quick button:hover{background:rgba(0,0,0,.07);color:#111827}
-
-/* Right: Results */
-.imp-results{
-  padding:18px 22px;
-  overflow-y:auto;
-  display:flex;flex-direction:column;gap:14px
-}
-.imp-results::-webkit-scrollbar{width:3px}
-.imp-results::-webkit-scrollbar-thumb{background:rgba(0,0,0,.07);border-radius:2px}
-
-.imp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.imp-row.three{grid-template-columns:repeat(3,1fr)}
-
-.imp-card{
-  background:rgba(0,0,0,.03);border:1px solid var(--border);
-  border-radius:14px;padding:14px 16px;
-  position:relative;overflow:hidden;
-  transition:border-color .3s
-}
-.imp-card.highlight{border-color:rgba(34,197,94,.3)}
-.imp-card.warn-card{border-color:rgba(245,158,11,.3)}
-.imp-card .ic-icon{font-size:22px;margin-bottom:6px}
-.imp-card .ic-val{font-size:26px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1;transition:all .35s}
-.imp-card .ic-val.green{color:#4ade80}
-.imp-card .ic-val.red{color:#f87171}
-.imp-card .ic-val.blue{color:#60a5fa}
-.imp-card .ic-val.amber{color:#fbbf24}
-.imp-card .ic-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-top:6px}
-.imp-card .ic-sub{font-size:10px;color:rgba(17,24,39,.45);margin-top:3px;line-height:1.35}
-
-.imp-card .ic-bar{height:5px;background:rgba(0,0,0,.05);border-radius:3px;margin-top:10px;overflow:hidden}
-.imp-card .ic-bar-fill{height:100%;border-radius:3px;transition:width .6s var(--tr)}
-.ic-bar-fill.g{background:linear-gradient(90deg,#22c55e,#16a34a)}
-.ic-bar-fill.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
-.ic-bar-fill.b{background:linear-gradient(90deg,#6366f1,#818cf8)}
-.ic-bar-fill.a{background:linear-gradient(90deg,#f59e0b,#d97706)}
-
-.imp-divider{
-  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(17,24,39,.25);padding:4px 0;
-  border-bottom:1px solid var(--border);margin-bottom:0
-}
-
-.imp-bve{
-  display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center
-}
-.bve-col{text-align:center}
-.bve-col .bve-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.3);margin-bottom:4px}
-.bve-col .bve-val{font-size:20px;font-weight:800;color:#111827;letter-spacing:-.02em}
-.bve-col.baseline .bve-val{color:#f87171}
-.bve-col.endline .bve-val{color:#4ade80}
-.bve-arrow{font-size:20px;color:rgba(17,24,39,.2)}
-.bve-saving{text-align:center;font-size:11px;font-weight:700;margin-top:4px}
-.bve-saving.pos{color:#4ade80}
-.bve-saving.neg{color:#fbbf24}
-
-.imp-empty{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:100%;color:rgba(17,24,39,.2);text-align:center;gap:16px
-}
-.imp-empty .ee-icon{font-size:60px;opacity:.3}
-.imp-empty .ee-text{font-size:14px;font-weight:600;max-width:280px;line-height:1.5}
 
 /* ── RESPONSIVE SCALING ── */
 
@@ -671,7 +504,6 @@ body{background:var(--dark);color:#111827}
   .s-pill{font-size:13px;padding:8px 16px}
   .dk .dv{font-size:26px}
   .dk .dl{font-size:10px}
-  .imp-card .ic-val{font-size:28px}
 }
 
 /* 1920px — HD monitor / projector */
@@ -707,35 +539,10 @@ body{background:var(--dark);color:#111827}
   .bn-table td{font-size:14px;padding:9px 14px}
   .bn-badge{font-size:12px;padding:3px 10px}
 
-  /* Impact calculator */
+  /* Impact header */
   .imp-header{padding:18px 32px}
   .imp-title{font-size:20px}
   .imp-subtitle{font-size:13px}
-  .imp-input{padding:28px 26px;gap:24px}
-  .inp-section{padding:20px;border-radius:18px}
-  .inp-section h3{font-size:13px;margin-bottom:14px}
-  .inp-section h3 span{font-size:20px}
-  .inp-label{font-size:12px}
-  .inp-wrap input{font-size:22px;padding:14px 18px;border-radius:12px}
-  .inp-hint{font-size:12px}
-  .inp-quick button{font-size:12px;padding:7px 14px;border-radius:10px}
-  .imp-results{padding:26px 32px;gap:20px}
-  .imp-row{gap:14px}
-  .imp-card{padding:18px 22px;border-radius:18px}
-  .imp-card .ic-icon{font-size:26px;margin-bottom:8px}
-  .imp-card .ic-val{font-size:36px}
-  .imp-card .ic-lbl{font-size:11px;margin-top:8px}
-  .imp-card .ic-sub{font-size:12px;margin-top:5px}
-  .imp-card .ic-bar{height:6px;margin-top:14px}
-  .bve-col .bve-lbl{font-size:11px;margin-bottom:6px}
-  .bve-col .bve-val{font-size:26px}
-  .bve-arrow{font-size:26px}
-  .bve-saving{font-size:14px;margin-top:6px}
-  .imp-divider{font-size:12px;padding:5px 0}
-  .imp-empty .ee-icon{font-size:80px}
-  .imp-empty .ee-text{font-size:17px;max-width:340px}
-  #imp-export-btn{font-size:13px;padding:9px 18px;border-radius:11px}
-  #imp-export-btn svg{width:15px;height:15px}
 
   /* Side panel */
   .hero-title h2{font-size:21px}
@@ -795,37 +602,10 @@ body{background:var(--dark);color:#111827}
   .bn-badge{font-size:14px;padding:4px 13px;border-radius:24px}
   .charts-flex{gap:16px}
 
-  /* Impact calculator */
+  /* Impact header */
   .imp-header{padding:24px 44px}
   .imp-title{font-size:26px}
   .imp-subtitle{font-size:17px;margin-top:4px}
-  .imp-input{padding:36px 32px;gap:32px}
-  .inp-section{padding:26px;border-radius:22px}
-  .inp-section h3{font-size:17px;margin-bottom:18px;gap:12px}
-  .inp-section h3 span{font-size:26px}
-  .inp-label{font-size:15px;margin-bottom:8px}
-  .inp-wrap input{font-size:30px;padding:18px 22px;border-radius:15px}
-  .inp-unit{font-size:14px;right:16px}
-  .inp-hint{font-size:14px;margin-top:8px}
-  .inp-quick button{font-size:14px;padding:9px 18px;border-radius:12px}
-  .imp-results{padding:34px 44px;gap:26px}
-  .imp-row{gap:20px}
-  .imp-card{padding:24px 28px;border-radius:22px}
-  .imp-card .ic-icon{font-size:34px;margin-bottom:12px}
-  .imp-card .ic-val{font-size:50px}
-  .imp-card .ic-lbl{font-size:14px;margin-top:12px;letter-spacing:.1em}
-  .imp-card .ic-sub{font-size:15px;margin-top:7px}
-  .imp-card .ic-bar{height:8px;margin-top:20px}
-  .bve-col .bve-lbl{font-size:13px;margin-bottom:8px}
-  .bve-col .bve-val{font-size:36px}
-  .bve-arrow{font-size:36px}
-  .bve-saving{font-size:17px;margin-top:8px}
-  .imp-bve{gap:18px}
-  .imp-divider{font-size:15px;padding:7px 0}
-  .imp-empty .ee-icon{font-size:110px}
-  .imp-empty .ee-text{font-size:22px;max-width:400px}
-  #imp-export-btn{font-size:16px;padding:11px 24px;border-radius:14px;gap:9px}
-  #imp-export-btn svg{width:18px;height:18px}
 
   /* Side panel */
   .hero-title h2{font-size:28px}
@@ -1153,99 +933,20 @@ body{background:var(--dark);color:#111827}
   </div>
 </div>
 
-<!-- IMPACT CALCULATOR -->
+<!-- SHEE SCORECARD -->
 <div id="impact">
   <div class="imp-header">
     <div>
-      <div class="imp-title">SHEE Impact Calculator</div>
-      <div class="imp-subtitle">Social · Health · Economic · Environmental — Baseline vs Endline · SGG/SFC Ghana Data</div>
+      <div class="imp-title">SHEE Cooperative Scorecard</div>
+      <div class="imp-subtitle">Social · Health · Economic · Environmental — SGG/SFC Ghana</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <div class="imp-tab-nav">
-        <button class="imp-tab active" id="itab-calc">⚡ Calculator</button>
-        <button class="imp-tab" id="itab-score">📋 Scorecard</button>
-      </div>
-      <button id="imp-export-btn" class="disabled">
-        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 1v8.586L4.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L9 9.586V1H7zm-5 12v1a1 1 0 001 1h10a1 1 0 001-1v-1h-2v.5H4V13H2z"/></svg>
-        Export PDF
-      </button>
       <button class="dash-close" id="impact-close">← Back to Map</button>
     </div>
   </div>
-  <div class="imp-body" id="imp-calc-pane">
-    <!-- LEFT: Inputs -->
-    <div class="imp-input">
-      <div class="inp-section">
-        <h3><span>🌰</span> Dried Nuts (Kernels)</h3>
-        <div class="inp-field">
-          <div class="inp-label">Total Dried Kernels</div>
-          <div class="inp-wrap">
-            <input type="number" id="inp-nuts" placeholder="e.g. 100" min="0" step="0.1">
-            <span class="inp-unit">tonnes</span>
-          </div>
-          <div class="inp-hint">1 bag FN ≈ 85 kg · ~3 kg FN → 1 kg dried kernel</div>
-        </div>
-        <div class="inp-quick" id="qk-nuts">
-          <button data-v="10">10t</button>
-          <button data-v="50">50t</button>
-          <button data-v="100">100t</button>
-          <button data-v="321">321t</button>
-          <button data-v="500">500t</button>
-          <button data-v="1000">1,000t</button>
-        </div>
-      </div>
 
-      <div class="inp-section">
-        <h3><span>🧈</span> Butter</h3>
-        <div class="inp-field">
-          <div class="inp-label">Total Raw Butter</div>
-          <div class="inp-wrap">
-            <input type="number" id="inp-butter" placeholder="e.g. 50" min="0" step="0.1">
-            <span class="inp-unit">tonnes</span>
-          </div>
-          <div class="inp-hint">Gate-to-gate: kernels received → finished butter</div>
-        </div>
-        <div class="inp-quick" id="qk-butter">
-          <button data-v="5">5t</button>
-          <button data-v="20">20t</button>
-          <button data-v="50">50t</button>
-          <button data-v="100">100t</button>
-          <button data-v="200">200t</button>
-        </div>
-      </div>
-
-      <div class="inp-section" style="background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.2)">
-        <h3><span>📐</span> About the Rates</h3>
-        <div class="inp-hint" style="margin-top:0;color:rgba(17,24,39,.45);line-height:1.55">
-          <b>Baseline</b> = Individual processing (pre-SFC)<br>
-          <b>Endline</b> = Collective processing (with SFC)<br><br>
-          Rates from SGG Project (Gushegu, Savelugu, Sagnarigu, Kanfehiyili, Bognayili, Gupanarigu).<br><br>
-          Firewood &amp; GHG show 43–66% improvement range.
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Results -->
-    <div class="imp-results" id="imp-results">
-      <!-- Print-only report header — hidden on screen -->
-      <div id="imp-print-header">
-        <div class="iph-title">SHEE Impact Report — SFC Shea Network, Northern Ghana</div>
-        <div class="iph-meta">Social · Health · Economic · Environmental · Baseline vs Endline (SGG/SFC Project Data)</div>
-        <div class="iph-inputs" id="iph-inputs-row"></div>
-      </div>
-
-      <div class="imp-empty" id="imp-empty">
-        <div class="ee-icon">🌍</div>
-        <div class="ee-text">Enter tonnes of dried kernels or butter to see full SHEE impact metrics auto-calculate</div>
-      </div>
-      <div id="imp-live" style="display:none">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- SHEE CALCULATOR & SCORECARD PANE -->
-  <div id="imp-score-pane" style="display:none;flex:1;overflow:hidden;flex-direction:column">
+  <!-- SHEE SCORECARD PANE -->
+  <div id="imp-score-pane" style="display:flex;flex:1;overflow:hidden;flex-direction:column">
     <!-- TAB NAVIGATION -->
     <nav class="shc-nav" id="shc-nav">
       <button class="shc-tab-btn act" data-tab="method">① Method</button>
@@ -2438,25 +2139,10 @@ document.head.appendChild(style);
 // ═══════════════════════════════════════════════════════════════════════
 //  IMPACT CALCULATOR
 // ═══════════════════════════════════════════════════════════════════════
-function openImpact(){document.getElementById('impact').classList.add('open');}
+function openImpact(){document.getElementById('impact').classList.add('open');shcInit();}
 function closeImpact(){document.getElementById('impact').classList.remove('open');}
 document.getElementById('impact-btn').addEventListener('click',openImpact);
 document.getElementById('impact-close').addEventListener('click',closeImpact);
-
-// ── Impact tab switching ──────────────────────────────────────────────
-document.getElementById('itab-calc').addEventListener('click',()=>{
-  document.getElementById('itab-calc').classList.add('active');
-  document.getElementById('itab-score').classList.remove('active');
-  document.getElementById('imp-calc-pane').style.display='';
-  document.getElementById('imp-score-pane').style.display='none';
-});
-document.getElementById('itab-score').addEventListener('click',()=>{
-  document.getElementById('itab-score').classList.add('active');
-  document.getElementById('itab-calc').classList.remove('active');
-  document.getElementById('imp-calc-pane').style.display='none';
-  document.getElementById('imp-score-pane').style.display='flex';
-  shcInit();
-});
 
 // ══════════════════════════════════════════════════════════════════
 //  SHEE COOPERATIVE CALCULATOR & SCORECARD — full engine
@@ -3415,335 +3101,6 @@ function shcLoadSample(){
   shcRebuildInputs();
   shcGoTab('results');
 }
-
-// SGG baseline/endline rates — NUTS (per kg dried kernel)
-const NR = {
-  fw_base: 0.63,    // kg firewood / kg kernel (avg Gushegu 0.70 + Savelugu 0.55)
-  fw_end_lo: 0.63*(1-0.43), // 43% reduction
-  fw_end_hi: 0.63*(1-0.66), // 66% reduction
-  water_base: 0.91,  // L / kg kernel
-  water_end: 1.10,   // L / kg kernel (increases slightly with collective)
-  ghg_base: 0.521,   // kg CO2eq / kg kernel (avg 0.55+0.492)
-  ghg_end_lo: 0.521*(1-0.43),
-  ghg_end_hi: 0.521*(1-0.66),
-  rev_base: 4.71,    // GHS / kg kernel
-  rev_end: 7.50,     // GHS / kg kernel (collective gets premium)
-  work_base: 16.5,   // min / kg kernel
-  work_end: 20.3,    // min / kg kernel (slightly more with collective QA)
-  women_per_t_fn: 16.8 // women per tonne fresh nuts
-};
-
-// SGG baseline/endline rates — BUTTER (per kg butter)
-const BR = {
-  fw_base: 0.797,   // kg firewood / kg butter (avg across 4 centres)
-  fw_end: 0.797*(1-0.35), // ~35% reduction with improved equipment
-  water_base: 6.925, // L / kg butter
-  water_end: 5.54,   // ~20% reduction
-  waste_base: 9.575, // kg waste / kg butter
-  ghg_base: 0.65,    // kg CO2eq / kg butter (estimated from firewood rate + NCV)
-  ghg_end: 0.65*(1-0.40),
-  women_per_t: 25    // approx women per tonne butter
-};
-
-function fmtN(n,d=1){
-  if(n==null||isNaN(n)) return '—';
-  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(d)+'M';
-  if(Math.abs(n)>=1e3) return (n/1e3).toFixed(d)+'k';
-  return n.toFixed(d);
-}
-function fmtT(n){
-  if(n==null||isNaN(n)) return '—';
-  if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k t';
-  return n.toFixed(1)+' t';
-}
-
-function calcImpact(){
-  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
-  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
-
-  const empty = document.getElementById('imp-empty');
-  const live = document.getElementById('imp-live');
-
-  const exportBtn = document.getElementById('imp-export-btn');
-  if(nutT<=0 && butT<=0){
-    empty.style.display='flex';
-    live.style.display='none';
-    exportBtn.classList.add('disabled');
-    return;
-  }
-  empty.style.display='none';
-  live.style.display='block';
-  exportBtn.classList.remove('disabled');
-
-  const nutKg = nutT*1000;
-  const butKg = butT*1000;
-  const fnKg = nutKg*3; // approx fresh nuts = 3x dried kernels
-  const fnT = fnKg/1000;
-
-  // NUTS calculations
-  const n_fw_base = nutKg * NR.fw_base / 1000;
-  const n_fw_end_avg = nutKg * ((NR.fw_end_lo+NR.fw_end_hi)/2) / 1000;
-  const n_fw_saved = n_fw_base - n_fw_end_avg;
-  const n_water_base = nutKg * NR.water_base / 1000; // m³
-  const n_water_end = nutKg * NR.water_end / 1000;
-  const n_ghg_base = nutKg * NR.ghg_base / 1000; // tonnes CO2
-  const n_ghg_end_avg = nutKg * ((NR.ghg_end_lo+NR.ghg_end_hi)/2) / 1000;
-  const n_ghg_saved = n_ghg_base - n_ghg_end_avg;
-  const n_rev_base = nutKg * NR.rev_base; // GHS
-  const n_rev_end = nutKg * NR.rev_end;
-  const n_rev_gain = n_rev_end - n_rev_base;
-  const n_work_base = nutKg * NR.work_base / 60; // hours
-  const n_work_end = nutKg * NR.work_end / 60;
-
-  // BUTTER calculations
-  const b_fw_base = butKg * BR.fw_base / 1000;
-  const b_fw_end = butKg * BR.fw_end / 1000;
-  const b_fw_saved = b_fw_base - b_fw_end;
-  const b_water_base = butKg * BR.water_base / 1000;
-  const b_water_end = butKg * BR.water_end / 1000;
-  const b_water_saved = b_water_base - b_water_end;
-  const b_waste = butKg * BR.waste_base / 1000;
-  const b_ghg_base = butKg * BR.ghg_base / 1000;
-  const b_ghg_end = butKg * BR.ghg_end / 1000;
-  const b_ghg_saved = b_ghg_base - b_ghg_end;
-
-  // Combined totals
-  const tot_fw_saved = n_fw_saved + b_fw_saved;
-  const tot_ghg_saved = n_ghg_saved + b_ghg_saved;
-  const tot_water_base = n_water_base + b_water_base;
-  const tot_water_end = n_water_end + b_water_end;
-  const women_est = Math.round(fnT * NR.women_per_t_fn + butT * BR.women_per_t);
-
-  // Equivalences
-  const trees_saved = Math.round(tot_fw_saved / 0.012); // ~12 kg usable firewood per tree
-  const cars_eq = (tot_ghg_saved / 4.6).toFixed(1); // 4.6 t CO2/year per avg car
-
-  live.innerHTML = `
-    <!-- HEADLINE METRICS -->
-    <div class="imp-divider">Headline Impact</div>
-    <div class="imp-row">
-      <div class="imp-card highlight">
-        <div class="ic-icon">🌳</div>
-        <div class="ic-val green">${fmtT(tot_fw_saved)}</div>
-        <div class="ic-lbl">Firewood Saved</div>
-        <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved</div>
-      </div>
-      <div class="imp-card highlight">
-        <div class="ic-icon">💨</div>
-        <div class="ic-val green">${fmtT(tot_ghg_saved)}</div>
-        <div class="ic-lbl">GHG Avoided</div>
-        <div class="ic-sub">≈ ${cars_eq} cars off road / year</div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">💰</div>
-        <div class="ic-val blue">${nutT>0?'GHS '+fmtN(n_rev_gain,0):'—'}</div>
-        <div class="ic-lbl">Extra Revenue</div>
-        <div class="ic-sub">Endline vs baseline pricing</div>
-      </div>
-    </div>
-
-    ${nutT>0?`
-    <!-- NUTS SECTION -->
-    <div class="imp-divider">🌰 Nuts — ${nutT} tonnes dried kernels ≈ ${fnT.toFixed(0)} t fresh nuts</div>
-
-    <div class="imp-row">
-      <div class="imp-card">
-        <div class="ic-icon">🔥</div>
-        <div class="ic-lbl">Firewood</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_fw_base.toFixed(1)} t</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_avg.toFixed(1)} t</div></div>
-        </div>
-        <div class="bve-saving pos">▼ ${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved/n_fw_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">💧</div>
-        <div class="ic-lbl">Water Use</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_water_base.toFixed(0)} m³</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_water_end.toFixed(0)} m³</div></div>
-        </div>
-        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">💨</div>
-        <div class="ic-lbl">GHG Emissions</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_ghg_base.toFixed(1)} t</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end_avg.toFixed(1)} t</div></div>
-        </div>
-        <div class="bve-saving pos">▼ ${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved/n_ghg_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">⏱</div>
-        <div class="ic-lbl">Person-Hours</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${fmtN(n_work_base)}h</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${fmtN(n_work_end)}h</div></div>
-        </div>
-        <div class="bve-saving neg">▲ Collective QA adds time but improves quality</div>
-      </div>
-    </div>
-
-    <div class="imp-row three">
-      <div class="imp-card">
-        <div class="ic-icon">💵</div>
-        <div class="ic-lbl">Revenue to Collectors</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">GHS ${fmtN(n_rev_base,0)}</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">GHS ${fmtN(n_rev_end,0)}</div></div>
-        </div>
-        <div class="bve-saving pos">+GHS ${fmtN(n_rev_gain,0)} extra income (+${((n_rev_gain/n_rev_base)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((n_rev_gain/n_rev_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">📊</div>
-        <div class="ic-lbl">Unit Rates — Nuts</div>
-        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
-          Firewood: <b>${NR.fw_base}</b> → <b>${((NR.fw_end_lo+NR.fw_end_hi)/2).toFixed(2)}</b> kg/kg<br>
-          Water: <b>${NR.water_base}</b> → <b>${NR.water_end}</b> L/kg<br>
-          GHG: <b>${NR.ghg_base}</b> → <b>${((NR.ghg_end_lo+NR.ghg_end_hi)/2).toFixed(3)}</b> kg CO₂/kg<br>
-          Revenue: <b>${NR.rev_base}</b> → <b>${NR.rev_end}</b> GHS/kg
-        </div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">🎯</div>
-        <div class="ic-lbl">Improvement Range</div>
-        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
-          Firewood: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
-          GHG: <b style="color:#4ade80">-43%</b> to <b style="color:#4ade80">-66%</b><br>
-          Revenue: <b style="color:#60a5fa">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> premium<br>
-          Water: <b style="color:#fbbf24">+21%</b> (more QA rinsing)
-        </div>
-      </div>
-    </div>
-    `:''}
-
-    ${butT>0?`
-    <!-- BUTTER SECTION -->
-    <div class="imp-divider">🧈 Butter — ${butT} tonnes raw butter</div>
-
-    <div class="imp-row">
-      <div class="imp-card">
-        <div class="ic-icon">🔥</div>
-        <div class="ic-lbl">Firewood</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_fw_base.toFixed(1)} t</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end.toFixed(1)} t</div></div>
-        </div>
-        <div class="bve-saving pos">▼ ${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved/b_fw_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">💧</div>
-        <div class="ic-lbl">Water Use</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_water_base.toFixed(0)} m³</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_water_end.toFixed(0)} m³</div></div>
-        </div>
-        <div class="bve-saving pos">▼ ${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
-        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((b_water_saved/b_water_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">💨</div>
-        <div class="ic-lbl">GHG Emissions</div>
-        <div class="imp-bve">
-          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_ghg_base.toFixed(1)} t</div></div>
-          <div class="bve-arrow">→</div>
-          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.toFixed(1)} t</div></div>
-        </div>
-        <div class="bve-saving pos">▼ ${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
-        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved/b_ghg_base)*100))}%"></div></div>
-      </div>
-      <div class="imp-card">
-        <div class="ic-icon">🗑</div>
-        <div class="ic-lbl">Waste Generated</div>
-        <div class="ic-val amber" style="margin-top:8px">${b_waste.toFixed(1)} t</div>
-        <div class="ic-sub">At ${BR.waste_base} kg waste / kg butter</div>
-        <div class="ic-sub">Effluent treatment recommended</div>
-      </div>
-    </div>
-    `:''}
-
-    <!-- COMBINED SUMMARY -->
-    ${(nutT>0||butT>0)?`
-    <div class="imp-divider">Combined Environmental Scorecard</div>
-    <div class="imp-row">
-      <div class="imp-card highlight" style="grid-column:span 2">
-        <div style="display:flex;align-items:center;gap:16px">
-          <div style="font-size:42px">🌍</div>
-          <div>
-            <div class="ic-val green" style="font-size:32px">${fmtT(tot_ghg_saved)} CO₂eq</div>
-            <div class="ic-lbl" style="margin-top:4px">Total Greenhouse Gas Avoided</div>
-            <div class="ic-sub">Equivalent to taking ${cars_eq} cars off the road for a year</div>
-          </div>
-        </div>
-      </div>
-      <div class="imp-card highlight" style="grid-column:span 2">
-        <div style="display:flex;align-items:center;gap:16px">
-          <div style="font-size:42px">🌳</div>
-          <div>
-            <div class="ic-val green" style="font-size:32px">${fmtT(tot_fw_saved)}</div>
-            <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided</div>
-            <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved · Reduced deforestation pressure</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    `:''}
-  `;
-}
-
-// ── PDF Export ────────────────────────────────────────────────────────────
-const exportBtn = document.getElementById('imp-export-btn');
-
-function updatePrintHeader(){
-  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
-  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
-  const row = document.getElementById('iph-inputs-row');
-  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  let html = `<div class="iph-inp"><span>Generated:</span>${date}</div>`;
-  if(nutT>0) html += `<div class="iph-inp"><span>Dried Kernels:</span>${nutT} tonnes</div>`;
-  if(butT>0) html += `<div class="iph-inp"><span>Butter:</span>${butT} tonnes</div>`;
-  row.innerHTML = html;
-}
-
-function exportImpactPDF(){
-  updatePrintHeader();
-  // Brief delay to ensure DOM is updated, then print
-  setTimeout(()=>{
-    window.print();
-  }, 80);
-}
-
-exportBtn.addEventListener('click', exportImpactPDF);
-
-// Wire up inputs
-document.getElementById('inp-nuts').addEventListener('input',calcImpact);
-document.getElementById('inp-butter').addEventListener('input',calcImpact);
-
-// Quick buttons
-document.getElementById('qk-nuts').addEventListener('click',e=>{
-  if(e.target.tagName==='BUTTON'){
-    document.getElementById('inp-nuts').value=e.target.dataset.v;
-    calcImpact();
-  }
-});
-document.getElementById('qk-butter').addEventListener('click',e=>{
-  if(e.target.tagName==='BUTTON'){
-    document.getElementById('inp-butter').value=e.target.dataset.v;
-    calcImpact();
-  }
-});
 </script>
 </body>
 </html>
