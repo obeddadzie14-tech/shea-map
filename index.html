@@ -968,7 +968,7 @@ body{background:var(--dark);color:#111827}
         <div class="method-info"><h4>Four Pillars</h4><p><strong>Social (S)</strong> · <strong>Health (H)</strong> · <strong>Economic (E)</strong> · <strong>Environmental (En)</strong><br>Default weights: Social 20% · Health 20% · Economic 25% · Environmental 35% — see reference table below.</p></div>
         <div class="method-info"><h4>Aggregation — Geometric Mean</h4><p>Pillar scores are combined using a <strong>weighted geometric mean</strong> — not a simple sum. This means a very low score on one pillar cannot be compensated by high scores elsewhere.</p></div>
         <div class="method-formula">Overall = 100 × (S/100)^wS × (H/100)^wH × (E/100)^wE × (En/100)^wEn</div>
-        <div class="method-info"><h4>Governance Gate</h4><p>Before the score is published, four governance criteria (G1–G4) must be assessed. A <strong>Fail</strong> blocks external use. A <strong>Conditional Pass</strong> allows the score with a caveat tag.</p></div>
+        <div class="method-info"><h4>Governance Gate</h4><p>Four governance criteria (G1–G4) must be assessed. <strong>Pass</strong> = full premium benefits. <strong>Conditional</strong> = reduced benefits pending resolution. <strong>Fail</strong> = cooperative may lose premium benefits or SFC may suspend purchasing.</p></div>
         <div class="method-info"><h4>Grade Bands</h4><p>A (85–100) Leading · B (70–84) Strong · C (55–69) Moderate · D (40–54) Weak · E (&lt;40) Critical<br>If any pillar scores below 40, grade is capped at C. Below 25 caps at D.</p></div>
       </div>
       <div class="shc-card">
@@ -1036,7 +1036,7 @@ body{background:var(--dark);color:#111827}
       <div id="gov-result-banner" class="gov-banner pass" style="display:none"></div>
       <div class="shc-card">
         <div class="shc-card-title">Governance Gate — G1 to G4</div>
-        <p style="font-size:11.5px;color:#6b7280;margin:0 0 14px;line-height:1.6">All four criteria must be assessed before scoring. <strong>Pass all 4 = Gate Open</strong>. One Partial + no Fail = Conditional. Any Fail or 2+ Partial = Gate Fail (internal only).</p>
+        <p style="font-size:11.5px;color:#6b7280;margin:0 0 14px;line-height:1.6">Four governance criteria must be assessed. <strong>Pass all 4 = Full benefits</strong>. One Partial + no Fail = Conditional benefits. Any Fail or 2+ Partial = cooperative may lose premium benefits or SFC may suspend purchasing until issues are resolved.</p>
         <div class="gov-grid" id="gov-grid">
           <div class="gov-item" data-g="g1">
             <div class="gov-item-title">G1 · Democratic Representation &amp; Vote</div>
@@ -2311,9 +2311,9 @@ function calculateGovernanceGate(){
 function shcUpdateGovBanner(){
   const result = calculateGovernanceGate();
   const msgs = {
-    pass:'✅ Governance Gate: PASS — Score may be used externally.',
-    conditional:'⚠️ Governance Gate: CONDITIONAL PASS — Score visible with caveat tag.',
-    fail:'🚫 Governance Gate: FAIL — Score is INTERNAL ONLY. External publication blocked.'
+    pass:'✅ Governance Gate: PASS — Cooperative eligible for full premium benefits.',
+    conditional:'⚠️ Governance Gate: CONDITIONAL — Cooperative may receive reduced premium benefits pending resolution.',
+    fail:'🚫 Governance Gate: FAIL — Cooperative may lose premium benefits or SFC may suspend purchasing until issues are resolved.'
   };
   ['gov-result-banner','results-gov-banner'].forEach(id=>{
     const el=document.getElementById(id);
@@ -2891,7 +2891,7 @@ function shcRenderScorecard(){
   const e  = r.endline;
   const grd= e.grade;
   const govResult = calculateGovernanceGate();
-  const govTag = govResult==='pass'?'✅ Gate: PASS':govResult==='conditional'?'⚠ Gate: CONDITIONAL':'🚫 Gate: FAIL';
+  const govTag = govResult==='pass'?'✅ Full Benefits':govResult==='conditional'?'⚠ Conditional Benefits':'🚫 Benefits at Risk';
   const PILLAR_META = {S:{label:'Social',color:'#7c3aed'},H:{label:'Health',color:'#ea580c'},E:{label:'Economic',color:'#059669'},En:{label:'Environmental',color:'#2563eb'}};
   const inds = shcGetIndicators();
   const typeLabels = {'nut-collective':'B · Nut — Collective Processing','nut-individual':'A · Nut — Individual Processing','butter-collective':'C · Butter — Collective Processing'};
