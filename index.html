@@ -1970,7 +1970,12 @@ function mkIcon(perf,sel){
 const mIdx=new Map();
 CENTERS.forEach(c=>{
   const m=L.marker([c.lat,c.lng],{icon:mkIcon(c.performance,false)}).addTo(map);
-  m.on('click',e=>{L.DomEvent.stopPropagation(e);openPanel(c,m);});
+  m.on('click',e=>{
+    _markerClicking=true;
+    L.DomEvent.stopPropagation(e);
+    openPanel(c,m);
+    setTimeout(()=>{_markerClicking=false;},120);
+  });
   mIdx.set(c.id,{m,c});
 });
 
@@ -1978,6 +1983,7 @@ CENTERS.forEach(c=>{
 //  PANEL STATE
 // ═══════════════════════════════════════════════════════════════════════
 let activeMkr=null,activeC=null,filterPerf='all';
+let _markerClicking=false; // prevents map.click from closing panel right after a marker click
 let visibleCenters=()=>CENTERS.filter(c=>filterPerf==='all'||c.performance===filterPerf);
 
 function currentIdx(){return visibleCenters().findIndex(c=>c.id===(activeC&&activeC.id))}
@@ -2041,6 +2047,14 @@ function fmtKg(kg){
 }
 
 function renderPanel(c){
+  // Reset scroll + ensure Overview tab is active so hero data is immediately visible
+  const panelBody=document.querySelector('.panel-body');
+  if(panelBody) panelBody.scrollTop=0;
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+  const defTab=document.querySelector('.tab-btn[data-tab="overview"]');
+  if(defTab){defTab.classList.add('active');const p=document.getElementById('tab-overview');if(p)p.classList.add('active');}
+
   // Hero
   document.getElementById('p-name').textContent=c.centerName;
   document.getElementById('p-coop').textContent=c.cooperative;
@@ -2191,7 +2205,7 @@ document.getElementById('btn-next').addEventListener('click',()=>{
 });
 
 document.getElementById('panel-close').addEventListener('click',closePanel);
-map.on('click',closePanel);
+map.on('click',()=>{ if(!_markerClicking) closePanel(); });
 
 // ═══════════════════════════════════════════════════════════════════════
 //  FILTER
