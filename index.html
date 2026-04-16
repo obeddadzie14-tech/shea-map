@@ -474,6 +474,40 @@ body{background:var(--dark);color:#111827}
   .shc-panel.print-target{display:block!important}
 }
 
+/* ── NITIDAE PANEL ── */
+#nitidae{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#nitidae.open{transform:translateY(0)}
+.nit-header{
+  flex-shrink:0;background:var(--dark);border-bottom:1px solid var(--border);
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between
+}
+.nit-title{font-size:14px;font-weight:800;letter-spacing:-.01em}
+.nit-subtitle{font-size:10px;color:rgba(17,24,39,.5);margin-top:2px}
+.nit-body{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:18px}
+.nit-body::-webkit-scrollbar{width:4px}
+.nit-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:2px}
+.nit-section-title{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(17,24,39,.35);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.06)}
+.nit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.nit-card{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.nit-card-lbl{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:8px}
+.nit-compare{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.nit-val{font-size:17px;font-weight:800;color:#111827;line-height:1}
+.nit-val.dim{font-size:14px;color:rgba(17,24,39,.4);font-weight:600}
+.nit-arrow{font-size:14px;color:rgba(17,24,39,.25)}
+.nit-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:800}
+.nit-badge.pos{background:#dcfce7;color:#15803d}
+.nit-badge.neg{background:#fee2e2;color:#dc2626}
+.nit-badge.neu{background:#f3f4f6;color:#6b7280}
+.nit-unit{font-size:10px;color:rgba(17,24,39,.35);margin-top:3px}
+.nit-source{font-size:9.5px;color:rgba(17,24,39,.3);font-style:italic;padding:10px 0 0;border-top:1px solid rgba(0,0,0,.05)}
+
 /* ── IMPACT CALCULATOR ── */
 #impact{
   position:fixed;inset:0;z-index:2000;
@@ -890,6 +924,7 @@ body{background:var(--dark);color:#111827}
       <div class="dash-subtitle">SFC Shea Post-Harvest · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
+      <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">📊 Nitidae</button>
       <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">⚡ Impact</button>
       <button class="dash-close" id="dash-close">🗺 View Map</button>
     </div>
@@ -930,6 +965,164 @@ body{background:var(--dark);color:#111827}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- NITIDAE IMPACT STUDY -->
+<div id="nitidae">
+  <div class="nit-header">
+    <div>
+      <div class="nit-title">Nitidae Impact Study — SGG Project</div>
+      <div class="nit-subtitle">Baseline vs Endline · Shea Nut Processing · Ghana (Gushegu &amp; Savelugu SFC Cooperatives) · Deliverable 4.4</div>
+    </div>
+    <button class="dash-close" id="nitidae-close">← Back</button>
+  </div>
+  <div class="nit-body">
+
+    <!-- EFFICIENCY -->
+    <div>
+      <div class="nit-section-title">⚡ Processing Efficiency</div>
+      <div class="nit-grid">
+        <div class="nit-card">
+          <div class="nit-card-lbl">Batch Size — Fresh Nuts</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">52 kg</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">236 kg</div>
+          </div>
+          <span class="nit-badge pos">+353%</span>
+          <div class="nit-unit">kg fresh nuts per batch</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Processing Time / kg Kernel</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">23:11</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">4:04</div>
+          </div>
+          <span class="nit-badge pos">−82%</span>
+          <div class="nit-unit">min:sec per kg dried kernel (per operator)</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Nuts Processing Yield</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">31%</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">37%</div>
+          </div>
+          <span class="nit-badge pos">+19%</span>
+          <div class="nit-unit">% dried kernels from fresh nuts</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Dried Kernels per Batch</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">16 kg</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">85 kg</div>
+          </div>
+          <span class="nit-badge pos">+431%</span>
+          <div class="nit-unit">kg dried kernels per batch</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENVIRONMENTAL -->
+    <div>
+      <div class="nit-section-title">🌍 Environmental (per kg dried kernels)</div>
+      <div class="nit-grid">
+        <div class="nit-card">
+          <div class="nit-card-lbl">Firewood Consumption</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">0.625</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">0.355</div>
+          </div>
+          <span class="nit-badge pos">−43%</span>
+          <div class="nit-unit">kg firewood (dry eq) / kg kernel</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">GHG Emissions</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">0.521</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">0.297</div>
+          </div>
+          <span class="nit-badge pos">−43%</span>
+          <div class="nit-unit">kg CO₂eq / kg kernel</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Water Consumption</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">0.905</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">1.095</div>
+          </div>
+          <span class="nit-badge neg">+21%</span>
+          <div class="nit-unit">L water / kg kernel (slight increase with collective)</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Annual GHG Reduction (Network)</div>
+          <div class="nit-compare">
+            <div class="nit-val" style="color:#10b981">−44 t</div>
+          </div>
+          <span class="nit-badge pos">CO₂eq / year avoided</span>
+          <div class="nit-unit">cooperative collective + individual vs baseline</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ECONOMIC -->
+    <div>
+      <div class="nit-section-title">💰 Economic Impact</div>
+      <div class="nit-grid">
+        <div class="nit-card">
+          <div class="nit-card-lbl">Revenue per kg Kernels</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">GHS 4.71</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">GHS 5.88</div>
+          </div>
+          <span class="nit-badge pos">+25%</span>
+          <div class="nit-unit">GHS per kg dried kernel (operator)</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Revenue per Hour</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">GHS 22.78</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">GHS 23.68</div>
+          </div>
+          <span class="nit-badge pos">+4%</span>
+          <div class="nit-unit">GHS per hour (collector / operator)</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Annual Volume per Operator</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">170 kg</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val">9,796 kg</div>
+          </div>
+          <span class="nit-badge pos">+5,762%</span>
+          <div class="nit-unit">kg kernels sold per collector / operator / year</div>
+        </div>
+        <div class="nit-card">
+          <div class="nit-card-lbl">Annual Revenue per Operator</div>
+          <div class="nit-compare">
+            <div class="nit-val dim">GHS 800</div>
+            <div class="nit-arrow">→</div>
+            <div class="nit-val" style="color:#10b981">GHS 11,525</div>
+          </div>
+          <span class="nit-badge pos">+1,341%</span>
+          <div class="nit-unit">GHS / year (individual collector vs coop operator)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTEXT NOTE -->
+    <div class="nit-source">
+      Source: Nitidae — Deliverable 4.4, SGG Project · Dashboard impact study: baseline vs endline scenarios · February 2025 · Data: Gushegu &amp; Savelugu SFC cooperatives, Ghana · Individual processing (baseline) vs collective processing (endline). Water increase reflects greater collective throughput, not inefficiency.
+    </div>
+
   </div>
 </div>
 
@@ -2118,6 +2311,11 @@ function openImpact(){document.getElementById('impact').classList.add('open');sh
 function closeImpact(){document.getElementById('impact').classList.remove('open');}
 document.getElementById('impact-btn').addEventListener('click',openImpact);
 document.getElementById('impact-close').addEventListener('click',closeImpact);
+
+function openNitidae(){document.getElementById('nitidae').classList.add('open');}
+function closeNitidae(){document.getElementById('nitidae').classList.remove('open');}
+document.getElementById('dash-nitidae-btn').addEventListener('click',()=>{closeDash();openNitidae();});
+document.getElementById('nitidae-close').addEventListener('click',()=>{closeNitidae();openDash();});
 
 // ══════════════════════════════════════════════════════════════════
 //  SHEE COOPERATIVE CALCULATOR & SCORECARD — full engine
