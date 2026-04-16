@@ -1373,11 +1373,11 @@ const COOP_IMGS = {
 
 function getImgs(c) {
   const n = c.cooperative;
-  if (n.includes('Chiana') || n.includes('Sandema')) return COOP_IMGS['Chiana'];
-  if (n.includes('Gushegu')) return COOP_IMGS['Gushegu'];
-  if (n.includes('Kpalbe')) return COOP_IMGS['Kpalbe'];
-  if (n.includes('Savelugu')) return COOP_IMGS['Savelugu'];
-  if (n.includes('Tumu') || n.includes('Gbele') || n.includes('Gbarakan')) return COOP_IMGS['Tumu'];
+  if (n.includes('Chiana') || n.includes('Sandema')) return COOP_IMGS['Chiana'] || [];
+  if (n.includes('Gushegu')) return COOP_IMGS['Gushegu'] || [];
+  if (n.includes('Kpalbe')) return COOP_IMGS['Kpalbe'] || [];
+  if (n.includes('Savelugu')) return COOP_IMGS['Savelugu'] || [];
+  if (n.includes('Tumu') || n.includes('Gbele') || n.includes('Gbarakan')) return COOP_IMGS['Tumu'] || [];
   return [];
 }
 
