@@ -309,14 +309,36 @@ body{background:var(--dark);color:#111827}
   @page{margin:12mm 14mm;size:A4}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,
-  #impact-close{display:none!important}
+  #impact-close,#nitidae-close,#nit-export-btn,.imp-input{display:none!important}
   body,html{background:#fff!important;height:auto!important;overflow:visible!important}
-  #impact{position:static!important;transform:none!important;background:#fff!important;
+  #nitidae{position:static!important;transform:none!important;background:#fff!important;
     height:auto!important;overflow:visible!important;z-index:0!important}
-  .imp-header{background:#1a2744!important;color:#fff!important;padding:14px 20px!important;
+  .nit-header{background:#1a2744!important;color:#fff!important;padding:14px 20px!important;
     border-radius:0!important;border:none!important;-webkit-print-color-adjust:exact!important}
-  .imp-title{color:#fff!important;font-size:16px!important}
-  .imp-subtitle{color:rgba(255,255,255,.7)!important}
+  .nit-title{color:#fff!important;font-size:16px!important}
+  .nit-subtitle{color:rgba(255,255,255,.7)!important}
+  .nit-body{display:block!important;height:auto!important;overflow:visible!important}
+  .imp-results{overflow:visible!important;height:auto!important;padding:14px 18px!important}
+  #nit-print-header{display:block!important}
+  .imp-row{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;page-break-inside:avoid}
+  .imp-row.three{grid-template-columns:repeat(3,1fr)!important}
+  .imp-card{background:#f3f4f6!important;border:1px solid #d1d5db!important;border-radius:10px!important;padding:10px 12px!important;page-break-inside:avoid}
+  .imp-card.highlight{background:#f0fdf4!important;border-color:#86efac!important}
+  .ic-val{color:#111827!important;font-size:20px!important}
+  .ic-val.green{color:#15803d!important}
+  .ic-val.blue{color:#1d4ed8!important}
+  .ic-val.amber{color:#b45309!important}
+  .ic-lbl{color:#6b7280!important}
+  .ic-sub{color:#9ca3af!important}
+  .ic-bar{background:#e5e7eb!important}
+  .ic-bar-fill.g{background:#22c55e!important}
+  .ic-bar-fill.b{background:#6366f1!important}
+  .bve-col.baseline .bve-val{color:#dc2626!important}
+  .bve-col.endline .bve-val{color:#15803d!important}
+  .bve-saving.pos{color:#15803d!important}
+  .bve-saving.neg{color:#b45309!important}
+  .imp-divider{color:#374151!important;border-bottom-color:#d1d5db!important}
+  .imp-empty{display:none!important}
 }
 
 
@@ -474,7 +496,7 @@ body{background:var(--dark);color:#111827}
   .shc-panel.print-target{display:block!important}
 }
 
-/* ── NITIDAE PANEL ── */
+/* ── NITIDAE / IMPACT CALCULATOR PANEL ── */
 #nitidae{
   position:fixed;inset:0;z-index:2000;
   background:var(--dark);
@@ -490,23 +512,85 @@ body{background:var(--dark);color:#111827}
 }
 .nit-title{font-size:14px;font-weight:800;letter-spacing:-.01em}
 .nit-subtitle{font-size:10px;color:rgba(17,24,39,.5);margin-top:2px}
-.nit-body{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:18px}
-.nit-body::-webkit-scrollbar{width:4px}
-.nit-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:2px}
-.nit-section-title{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(17,24,39,.35);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(0,0,0,.06)}
-.nit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.nit-card{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.nit-card-lbl{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:8px}
-.nit-compare{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.nit-val{font-size:17px;font-weight:800;color:#111827;line-height:1}
-.nit-val.dim{font-size:14px;color:rgba(17,24,39,.4);font-weight:600}
-.nit-arrow{font-size:14px;color:rgba(17,24,39,.25)}
-.nit-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:800}
-.nit-badge.pos{background:#dcfce7;color:#15803d}
-.nit-badge.neg{background:#fee2e2;color:#dc2626}
-.nit-badge.neu{background:#f3f4f6;color:#6b7280}
-.nit-unit{font-size:10px;color:rgba(17,24,39,.35);margin-top:3px}
-.nit-source{font-size:9.5px;color:rgba(17,24,39,.3);font-style:italic;padding:10px 0 0;border-top:1px solid rgba(0,0,0,.05)}
+.nit-body{flex:1;min-height:0;display:grid;grid-template-columns:clamp(280px,22vw,480px) 1fr;gap:0;overflow:hidden}
+
+/* Left: Input panel */
+.imp-input{background:rgba(0,0,0,.02);border-right:1px solid var(--border);padding:20px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.imp-input::-webkit-scrollbar{width:3px}
+.imp-input::-webkit-scrollbar-thumb{background:rgba(0,0,0,.07);border-radius:2px}
+.inp-section{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:14px;padding:16px}
+.inp-section h3{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.inp-section h3 span{font-size:18px}
+.inp-field{margin-bottom:14px}
+.inp-field:last-child{margin-bottom:0}
+.inp-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px}
+.inp-wrap{position:relative}
+.inp-wrap input{width:100%;padding:11px 14px;background:rgba(0,0,0,.05);border:1.5px solid var(--border);border-radius:10px;color:#111827;font-size:18px;font-weight:700;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.inp-wrap input:focus{border-color:rgba(99,102,241,.6);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.inp-wrap input::placeholder{color:rgba(17,24,39,.2);font-weight:400;font-size:14px}
+.inp-unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:rgba(17,24,39,.35);pointer-events:none}
+.inp-hint{font-size:10px;color:rgba(17,24,39,.3);margin-top:6px;line-height:1.4}
+.inp-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.inp-quick button{padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.03);color:rgba(17,24,39,.6);font-size:10px;font-weight:600;cursor:pointer;transition:all .15s}
+.inp-quick button:hover{background:rgba(0,0,0,.07);color:#111827}
+.inp-select{width:100%;padding:9px 12px;background:rgba(0,0,0,.05);border:1.5px solid var(--border);border-radius:10px;color:#111827;font-size:13px;font-weight:600;font-family:inherit;outline:none;cursor:pointer;transition:border-color .2s,box-shadow .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.inp-select:focus{border-color:rgba(16,185,129,.6);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+.inp-select:disabled{opacity:.4;cursor:not-allowed}
+.inp-select option{background:#fff;color:#111827;font-weight:500}
+.centre-badge{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:10.5px;line-height:1.6}
+.centre-badge strong{color:#065f46;display:block;font-size:11px;margin-bottom:2px}
+.centre-badge span{color:#374151}
+
+/* Right: Results */
+.imp-results{padding:18px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.imp-results::-webkit-scrollbar{width:3px}
+.imp-results::-webkit-scrollbar-thumb{background:rgba(0,0,0,.07);border-radius:2px}
+.imp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.imp-row.three{grid-template-columns:repeat(3,1fr)}
+.imp-card{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden;transition:border-color .3s}
+.imp-card.highlight{border-color:rgba(34,197,94,.3)}
+.imp-card .ic-icon{font-size:22px;margin-bottom:6px}
+.imp-card .ic-val{font-size:26px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1;transition:all .35s}
+.imp-card .ic-val.green{color:#4ade80}
+.imp-card .ic-val.red{color:#f87171}
+.imp-card .ic-val.blue{color:#60a5fa}
+.imp-card .ic-val.amber{color:#fbbf24}
+.imp-card .ic-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-top:6px}
+.imp-card .ic-sub{font-size:10px;color:rgba(17,24,39,.45);margin-top:3px;line-height:1.35}
+.imp-card .ic-bar{height:5px;background:rgba(0,0,0,.05);border-radius:3px;margin-top:10px;overflow:hidden}
+.imp-card .ic-bar-fill{height:100%;border-radius:3px;transition:width .6s var(--tr)}
+.ic-bar-fill.g{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.ic-bar-fill.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.ic-bar-fill.b{background:linear-gradient(90deg,#6366f1,#818cf8)}
+.ic-bar-fill.a{background:linear-gradient(90deg,#f59e0b,#d97706)}
+.imp-divider{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(17,24,39,.25);padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:0}
+.imp-bve{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center}
+.bve-col{text-align:center}
+.bve-col .bve-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.3);margin-bottom:4px}
+.bve-col .bve-val{font-size:20px;font-weight:800;color:#111827;letter-spacing:-.02em}
+.bve-col.baseline .bve-val{color:#f87171}
+.bve-col.endline .bve-val{color:#4ade80}
+.bve-arrow{font-size:20px;color:rgba(17,24,39,.2)}
+.bve-saving{text-align:center;font-size:11px;font-weight:700;margin-top:4px}
+.bve-saving.pos{color:#4ade80}
+.bve-saving.neg{color:#fbbf24}
+.imp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:rgba(17,24,39,.2);text-align:center;gap:16px}
+.imp-empty .ee-icon{font-size:60px;opacity:.3}
+.imp-empty .ee-text{font-size:14px;font-weight:600;max-width:280px;line-height:1.5}
+
+/* Export button */
+#nit-export-btn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:9px;padding:7px 14px;font-size:11px;font-weight:700;color:#fbbf24;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;letter-spacing:.02em}
+#nit-export-btn:hover{background:rgba(245,158,11,.25);color:#fde68a}
+#nit-export-btn svg{width:13px;height:13px;flex-shrink:0}
+#nit-export-btn.disabled{opacity:.35;pointer-events:none}
+
+/* Print-only header */
+#nit-print-header{display:none;background:#1a2744;color:#fff;padding:10px 18px 12px;margin-bottom:14px;border-radius:8px;font-family:inherit}
+#nit-print-header .iph-title{font-size:13px;font-weight:800;letter-spacing:-.01em}
+#nit-print-header .iph-meta{font-size:10px;color:rgba(255,255,255,.6);margin-top:3px}
+#nit-print-header .iph-inputs{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+#nit-print-header .iph-inp{background:rgba(0,0,0,.09);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600}
+#nit-print-header .iph-inp span{color:rgba(255,255,255,.55);font-weight:400;margin-right:4px}
 
 /* ── IMPACT CALCULATOR ── */
 #impact{
@@ -924,7 +1008,7 @@ body{background:var(--dark);color:#111827}
       <div class="dash-subtitle">SFC Shea Post-Harvest · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">📊 Nitidae</button>
+      <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">📊 Assess</button>
       <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">⚡ Impact</button>
       <button class="dash-close" id="dash-close">🗺 View Map</button>
     </div>
@@ -968,164 +1052,108 @@ body{background:var(--dark);color:#111827}
   </div>
 </div>
 
-<!-- NITIDAE IMPACT STUDY -->
+<!-- NITIDAE / IMPACT CALCULATOR -->
 <div id="nitidae">
   <div class="nit-header">
     <div>
-      <div class="nit-title">Nitidae Impact Study — SGG Project</div>
-      <div class="nit-subtitle">Baseline vs Endline · Shea Nut Processing · Ghana (Gushegu &amp; Savelugu SFC Cooperatives) · Deliverable 4.4</div>
+      <div class="nit-title">Assess</div>
+      <div class="nit-subtitle">Baseline vs Endline · Social · Health · Economic · Environmental · SGG/SFC Ghana Data</div>
     </div>
-    <button class="dash-close" id="nitidae-close">← Back</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="nit-export-btn" class="disabled">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M7 1v8.586L4.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L9 9.586V1H7zm-5 12v1a1 1 0 001 1h10a1 1 0 001-1v-1h-2v.5H4V13H2z"/></svg>
+        Export PDF
+      </button>
+      <button class="dash-close" id="nitidae-close">← Back</button>
+    </div>
   </div>
   <div class="nit-body">
-
-    <!-- EFFICIENCY -->
-    <div>
-      <div class="nit-section-title">⚡ Processing Efficiency</div>
-      <div class="nit-grid">
-        <div class="nit-card">
-          <div class="nit-card-lbl">Batch Size — Fresh Nuts</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">52 kg</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">236 kg</div>
-          </div>
-          <span class="nit-badge pos">+353%</span>
-          <div class="nit-unit">kg fresh nuts per batch</div>
+    <!-- LEFT: Inputs -->
+    <div class="imp-input">
+      <!-- CENTRE SELECTOR -->
+      <div class="inp-section" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.25)">
+        <h3 style="color:rgba(6,95,70,.7)">Load Centre Data</h3>
+        <div class="inp-field">
+          <div class="inp-label">Season</div>
+          <select class="inp-select" id="inp-season">
+            <option value="">— select season —</option>
+            <option value="2526">2025 / 26</option>
+            <option value="2324">2023 / 24</option>
+          </select>
         </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Processing Time / kg Kernel</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">23:11</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">4:04</div>
-          </div>
-          <span class="nit-badge pos">−82%</span>
-          <div class="nit-unit">min:sec per kg dried kernel (per operator)</div>
+        <div class="inp-field" style="margin-bottom:0">
+          <div class="inp-label">Centre</div>
+          <select class="inp-select" id="inp-centre" disabled>
+            <option value="">— select season first —</option>
+          </select>
         </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Nuts Processing Yield</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">31%</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">37%</div>
+        <div id="centre-loaded-badge" style="display:none"></div>
+      </div>
+      <div class="inp-section">
+        <h3><span>🌰</span> Dried Nuts (Kernels)</h3>
+        <div class="inp-field">
+          <div class="inp-label">Total Dried Kernels</div>
+          <div class="inp-wrap">
+            <input type="number" id="inp-nuts" placeholder="e.g. 100" min="0" step="0.1">
+            <span class="inp-unit">tonnes</span>
           </div>
-          <span class="nit-badge pos">+19%</span>
-          <div class="nit-unit">% dried kernels from fresh nuts</div>
+          <div class="inp-hint">1 bag FN ≈ 85 kg · ~3 kg FN → 1 kg dried kernel</div>
         </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Dried Kernels per Batch</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">16 kg</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">85 kg</div>
+        <div class="inp-quick" id="qk-nuts">
+          <button data-v="10">10t</button>
+          <button data-v="50">50t</button>
+          <button data-v="100">100t</button>
+          <button data-v="321">321t</button>
+          <button data-v="500">500t</button>
+          <button data-v="1000">1,000t</button>
+        </div>
+      </div>
+      <div class="inp-section">
+        <h3><span>🧈</span> Butter</h3>
+        <div class="inp-field">
+          <div class="inp-label">Total Raw Butter</div>
+          <div class="inp-wrap">
+            <input type="number" id="inp-butter" placeholder="e.g. 50" min="0" step="0.1">
+            <span class="inp-unit">tonnes</span>
           </div>
-          <span class="nit-badge pos">+431%</span>
-          <div class="nit-unit">kg dried kernels per batch</div>
+          <div class="inp-hint">Gate-to-gate: kernels received → finished butter</div>
+        </div>
+        <div class="inp-quick" id="qk-butter">
+          <button data-v="5">5t</button>
+          <button data-v="20">20t</button>
+          <button data-v="50">50t</button>
+          <button data-v="100">100t</button>
+          <button data-v="200">200t</button>
+        </div>
+      </div>
+      <div class="inp-section" style="background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.2)">
+        <h3><span>📐</span> About the Rates</h3>
+        <div class="inp-hint" style="margin-top:0;color:rgba(17,24,39,.45);line-height:1.55">
+          <b>Baseline</b> = Individual processing (pre-SFC)<br>
+          <b>Endline</b> = Collective mechanised processing<br><br>
+          Nuts firewood: −43% to −66% reduction<br>
+          Nuts GHG: −43% to −66% reduction<br>
+          Nuts revenue: +59% premium (GHS 4.71→7.50)<br>
+          Butter firewood: ~35% reduction<br>
+          Butter water: ~20% reduction
         </div>
       </div>
     </div>
-
-    <!-- ENVIRONMENTAL -->
-    <div>
-      <div class="nit-section-title">🌍 Environmental (per kg dried kernels)</div>
-      <div class="nit-grid">
-        <div class="nit-card">
-          <div class="nit-card-lbl">Firewood Consumption</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">0.625</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">0.355</div>
-          </div>
-          <span class="nit-badge pos">−43%</span>
-          <div class="nit-unit">kg firewood (dry eq) / kg kernel</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">GHG Emissions</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">0.521</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">0.297</div>
-          </div>
-          <span class="nit-badge pos">−43%</span>
-          <div class="nit-unit">kg CO₂eq / kg kernel</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Water Consumption</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">0.905</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">1.095</div>
-          </div>
-          <span class="nit-badge neg">+21%</span>
-          <div class="nit-unit">L water / kg kernel (slight increase with collective)</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Annual GHG Reduction (Network)</div>
-          <div class="nit-compare">
-            <div class="nit-val" style="color:#10b981">−44 t</div>
-          </div>
-          <span class="nit-badge pos">CO₂eq / year avoided</span>
-          <div class="nit-unit">cooperative collective + individual vs baseline</div>
-        </div>
+    <!-- RIGHT: Results -->
+    <div class="imp-results" id="imp-results-area">
+      <div id="nit-print-header">
+        <div class="iph-title">SHEE Impact Report — SFC Shea Network, Northern Ghana</div>
+        <div class="iph-meta">Social · Health · Economic · Environmental · Baseline vs Endline (SGG/SFC Project Data)</div>
+        <div class="iph-inputs" id="iph-inputs-row"></div>
       </div>
-    </div>
-
-    <!-- ECONOMIC -->
-    <div>
-      <div class="nit-section-title">💰 Economic Impact</div>
-      <div class="nit-grid">
-        <div class="nit-card">
-          <div class="nit-card-lbl">Revenue per kg Kernels</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">GHS 4.71</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">GHS 5.88</div>
-          </div>
-          <span class="nit-badge pos">+25%</span>
-          <div class="nit-unit">GHS per kg dried kernel (operator)</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Revenue per Hour</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">GHS 22.78</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">GHS 23.68</div>
-          </div>
-          <span class="nit-badge pos">+4%</span>
-          <div class="nit-unit">GHS per hour (collector / operator)</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Annual Volume per Operator</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">170 kg</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val">9,796 kg</div>
-          </div>
-          <span class="nit-badge pos">+5,762%</span>
-          <div class="nit-unit">kg kernels sold per collector / operator / year</div>
-        </div>
-        <div class="nit-card">
-          <div class="nit-card-lbl">Annual Revenue per Operator</div>
-          <div class="nit-compare">
-            <div class="nit-val dim">GHS 800</div>
-            <div class="nit-arrow">→</div>
-            <div class="nit-val" style="color:#10b981">GHS 11,525</div>
-          </div>
-          <span class="nit-badge pos">+1,341%</span>
-          <div class="nit-unit">GHS / year (individual collector vs coop operator)</div>
-        </div>
+      <div id="imp-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:rgba(17,24,39,.2);text-align:center;gap:16px">
+        <div style="font-size:60px;opacity:.3">⚡</div>
+        <div style="font-size:14px;font-weight:600;max-width:280px;line-height:1.5">Enter a quantity on the left to calculate the environmental and economic impact</div>
       </div>
+      <div id="imp-live" style="display:none"></div>
     </div>
-
-    <!-- CONTEXT NOTE -->
-    <div class="nit-source">
-      Source: Nitidae — Deliverable 4.4, SGG Project · Dashboard impact study: baseline vs endline scenarios · February 2025 · Data: Gushegu &amp; Savelugu SFC cooperatives, Ghana · Individual processing (baseline) vs collective processing (endline). Water increase reflects greater collective throughput, not inefficiency.
-    </div>
-
   </div>
 </div>
-
 <!-- SHEE SCORECARD -->
 <div id="impact">
   <div class="imp-header">
@@ -2316,6 +2344,377 @@ function openNitidae(){document.getElementById('nitidae').classList.add('open');
 function closeNitidae(){document.getElementById('nitidae').classList.remove('open');}
 document.getElementById('dash-nitidae-btn').addEventListener('click',()=>{closeDash();openNitidae();});
 document.getElementById('nitidae-close').addEventListener('click',()=>{closeNitidae();openDash();});
+
+// ── IMPACT CALCULATOR ─────────────────────────────────────────────
+// SGG baseline/endline rates — NUTS (per kg dried kernel)
+const NR = {
+  fw_base: 0.63,
+  fw_end_lo: 0.63*(1-0.43),
+  fw_end_hi: 0.63*(1-0.66),
+  water_base: 0.91,
+  water_end: 1.10,
+  ghg_base: 0.521,
+  ghg_end_lo: 0.521*(1-0.43),
+  ghg_end_hi: 0.521*(1-0.66),
+  rev_base: 4.71,
+  rev_end: 7.50,
+  work_base: 16.5,
+  work_end: 20.3,
+  women_per_t_fn: 16.8
+};
+// SGG baseline/endline rates — BUTTER (per kg butter)
+const BR = {
+  fw_base: 0.797,
+  fw_end: 0.797*(1-0.35),
+  water_base: 6.925,
+  water_end: 5.54,
+  waste_base: 9.575,
+  ghg_base: 0.65,
+  ghg_end: 0.65*(1-0.40),
+  women_per_t: 25
+};
+
+function fmtN(n,d=1){
+  if(n==null||isNaN(n)) return '—';
+  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(d)+'M';
+  if(Math.abs(n)>=1e3) return (n/1e3).toFixed(d)+'k';
+  return n.toFixed(d);
+}
+function fmtT(n){
+  if(n==null||isNaN(n)) return '—';
+  if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+'k t';
+  return n.toFixed(1)+' t';
+}
+
+function calcImpact(){
+  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
+  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
+  const empty = document.getElementById('imp-empty');
+  const live = document.getElementById('imp-live');
+  const exportBtn = document.getElementById('nit-export-btn');
+  if(nutT<=0 && butT<=0){
+    empty.style.display='flex';
+    live.style.display='none';
+    exportBtn.classList.add('disabled');
+    return;
+  }
+  empty.style.display='none';
+  live.style.display='block';
+  exportBtn.classList.remove('disabled');
+
+  const nutKg = nutT*1000;
+  const butKg = butT*1000;
+  const fnKg = nutKg*3;
+  const fnT = fnKg/1000;
+
+  // NUTS calculations
+  const n_fw_base = nutKg * NR.fw_base / 1000;
+  const n_fw_end_avg = nutKg * ((NR.fw_end_lo+NR.fw_end_hi)/2) / 1000;
+  const n_fw_saved = n_fw_base - n_fw_end_avg;
+  const n_water_base = nutKg * NR.water_base / 1000;
+  const n_water_end = nutKg * NR.water_end / 1000;
+  const n_ghg_base = nutKg * NR.ghg_base / 1000;
+  const n_ghg_end_avg = nutKg * ((NR.ghg_end_lo+NR.ghg_end_hi)/2) / 1000;
+  const n_ghg_saved = n_ghg_base - n_ghg_end_avg;
+  const n_rev_base = nutKg * NR.rev_base;
+  const n_rev_end = nutKg * NR.rev_end;
+  const n_rev_gain = n_rev_end - n_rev_base;
+  const n_work_base = nutKg * NR.work_base / 60;
+  const n_work_end = nutKg * NR.work_end / 60;
+
+  // BUTTER calculations
+  const b_fw_base = butKg * BR.fw_base / 1000;
+  const b_fw_end = butKg * BR.fw_end / 1000;
+  const b_fw_saved = b_fw_base - b_fw_end;
+  const b_water_base = butKg * BR.water_base / 1000;
+  const b_water_end = butKg * BR.water_end / 1000;
+  const b_water_saved = b_water_base - b_water_end;
+  const b_waste = butKg * BR.waste_base / 1000;
+  const b_ghg_base = butKg * BR.ghg_base / 1000;
+  const b_ghg_end = butKg * BR.ghg_end / 1000;
+  const b_ghg_saved = b_ghg_base - b_ghg_end;
+
+  // Combined totals
+  const tot_fw_saved = n_fw_saved + b_fw_saved;
+  const tot_ghg_saved = n_ghg_saved + b_ghg_saved;
+  const trees_saved = Math.round(tot_fw_saved / 0.012);
+  const cars_eq = (tot_ghg_saved / 4.6).toFixed(1);
+
+  live.innerHTML = `
+    <div class="imp-divider">Headline Impact</div>
+    <div class="imp-row">
+      <div class="imp-card highlight">
+        <div class="ic-icon">🌳</div>
+        <div class="ic-val green">${fmtT(tot_fw_saved)}</div>
+        <div class="ic-lbl">Firewood Saved</div>
+        <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved</div>
+      </div>
+      <div class="imp-card highlight">
+        <div class="ic-icon">💨</div>
+        <div class="ic-val green">${fmtT(tot_ghg_saved)}</div>
+        <div class="ic-lbl">GHG Avoided</div>
+        <div class="ic-sub">≈ ${cars_eq} cars off road / year</div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💰</div>
+        <div class="ic-val blue">${nutT>0?'GHS '+fmtN(n_rev_gain,0):'—'}</div>
+        <div class="ic-lbl">Extra Revenue</div>
+        <div class="ic-sub">Endline vs baseline pricing</div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">👩</div>
+        <div class="ic-val amber">${fmtN(nutT * NR.women_per_t_fn * 3 + butT * BR.women_per_t,0)}</div>
+        <div class="ic-lbl">Women Benefiting</div>
+        <div class="ic-sub">Estimated collectors + processors</div>
+      </div>
+    </div>
+
+    ${nutT>0?`
+    <div class="imp-divider">🌰 Nuts — ${nutT} t dried kernels ≈ ${fnT.toFixed(0)} t fresh nuts</div>
+    <div class="imp-row">
+      <div class="imp-card">
+        <div class="ic-icon">🔥</div>
+        <div class="ic-lbl">Firewood</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_fw_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_avg.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved/n_fw_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💧</div>
+        <div class="ic-lbl">Water Use</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_water_base.toFixed(0)} m³</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_water_end.toFixed(0)} m³</div></div>
+        </div>
+        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💨</div>
+        <div class="ic-lbl">GHG Emissions</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${n_ghg_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end_avg.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved/n_ghg_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">⏱</div>
+        <div class="ic-lbl">Person-Hours</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${fmtN(n_work_base)}h</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${fmtN(n_work_end)}h</div></div>
+        </div>
+        <div class="bve-saving neg">▲ Collective QA adds time but improves quality</div>
+      </div>
+    </div>
+    <div class="imp-row three">
+      <div class="imp-card">
+        <div class="ic-icon">💵</div>
+        <div class="ic-lbl">Revenue to Collectors</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">GHS ${fmtN(n_rev_base,0)}</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">GHS ${fmtN(n_rev_end,0)}</div></div>
+        </div>
+        <div class="bve-saving pos">+GHS ${fmtN(n_rev_gain,0)} extra income (+${((n_rev_gain/n_rev_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((n_rev_gain/n_rev_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">📊</div>
+        <div class="ic-lbl">Unit Rates — Nuts</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b>${NR.fw_base}</b> → <b>${((NR.fw_end_lo+NR.fw_end_hi)/2).toFixed(2)}</b> kg/kg<br>
+          Water: <b>${NR.water_base}</b> → <b>${NR.water_end}</b> L/kg<br>
+          GHG: <b>${NR.ghg_base}</b> → <b>${((NR.ghg_end_lo+NR.ghg_end_hi)/2).toFixed(3)}</b> kg CO₂/kg<br>
+          Revenue: <b>${NR.rev_base}</b> → <b>${NR.rev_end}</b> GHS/kg
+        </div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">🎯</div>
+        <div class="ic-lbl">Improvement Range</div>
+        <div class="ic-sub" style="margin-top:8px;line-height:1.7;font-size:11px">
+          Firewood: <b style="color:#4ade80">−43%</b> to <b style="color:#4ade80">−66%</b><br>
+          GHG: <b style="color:#4ade80">−43%</b> to <b style="color:#4ade80">−66%</b><br>
+          Revenue: <b style="color:#60a5fa">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> premium<br>
+          Water: <b style="color:#fbbf24">+21%</b> (more QA rinsing)
+        </div>
+      </div>
+    </div>
+    `:''}
+
+    ${butT>0?`
+    <div class="imp-divider">🧈 Butter — ${butT} t raw butter</div>
+    <div class="imp-row">
+      <div class="imp-card">
+        <div class="ic-icon">🔥</div>
+        <div class="ic-lbl">Firewood</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_fw_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved/b_fw_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💧</div>
+        <div class="ic-lbl">Water Use</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_water_base.toFixed(0)} m³</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_water_end.toFixed(0)} m³</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
+        <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((b_water_saved/b_water_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">💨</div>
+        <div class="ic-lbl">GHG Emissions</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">${b_ghg_base.toFixed(1)} t</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.toFixed(1)} t</div></div>
+        </div>
+        <div class="bve-saving pos">▼ ${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved/b_ghg_base)*100))}%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-icon">🗑</div>
+        <div class="ic-lbl">Waste Generated</div>
+        <div class="ic-val amber" style="margin-top:8px">${b_waste.toFixed(1)} t</div>
+        <div class="ic-sub">At ${BR.waste_base} kg waste / kg butter</div>
+        <div class="ic-sub">Effluent treatment recommended</div>
+      </div>
+    </div>
+    `:''}
+
+    ${(nutT>0||butT>0)?`
+    <div class="imp-divider">Combined Environmental Scorecard</div>
+    <div class="imp-row">
+      <div class="imp-card highlight" style="grid-column:span 2">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:42px">🌍</div>
+          <div>
+            <div class="ic-val green" style="font-size:32px">${fmtT(tot_ghg_saved)} CO₂eq</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Greenhouse Gas Avoided</div>
+            <div class="ic-sub">Equivalent to taking ${cars_eq} cars off the road for a year</div>
+          </div>
+        </div>
+      </div>
+      <div class="imp-card highlight" style="grid-column:span 2">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:42px">🌳</div>
+          <div>
+            <div class="ic-val green" style="font-size:32px">${fmtT(tot_fw_saved)}</div>
+            <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided</div>
+            <div class="ic-sub">≈ ${fmtN(trees_saved,0)} trees preserved · Reduced deforestation pressure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `:''}
+  `;
+}
+
+function nitUpdatePrintHeader(){
+  const nutT = parseFloat(document.getElementById('inp-nuts').value)||0;
+  const butT = parseFloat(document.getElementById('inp-butter').value)||0;
+  const row = document.getElementById('iph-inputs-row');
+  const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  let html = `<div class="iph-inp"><span>Generated:</span>${date}</div>`;
+  if(nutT>0) html += `<div class="iph-inp"><span>Dried Kernels:</span>${nutT} t</div>`;
+  if(butT>0) html += `<div class="iph-inp"><span>Butter:</span>${butT} t</div>`;
+  row.innerHTML = html;
+}
+
+document.getElementById('nit-export-btn').addEventListener('click',()=>{
+  nitUpdatePrintHeader();
+  setTimeout(()=>window.print(), 80);
+});
+document.getElementById('inp-nuts').addEventListener('input', calcImpact);
+document.getElementById('inp-butter').addEventListener('input', calcImpact);
+
+// ── Centre / Season selector ──────────────────────────────────────
+const seasonSel = document.getElementById('inp-season');
+const centreSel = document.getElementById('inp-centre');
+const centreBadge = document.getElementById('centre-loaded-badge');
+
+seasonSel.addEventListener('change', () => {
+  const s = seasonSel.value;
+  centreSel.innerHTML = '<option value="">— select centre —</option>';
+  centreBadge.style.display = 'none';
+  if(!s){ centreSel.disabled = true; return; }
+  centreSel.disabled = false;
+
+  // Build sorted list with label showing center name + DK tonnes
+  const items = CENTERS.map(c => {
+    let dkT, label;
+    if(s === '2526'){
+      dkT = (c.ops.dryNuts || 0) * 0.085;
+      label = `${c.centerName} — ${dkT.toFixed(1)} t DK`;
+    } else {
+      // 2023/24: cooperative total FN bags → DK tonnes
+      dkT = (c.prev2324coop || 0) * 85 / 3 / 1000;
+      label = `${c.centerName} (coop: ${dkT.toFixed(1)} t DK)`;
+    }
+    return { id: c.id, label, dkT, c };
+  }).sort((a,b) => a.c.centerName.localeCompare(b.c.centerName));
+
+  items.forEach(it => {
+    const opt = document.createElement('option');
+    opt.value = it.id;
+    opt.textContent = it.label;
+    centreSel.appendChild(opt);
+  });
+});
+
+centreSel.addEventListener('change', () => {
+  const s = seasonSel.value;
+  const id = centreSel.value;
+  if(!id){ centreBadge.style.display = 'none'; return; }
+
+  const c = CENTERS.find(x => x.id === id);
+  if(!c) return;
+
+  let dkT, fnBags, note;
+  if(s === '2526'){
+    dkT = (c.ops.dryNuts || 0) * 0.085;
+    fnBags = c.ops.fnBags || 0;
+    note = `2025/26 · per-centre data`;
+  } else {
+    dkT = (c.prev2324coop || 0) * 85 / 3 / 1000;
+    fnBags = c.prev2324coop || 0;
+    note = `2023/24 · cooperative total`;
+  }
+
+  // Pre-fill the dried kernels input
+  document.getElementById('inp-nuts').value = dkT > 0 ? dkT.toFixed(2) : '';
+  calcImpact();
+
+  // Show badge
+  const seasonLabel = s === '2526' ? '2025/26' : '2023/24';
+  centreBadge.innerHTML = `<div class="centre-badge">
+    <strong>${c.centerName}</strong>
+    <span>${c.cooperative}</span><br>
+    <span style="color:#065f46;font-weight:700">${dkT.toFixed(2)} t DK · ${fnBags} bags FN</span><br>
+    <span style="font-size:9.5px;color:#6b7280">${note}</span>
+  </div>`;
+  centreBadge.style.display = 'block';
+});
+document.getElementById('qk-nuts').addEventListener('click', e=>{
+  if(e.target.tagName==='BUTTON'){ document.getElementById('inp-nuts').value=e.target.dataset.v; calcImpact(); }
+});
+document.getElementById('qk-butter').addEventListener('click', e=>{
+  if(e.target.tagName==='BUTTON'){ document.getElementById('inp-butter').value=e.target.dataset.v; calcImpact(); }
+});
 
 // ══════════════════════════════════════════════════════════════════
 //  SHEE COOPERATIVE CALCULATOR & SCORECARD — full engine
