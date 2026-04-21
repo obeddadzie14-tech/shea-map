@@ -430,7 +430,6 @@ body{background:var(--dark);color:#111827}
 .res-grade-box{border-radius:14px;padding:20px 24px;text-align:center;margin-bottom:16px}
 .res-score-num{font-size:48px;font-weight:900;line-height:1}
 .res-grade-letter{font-size:22px;font-weight:900;margin-top:4px}
-.res-grade-label{font-size:12px;font-weight:600;margin-top:4px;opacity:.8}
 .pillar-bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .pillar-bar-card{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px}
 .pillar-bar-card .lbl{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
@@ -760,7 +759,6 @@ body{background:var(--dark);color:#111827}
 /* Tooltips for overlays */
 .zone-tip,.protect-tip,.crema-tip,.dist-tip{background:rgba(13,15,20,.88)!important;border:1px solid rgba(0,0,0,.07)!important;color:#e5e7eb!important;font-size:11px!important;padding:4px 9px!important;border-radius:6px!important;font-weight:600!important;box-shadow:0 2px 8px rgba(0,0,0,.4)!important}
 .protect-tip{border-color:rgba(34,197,94,.4)!important;color:#4ade80!important}
-.crema-tip{border-color:rgba(245,158,11,.4)!important;color:#fbbf24!important}
 .dist-tip{border-color:rgba(148,163,184,.3)!important;color:#cbd5e1!important}
 </style>
 </head>
@@ -2583,11 +2581,6 @@ function buildDashCharts(){
     tr.addEventListener('mouseleave',()=>tr.style.background='');
   });
 }
-
-// Zone tooltip style
-const style=document.createElement('style');
-style.textContent=`.zone-tip{background:rgba(13,15,20,.85);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;font-size:11px;padding:4px 9px;border-radius:6px;font-weight:600}`;
-document.head.appendChild(style);
 
 // ═══════════════════════════════════════════════════════════════════════
 //  IMPACT CALCULATOR
