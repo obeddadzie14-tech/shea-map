@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SFC Shea Network — Operations Intelligence</title>
+<title>Shea Rise Dashboard</title>
 <link rel="preconnect" href="https://basemaps.cartocdn.com"/>
 <link rel="preconnect" href="https://drive.google.com"/>
 <link rel="stylesheet" href="lib/leaflet.css"/>
@@ -768,7 +768,7 @@ body{background:var(--dark);color:#111827}
 
 <!-- Header -->
 <div id="header">
-  <div class="brand"><div class="brand-dot"></div>SFC Shea Network</div>
+  <div class="brand"><div class="brand-dot"></div>Shea Rise Dashboard</div>
   <div class="sub">Post-Harvest Intelligence · Northern Ghana · 2023–24 &amp; 2025–26</div>
 </div>
 
@@ -828,7 +828,7 @@ body{background:var(--dark);color:#111827}
   <div class="s-pill"><strong>964</strong> t FN 25/26</div>
   <div class="s-pill"><strong>492</strong> t FN 23/24</div>
   <div class="s-pill"><strong>+96%</strong> YoY growth</div>
-  <div class="s-pill" id="stat-women-served"><strong>—</strong> women served</div>
+  <div class="s-pill" id="stat-women-served"><strong>—</strong> women impacted</div>
   <div class="s-pill"><strong>16,184</strong> coop members</div>
 </div>
 
@@ -936,7 +936,7 @@ body{background:var(--dark);color:#111827}
       <div class="sec-lbl">Workforce</div>
       <div class="kpi-grid">
         <div class="kpi-tile">
-          <div class="kt-lbl">Women Served</div>
+          <div class="kt-lbl">Women Impacted</div>
           <div class="kt-val" id="op-wb" style="color:#f9a8d4">—</div>
           <div class="kt-sub">using this centre</div>
         </div>
@@ -1100,8 +1100,8 @@ body{background:var(--dark);color:#111827}
 <div id="dash">
   <div class="dash-header">
     <div>
-      <div class="dash-title">Network Intelligence Dashboard</div>
-      <div class="dash-subtitle">SFC Shea Post-Harvest · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
+      <div class="dash-title">Shea Rise Dashboard</div>
+      <div class="dash-subtitle">SFC Shea · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">📊 Assess</button>
@@ -1120,7 +1120,7 @@ body{background:var(--dark);color:#111827}
         <div style="margin-top:6px;font-size:11px;color:rgba(17,24,39,.45)">→ Dried Kernels: <b style="color:rgba(17,24,39,.75)">164 t</b> &nbsp;1,928 bags</div>
       </div>
       <div class="dk"><div class="dv" style="color:#4ade80">+96%</div><div class="dl">YoY FN Growth</div><div class="dd">492 t → 964 t Fresh Nuts</div></div>
-      <div class="dk"><div class="dv" style="color:#f9a8d4" id="dash-women-served">—</div><div class="dl">Women Served</div><div class="dd">Collectors + processors across centres</div></div>
+      <div class="dk"><div class="dv" style="color:#f9a8d4" id="dash-women-served">—</div><div class="dl">Women Impacted</div><div class="dd">Collectors + processors across centres</div></div>
       <div class="dk"><div class="dv">16,184</div><div class="dl">Coop Members</div><div class="dd">Total across 10 cooperatives</div></div>
     </div>
 
@@ -1238,7 +1238,7 @@ body{background:var(--dark);color:#111827}
     <!-- RIGHT: Results -->
     <div class="imp-results" id="imp-results-area">
       <div id="nit-print-header">
-        <div class="iph-title">SHEE Impact Report — SFC Shea Network, Northern Ghana</div>
+        <div class="iph-title">SHEE Impact Report — Shea Rise Dashboard, Northern Ghana</div>
         <div class="iph-meta">Social · Health · Economic · Environmental · Baseline vs Endline (SGG/SFC Project Data)</div>
         <div class="iph-inputs" id="iph-inputs-row"></div>
       </div>
@@ -2058,7 +2058,7 @@ function mkIcon(perf,sel){
   },0);
   const fmt=total.toLocaleString();
   const el=document.getElementById('stat-women-served');
-  if(el) el.innerHTML=`<strong>${fmt}</strong> women served`;
+  if(el) el.innerHTML=`<strong>${fmt}</strong> women impacted`;
   const el2=document.getElementById('dash-women-served');
   if(el2) el2.textContent=fmt;
 })();
@@ -3177,6 +3177,12 @@ function shcGetIndicators(){
 }
 
 function shcRebuildInputs(){
+  // Save which accordions are currently open so they stay open after rebuild
+  const openIds=new Set();
+  document.querySelectorAll('.ind-body').forEach(b=>{
+    if(b.style.display!=='none'&&b.id.startsWith('ibody-')) openIds.add(b.id.slice(6));
+  });
+
   const inds = shcGetIndicators();
   const container = document.getElementById('shc-ind-blocks');
   if(!container) return;
@@ -3224,6 +3230,11 @@ function shcRebuildInputs(){
     html += '</div>';
   });
   container.innerHTML = html;
+  // Restore open accordions
+  openIds.forEach(id=>{
+    const el=document.getElementById('ibody-'+id);
+    if(el) el.style.display='block';
+  });
 }
 
 function shcBuildInputField(ind, d, mode){
