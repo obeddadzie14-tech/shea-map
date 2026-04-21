@@ -1980,6 +1980,109 @@ CENTERS.forEach(c=>{
 });
 
 // ═══════════════════════════════════════════════════════════════════════
+//  EXPANSION SITES (potential new centres — amber dots)
+// ═══════════════════════════════════════════════════════════════════════
+const EXPANSION_SITES=[
+  // Savelugu District
+  {name:"Zokuga",district:"Savelugu",lat:9.7502,lng:-0.8421},
+  {name:"Laligu",district:"Savelugu",lat:9.7124,lng:-0.7980},
+  {name:"Tigla",district:"Savelugu",lat:9.6892,lng:-0.8310},
+  {name:"Jegun",district:"Savelugu",lat:9.7341,lng:-0.8705},
+  {name:"Jegun-Kukuo",district:"Savelugu",lat:9.7295,lng:-0.8752},
+  {name:"Gbanga",district:"Savelugu",lat:9.6720,lng:-0.8630},
+  {name:"Tuunayili",district:"Savelugu",lat:9.7680,lng:-0.8540},
+  {name:"Kpalung",district:"Savelugu",lat:9.6430,lng:-0.8870},
+  {name:"Gushie",district:"Savelugu",lat:9.8231,lng:-0.8614},
+  // Navrongo District
+  {name:"Apemgo",district:"Navrongo",lat:10.8620,lng:-1.0540},
+  {name:"Kulbia",district:"Navrongo",lat:10.8210,lng:-1.0650},
+  {name:"Doba",district:"Navrongo",lat:10.9040,lng:-1.1320},
+  {name:"Vunania",district:"Navrongo",lat:10.8850,lng:-1.0320},
+  {name:"Gaani",district:"Navrongo",lat:10.9240,lng:-1.0780},
+  {name:"Biu",district:"Navrongo",lat:10.8480,lng:-1.1100},
+  {name:"Kologo-Nayire",district:"Navrongo",lat:10.8110,lng:-1.0920},
+  {name:"Naaga",district:"Navrongo",lat:10.8730,lng:-1.0460},
+  {name:"Kologo-Fumgu",district:"Navrongo",lat:10.8060,lng:-1.1000},
+  {name:"Tampola",district:"Navrongo",lat:10.7833,lng:-1.0833},
+  {name:"Zoogo",district:"Navrongo",lat:10.9320,lng:-1.0510},
+  // West Gonja (Damongo) District
+  {name:"Achubunyor",district:"West Gonja",lat:9.0540,lng:-1.7920},
+  {name:"Soalepe",district:"West Gonja",lat:9.1120,lng:-1.8350},
+  {name:"Bonyanto",district:"West Gonja",lat:9.0180,lng:-1.8720},
+  {name:"Mognori",district:"West Gonja",lat:9.2894,lng:-1.7746},
+  {name:"Yazori",district:"West Gonja",lat:9.1480,lng:-1.8010},
+  {name:"Kpulumbo",district:"West Gonja",lat:9.0850,lng:-1.9100},
+  {name:"Bawena",district:"West Gonja",lat:8.9760,lng:-1.8560},
+  {name:"Konkore",district:"West Gonja",lat:9.0320,lng:-1.9340},
+  {name:"Jinfrono",district:"West Gonja",lat:9.0650,lng:-1.7560},
+  // Bole District
+  {name:"Horiyiri",district:"Bole",lat:9.0620,lng:-2.5180},
+  {name:"Kiape",district:"Bole",lat:9.0840,lng:-2.4620},
+  {name:"Kpenayiri",district:"Bole",lat:9.0130,lng:-2.4980},
+  {name:"Norkoiyiri",district:"Bole",lat:9.0980,lng:-2.5340},
+  {name:"Simarlyiri",district:"Bole",lat:9.1250,lng:-2.5060},
+  {name:"Guli",district:"Bole",lat:8.9820,lng:-2.5220},
+  {name:"Dendeyiri",district:"Bole",lat:9.0450,lng:-2.5510},
+  {name:"Sonyor-Dagaaba",district:"Bole",lat:9.1480,lng:-2.5780},
+  {name:"Serepe",district:"Bole",lat:9.0020,lng:-2.4750},
+  {name:"Manful",district:"Bole",lat:8.9680,lng:-2.5040},
+  {name:"Gbenfu",district:"Bole",lat:9.0780,lng:-2.5650},
+  {name:"Mandari",district:"Bole",lat:9.1830,lng:-2.4410},
+  {name:"Dabouyiri",district:"Bole",lat:9.0350,lng:-2.5870},
+  // Wa West District
+  {name:"Wechiau 2",district:"Wa West",lat:9.8250,lng:-2.6890},
+  {name:"Goyiri 1",district:"Wa West",lat:9.9410,lng:-2.5620},
+  {name:"Goyiri 2",district:"Wa West",lat:9.9380,lng:-2.5680},
+  {name:"Basinayiri",district:"Wa West",lat:10.0120,lng:-2.6340},
+  {name:"Grupe",district:"Wa West",lat:9.8780,lng:-2.7120},
+  {name:"Kojanyiri",district:"Wa West",lat:9.9560,lng:-2.6780},
+  {name:"Kokoremeh",district:"Wa West",lat:9.8450,lng:-2.7450},
+  {name:"Kompieni",district:"Wa West",lat:10.0340,lng:-2.7120},
+  {name:"Kpefuri",district:"Wa West",lat:9.9020,lng:-2.6210},
+  {name:"Larsiyiri",district:"Wa West",lat:9.8640,lng:-2.6560},
+  {name:"Malkayiri",district:"Wa West",lat:9.9780,lng:-2.6890},
+  {name:"Nambena 1",district:"Wa West",lat:9.8920,lng:-2.7230},
+  {name:"Nambena 2",district:"Wa West",lat:9.8880,lng:-2.7280},
+  {name:"Poru",district:"Wa West",lat:9.9230,lng:-2.5890},
+  {name:"Sansayiri",district:"Wa West",lat:9.8130,lng:-2.6720},
+  {name:"Sequriyiri",district:"Wa West",lat:9.9650,lng:-2.7340},
+  {name:"Tansagla",district:"Wa West",lat:10.0050,lng:-2.6010},
+  {name:"Talatumo",district:"Wa West",lat:9.8760,lng:-2.6430},
+  {name:"Tampoy",district:"Wa West",lat:9.8340,lng:-2.7180},
+  {name:"Domongburi",district:"Wa West",lat:9.9890,lng:-2.7560},
+  {name:"Kachiua 1",district:"Wa West",lat:9.9140,lng:-2.6540},
+  {name:"Kachiua 2",district:"Wa West",lat:9.9100,lng:-2.6590},
+  {name:"Chabari",district:"Wa West",lat:9.8560,lng:-2.6980},
+  {name:"Tuole",district:"Wa West",lat:9.9420,lng:-2.7010},
+  {name:"Tokali",district:"Wa West",lat:10.0230,lng:-2.6580},
+  {name:"Tankara",district:"Wa West",lat:9.8710,lng:-2.7680},
+  {name:"Tambiligie",district:"Wa West",lat:9.9340,lng:-2.7450},
+  {name:"Talawona",district:"Wa West",lat:9.8420,lng:-2.6320},
+  {name:"Pelinkpaare",district:"Wa West",lat:10.0560,lng:-2.6890},
+  {name:"Mervugle",district:"Wa West",lat:9.9750,lng:-2.6150},
+  {name:"Kantu",district:"Wa West",lat:9.8890,lng:-2.5980},
+  {name:"Dornye 1",district:"Wa West",lat:9.9050,lng:-2.7120},
+  {name:"Dornye 2",district:"Wa West",lat:9.9010,lng:-2.7160},
+  {name:"Dompie",district:"Wa West",lat:9.8650,lng:-2.7390},
+  {name:"Dodome",district:"Wa West",lat:9.8780,lng:-2.7540},
+  {name:"Dochere",district:"Wa West",lat:9.9180,lng:-2.6820},
+  {name:"Dalanyiri",district:"Wa West",lat:9.8260,lng:-2.7010},
+  {name:"Bulinche",district:"Wa West",lat:9.9510,lng:-2.7230}
+];
+
+const expIcon=L.divIcon({
+  html:`<div style="width:9px;height:9px;border-radius:50%;background:#f59e0b;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);cursor:default"></div>`,
+  className:'',iconSize:[9,9],iconAnchor:[4.5,4.5]
+});
+
+EXPANSION_SITES.forEach(s=>{
+  L.marker([s.lat,s.lng],{icon:expIcon,interactive:true})
+    .addTo(map)
+    .bindTooltip(`<b>${s.name}</b><br><span style="color:#92400e;font-size:10px">${s.district} · Expansion Site</span>`,
+      {direction:'top',offset:[0,-6],className:'zone-tip'});
+});
+
+// ═══════════════════════════════════════════════════════════════════════
 //  PANEL STATE
 // ═══════════════════════════════════════════════════════════════════════
 let activeMkr=null,activeC=null,filterPerf='all';
