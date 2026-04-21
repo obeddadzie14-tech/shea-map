@@ -2178,13 +2178,14 @@ function openExpPanel(s){
   document.getElementById('panel').classList.remove('open');
   // populate
   document.getElementById('ep-name').textContent=s.name;
-  document.getElementById('ep-district').textContent=s.district+' District · Ghana';
-  document.getElementById('ep-coords').textContent=s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
+  const isProgramme=s.name==='Ghana Expansion Programme';
+  document.getElementById('ep-district').textContent=isProgramme?'80 sites across 5 districts · Ghana':s.district+' District · Ghana';
+  document.getElementById('ep-coords').textContent=isProgramme?'Savelugu · Navrongo · West Gonja · Bole · Wa West':s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
   // open
   document.getElementById('exp-panel').classList.add('open');
   document.getElementById('map').classList.add('panel-open');
   document.getElementById('stats').classList.add('hide');
-  map.flyTo([s.lat,s.lng],13,{animate:true,duration:.8});
+  if(!isProgramme) map.flyTo([s.lat,s.lng],13,{animate:true,duration:.8});
 }
 
 function closeExpPanel(){
@@ -2449,6 +2450,11 @@ document.querySelectorAll('.glass-btn[data-filter]').forEach(b=>{
     });
     if(activeC&&filterPerf!=='all'&&activeC.performance!==filterPerf)closePanel();
     else if(activeC)updateNavCounter();
+    if(filterPerf==='expansion'){
+      openExpPanel({name:'Ghana Expansion Programme',district:'All Districts',lat:9.8,lng:-1.6});
+    } else {
+      closeExpPanel();
+    }
   });
 });
 
