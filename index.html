@@ -2196,6 +2196,7 @@ function closeExpPanel(){
 
 document.getElementById('exp-panel-close').addEventListener('click',closeExpPanel);
 
+const expMarkers=[];
 EXPANSION_SITES.forEach(s=>{
   const mk=L.marker([s.lat,s.lng],{icon:expIcon,interactive:true}).addTo(map);
   mk.bindTooltip(`<b>${s.name}</b> · ${s.district}`,{direction:'top',offset:[0,-7],className:'zone-tip'});
@@ -2205,6 +2206,7 @@ EXPANSION_SITES.forEach(s=>{
     openExpPanel(s);
     setTimeout(()=>{_markerClicking=false;},120);
   });
+  expMarkers.push(mk);
 });
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -2444,10 +2446,14 @@ document.querySelectorAll('.glass-btn[data-filter]').forEach(b=>{
     document.querySelectorAll('.glass-btn[data-filter]').forEach(x=>x.classList.remove('active-filter'));
     b.classList.add('active-filter');
     filterPerf=b.dataset.filter;
+    // show/hide operational centre markers (hidden when expansion-only filter active)
     mIdx.forEach(({m,c})=>{
-      const show=filterPerf==='all'||c.performance===filterPerf;
-      show?(!map.hasLayer(m)&&map.addLayer(m)):map.removeLayer(m);
+      const showCentre=filterPerf==='all'||filterPerf===c.performance;
+      showCentre?(!map.hasLayer(m)&&map.addLayer(m)):map.removeLayer(m);
     });
+    // show/hide expansion markers (visible on 'all' or 'expansion' only)
+    const showExp=filterPerf==='all'||filterPerf==='expansion';
+    expMarkers.forEach(mk=>showExp?(!map.hasLayer(mk)&&map.addLayer(mk)):map.removeLayer(mk));
     if(activeC&&filterPerf!=='all'&&activeC.performance!==filterPerf)closePanel();
     else if(activeC)updateNavCounter();
     if(filterPerf==='expansion'){
