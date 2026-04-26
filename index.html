@@ -754,6 +754,9 @@ body{background:var(--dark);color:#111827}
 
 /* 3840px — 4K TV / 55"+ display */
 @media (min-width:3200px){
+  :root{--panel-w:clamp(700px,32vw,1100px)}
+
+  /* ── Map header & nav ── */
   #header{padding:24px 36px;border-radius:24px}
   #header .brand{font-size:28px;gap:14px}
   .brand-dot{width:16px;height:16px}
@@ -763,11 +766,24 @@ body{background:var(--dark);color:#111827}
   .s-pill{font-size:22px;padding:15px 30px;border-radius:50px}
   #stats{padding:14px 32px;gap:40px}
   #stats span{font-size:20px}
+  #coords{font-size:16px;padding:10px 18px}
 
-  /* Dashboard */
+  /* ── Map legend ── */
+  #legend{padding:30px 36px;min-width:380px;border-radius:26px}
+  #legend h3{font-size:18px;margin-bottom:16px}
+  .leg-section{font-size:17px;padding-top:12px;margin:16px 0 10px}
+  .leg-row span{font-size:22px}
+  .leg-row{gap:16px;margin-bottom:10px}
+  .leg-pip{width:24px;height:24px}
+  .leg-swatch{width:32px;height:22px}
+  .leg-checkbox{width:20px;height:20px}
+
+  /* ── Dashboard ── */
   .dash-header{padding:30px 56px}
+  .dash-header img{height:80px!important}
   .dash-title{font-size:38px}
   .dash-subtitle{font-size:22px;margin-top:6px}
+  .dash-close{font-size:18px;padding:12px 28px;border-radius:14px}
   .dash-body{padding:30px 48px 36px;gap:28px}
   .kpi-row{gap:24px}
   .dk{padding:32px 40px;border-radius:24px}
@@ -782,20 +798,122 @@ body{background:var(--dark);color:#111827}
   .bn-table td{font-size:24px;padding:16px 24px}
   .bn-badge{font-size:18px;padding:6px 18px;border-radius:30px}
 
-  /* Dashboard header logo */
-  .dash-header img{height:80px!important}
+  /* ── Assess (Nitidae) header ── */
+  .nit-header{padding:28px 48px}
+  .nit-header img{height:72px!important}
+  .nit-title{font-size:32px}
+  .nit-subtitle{font-size:18px;margin-top:5px}
+  #nit-export-btn{font-size:18px;padding:14px 28px;border-radius:14px}
+  .nit-body{gap:0}
 
-  /* Buttons inside dashboard */
-  .dash-close{font-size:18px;padding:10px 24px;border-radius:12px}
+  /* Assess inputs */
+  .imp-input{padding:28px 24px;gap:20px}
+  .inp-section{padding:22px;border-radius:18px}
+  .inp-section h3{font-size:18px;margin-bottom:16px}
+  .inp-section h3 span{font-size:28px}
+  .inp-label{font-size:16px;margin-bottom:6px}
+  .inp-wrap input{font-size:22px;padding:14px 16px;border-radius:12px}
+  .inp-unit{font-size:18px;padding:0 16px}
+  .inp-hint{font-size:15px;margin-top:8px}
+  .inp-quick button{font-size:16px;padding:9px 18px;border-radius:10px}
+  .inp-select{font-size:18px;padding:12px 14px;border-radius:12px}
 
-  /* Legend */
-  #legend{padding:30px 36px;min-width:380px;border-radius:26px}
-  #legend h3{font-size:18px;margin-bottom:16px}
-  .leg-section{font-size:17px;padding-top:12px;margin:16px 0 10px}
-  .leg-row span{font-size:22px}
-  .leg-row{gap:16px;margin-bottom:10px}
-  .leg-pip{width:24px;height:24px}
-  .leg-swatch{width:32px;height:22px}
+  /* Assess results tiles */
+  .imp-divider{font-size:16px;margin:20px 0 14px}
+  .imp-row{gap:16px;margin-bottom:16px}
+  .imp-tile{padding:22px 20px;border-radius:18px}
+  .it-icon{font-size:34px;margin-bottom:10px}
+  .it-val{font-size:38px}
+  .it-lbl{font-size:14px;margin-top:6px}
+  .it-sub{font-size:14px;margin-top:5px}
+
+  /* ── Scorecard (Impact) header ── */
+  .imp-header{padding:28px 48px}
+  .imp-header img{height:72px!important}
+  .imp-title{font-size:32px}
+  .imp-subtitle{font-size:18px;margin-top:5px}
+  #impact-close{font-size:18px;padding:12px 28px;border-radius:14px}
+
+  /* Scorecard tab nav */
+  .shc-nav{padding:14px 20px 0;gap:4px}
+  .shc-tab-btn{font-size:18px;padding:12px 22px;border-radius:10px 10px 0 0}
+
+  /* Scorecard cards */
+  .shc-card{padding:28px 30px;border-radius:18px;margin-bottom:20px}
+  .shc-card-title{font-size:16px;margin-bottom:18px}
+  .shc-panels{padding:28px 32px}
+  .method-info{padding:18px 20px;border-radius:14px;margin-bottom:12px}
+  .method-info h4{font-size:18px;margin-bottom:6px}
+  .method-info p{font-size:16px}
+  .method-formula{font-size:18px;padding:16px 20px;border-radius:12px}
+
+  /* Scorecard form inputs */
+  .shc-fg label{font-size:16px;margin-bottom:6px}
+  .shc-fg input,.shc-fg textarea,.shc-fg select{font-size:16px;padding:12px 14px;border-radius:12px}
+  .shc-form-grid{gap:16px}
+  .shc-btn-row{margin-top:24px;padding-top:18px;gap:14px}
+  .shc-btn{font-size:17px;padding:14px 28px;border-radius:13px}
+
+  /* Governance pills */
+  .gov-item{padding:20px;border-radius:14px;margin-bottom:14px}
+  .gov-item-title{font-size:16px;margin-bottom:10px}
+  .gov-item p{font-size:15px}
+  .gov-pill{font-size:14px;padding:10px 18px;border-radius:10px}
+
+  /* Scorecard indicator inputs */
+  .ind-header{padding:14px 18px;font-size:17px}
+  .ind-body{padding:16px 20px}
+  .ind-label{font-size:16px;margin-bottom:6px}
+  .ind-hint{font-size:14px}
+  .ind-input{font-size:18px;padding:12px 14px;border-radius:12px}
+
+  /* Scorecard results */
+  .res-score-big{font-size:110px}
+  .res-grade{font-size:32px}
+  .res-pillar-lbl{font-size:18px}
+  .res-pillar-val{font-size:18px}
+  .res-pillar-track{height:14px;border-radius:8px}
+
+  /* ── Side panel (centre cards) ── */
+  .panel-topbar{padding:14px 18px}
+  .panel-close{width:48px;height:48px;font-size:26px}
+  .nav-counter{font-size:18px}
+  .panel-hero{padding:24px 24px 20px}
+  .hero-title h2{font-size:36px}
+  .hero-title .coop{font-size:20px;margin-top:6px}
+  .perf-badge{font-size:18px;padding:9px 20px;border-radius:24px}
+  .tab-btn{font-size:20px;padding:22px 4px}
+  .tab-pane{padding:22px 26px}
+  .sec-lbl{font-size:15px;margin-bottom:16px;letter-spacing:.12em}
+  .kpi-tile .kt-lbl{font-size:16px}
+  .kpi-tile .kt-val{font-size:40px}
+  .kpi-tile .kt-sub{font-size:16px}
+  .kpi-tile{padding:20px 22px;border-radius:18px}
+  .yr-tile{padding:20px 22px;border-radius:18px}
+  .yr-tile .yt-season{font-size:16px}
+  .yr-tile .yt-kg{font-size:40px}
+  .yt-kg-sm{font-size:28px}
+  .yr-tile .yt-bags{font-size:18px}
+  .yt-bags-sm{font-size:17px}
+  .yt-row-lbl{font-size:14px}
+  .prog-lbl,.prog-val{font-size:18px}
+  .prog-track{height:12px;border-radius:8px}
+  .alert-text{font-size:20px}
+  .c-nm{font-size:22px}
+  .pg-val{font-size:20px}
+  .pg-lbl{font-size:14px}
+  .hl-txt{font-size:20px;line-height:1.6}
+  .ins-txt{font-size:20px}
+  .ins-ic{width:32px;height:32px;font-size:16px}
+  .profile-grid{border-radius:16px}
+  .pg-cell{padding:14px 18px}
+  .tag{font-size:14px;padding:6px 14px;border-radius:20px}
+  .photo-strip{padding:14px 20px;gap:12px}
+
+  /* ── Expansion panel ── */
+  #ep-name{font-size:28px}
+  #ep-district{font-size:18px;margin-top:4px}
+  #ep-coords{font-size:16px;margin-top:8px;padding:6px 14px;border-radius:20px}
 }
 
 /* Map controls */
