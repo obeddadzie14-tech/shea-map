@@ -275,7 +275,7 @@ body{background:var(--dark);color:#111827}
 }
 
 /* KPI row */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;flex-shrink:0}
 .dk{background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
 .dk .dv{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1}
 .dk .dl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-top:5px}
@@ -750,6 +750,52 @@ body{background:var(--dark);color:#111827}
   .hl-txt{font-size:17px;line-height:1.6}
   .ins-txt{font-size:17px}
   .ins-ic{width:24px;height:24px;font-size:12px}
+}
+
+/* 3840px — 4K TV / 55"+ display */
+@media (min-width:3200px){
+  #header{padding:24px 36px;border-radius:24px}
+  #header .brand{font-size:28px;gap:14px}
+  .brand-dot{width:16px;height:16px}
+  #header .sub{font-size:20px;margin-top:5px}
+  .glass-btn{font-size:22px;padding:20px 34px;border-radius:18px;gap:12px}
+  .glass-btn svg{width:26px;height:26px}
+  .s-pill{font-size:22px;padding:15px 30px;border-radius:50px}
+  #stats{padding:14px 32px;gap:40px}
+  #stats span{font-size:20px}
+
+  /* Dashboard */
+  .dash-header{padding:30px 56px}
+  .dash-title{font-size:38px}
+  .dash-subtitle{font-size:22px;margin-top:6px}
+  .dash-body{padding:30px 48px 36px;gap:28px}
+  .kpi-row{gap:24px}
+  .dk{padding:32px 40px;border-radius:24px}
+  .dk .dv{font-size:68px}
+  .dk .dl{font-size:18px;margin-top:10px;letter-spacing:.1em}
+  .dk .dd{font-size:20px;margin-top:6px}
+  .cc{padding:32px 38px;border-radius:20px}
+  .cc-title{font-size:24px;margin-bottom:6px}
+  .cc-sub{font-size:19px;margin-bottom:26px}
+  .charts-flex{gap:24px;grid-template-columns:1fr clamp(500px,28vw,800px)}
+  .bn-table th{font-size:20px;padding:14px 24px}
+  .bn-table td{font-size:24px;padding:16px 24px}
+  .bn-badge{font-size:18px;padding:6px 18px;border-radius:30px}
+
+  /* Dashboard header logo */
+  .dash-header img{height:80px!important}
+
+  /* Buttons inside dashboard */
+  .dash-close{font-size:18px;padding:10px 24px;border-radius:12px}
+
+  /* Legend */
+  #legend{padding:30px 36px;min-width:380px;border-radius:26px}
+  #legend h3{font-size:18px;margin-bottom:16px}
+  .leg-section{font-size:17px;padding-top:12px;margin:16px 0 10px}
+  .leg-row span{font-size:22px}
+  .leg-row{gap:16px;margin-bottom:10px}
+  .leg-pip{width:24px;height:24px}
+  .leg-swatch{width:32px;height:22px}
 }
 
 /* Map controls */
