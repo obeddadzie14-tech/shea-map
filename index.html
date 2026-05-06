@@ -1586,8 +1586,8 @@ body{background:var(--dark);color:#111827}
 
 <script src="lib/leaflet.js"></script>
 <script src="lib/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="lib/html2canvas.min.js"></script>
+<script src="lib/jspdf.umd.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════════════
 //  IMAGES — Google Drive thumbnails by cooperative key
@@ -4055,39 +4055,54 @@ function shcLoadSample(){
 // ── Shared PDF download helper ────────────────────────────────────
 async function exportPDF(el, filename, btn){
   const origHTML = btn ? btn.innerHTML : '';
-  if(btn){ btn.innerHTML='⏳ Generating...'; btn.disabled=true; }
+  if(btn){ btn.innerHTML='⏳ Generating PDF...'; btn.disabled=true; }
+
+  if(typeof html2canvas==='undefined' || typeof window.jspdf==='undefined'){
+    alert('PDF libraries not ready yet — please wait a moment and try again.');
+    if(btn){ btn.innerHTML=origHTML; btn.disabled=false; }
+    return;
+  }
+
   try {
-    // Temporarily expand any scrollable parent so html2canvas captures full content
-    const scrollParent = el.closest('[style*="overflow"]') || el.parentElement;
-    const savedStyle = scrollParent ? scrollParent.getAttribute('style') : null;
-    if(scrollParent) scrollParent.style.cssText += ';height:auto!important;overflow:visible!important;max-height:none!important';
+    // Clone into a plain off-screen div — html2canvas can't capture position:fixed elements
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:absolute;left:-9999px;top:0;width:860px;background:#fff;padding:24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;z-index:-1;';
+    wrapper.appendChild(el.cloneNode(true));
+    document.body.appendChild(wrapper);
 
-    const canvas = await html2canvas(el, {scale:2, useCORS:true, allowTaint:true, backgroundColor:'#ffffff'});
+    // Brief pause to let styles apply to the clone
+    await new Promise(r => setTimeout(r, 120));
 
-    if(scrollParent){
-      if(savedStyle !== null) scrollParent.setAttribute('style', savedStyle);
-      else scrollParent.removeAttribute('style');
-    }
+    const canvas = await html2canvas(wrapper, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: 860
+    });
+
+    document.body.removeChild(wrapper);
 
     const {jsPDF} = window.jspdf;
     const pdf = new jsPDF({unit:'pt', format:'a4'});
     const pW = pdf.internal.pageSize.getWidth();
     const pH = pdf.internal.pageSize.getHeight();
-    const iW = pW;
     const iH = (canvas.height / canvas.width) * pW;
     const img = canvas.toDataURL('image/png');
+
     let y = 0;
     while(y < iH){
       if(y > 0) pdf.addPage();
-      pdf.addImage(img, 'PNG', 0, -y, iW, iH);
+      pdf.addImage(img, 'PNG', 0, -y, pW, iH);
       y += pH;
     }
     pdf.save(filename);
   } catch(e){
-    console.error(e);
+    console.error('PDF export error:', e);
     alert('Export failed — please try again.');
   }
-  if(btn){ btn.innerHTML = origHTML; btn.disabled = false; }
+  if(btn){ btn.innerHTML=origHTML; btn.disabled=false; }
 }
 </script>
 </body>
