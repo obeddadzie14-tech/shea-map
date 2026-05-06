@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="lib/leaflet.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*:not(input):not(textarea):not(select){cursor:default}
+button,[class*="btn"],[class*="pill"],.ind-hdr,.tab-btn,.nav-btn,.panel-close,.glass-btn,.shc-tab-btn,.mode-toggle button,.inp-quick button,tr[data-cid],select,a{cursor:pointer!important}
+input,textarea{cursor:text!important}
 :root{
   --green:#22c55e;--green-bg:#dcfce7;--green-text:#15803d;
   --red:#ef4444;--red-bg:#fee2e2;--red-text:#dc2626;
@@ -1571,8 +1574,7 @@ body{background:var(--dark);color:#111827}
       <div id="results-warn-banners"></div>
       <div id="results-content"><p style="font-size:13px;color:#9ca3af;padding:24px 0">No results yet — complete the Inputs tab and click Calculate.</p></div>
       <div class="shc-btn-row" style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb">
-        <button class="shc-btn primary" onclick="shcPrint()">🖨 Print / Export PDF</button>
-        <button class="shc-btn secondary" onclick="shcExportJSON()">⬇ Export JSON</button>
+        <button class="shc-btn primary" onclick="shcPrint()">⬇ Export Scorecard</button>
       </div>
     </div>
 
@@ -3045,7 +3047,19 @@ function nitUpdatePrintHeader(){
 
 document.getElementById('nit-export-btn').addEventListener('click',()=>{
   nitUpdatePrintHeader();
-  setTimeout(()=>window.print(), 80);
+  const content=document.getElementById('nitidae').innerHTML;
+  const date=new Date().toISOString().slice(0,10);
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Shea R.I.S.E Impact Report</title>
+<style>*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:0;background:#fff;color:#111827}
+@media print{@page{size:A4 landscape;margin:10mm}button{display:none!important}}
+</style></head><body>${content}</body></html>`;
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`SheaRISE-Impact-Report-${date}.html`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 });
 document.getElementById('inp-nuts').addEventListener('input', calcImpact);
 document.getElementById('inp-butter').addEventListener('input', calcImpact);
@@ -3299,7 +3313,11 @@ function shcGoTab(tab){
   SHC.activeTab=tab;
   document.querySelectorAll('.shc-tab-btn').forEach(b=>b.classList.toggle('act', b.dataset.tab===tab));
   document.querySelectorAll('.shc-panel').forEach(p=>p.classList.toggle('act', p.id==='shc-'+tab));
-  if(tab==='results') shcRenderResults();
+  if(tab==='results'){
+    shcRenderResults();
+    const panels=document.getElementById('shc-panels');
+    if(panels) panels.scrollTop=0;
+  }
 }
 
 // ── Governance gate ───────────────────────────────────────────────
@@ -4025,19 +4043,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:0
 .sp-item{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:5px;font-size:10px;font-weight:600}
 .sp-item.strength{background:#d1fae5;color:#065f46}.sp-item.priority{background:#fee2e2;color:#b91c1c}.sp-item.flag{background:#fef3c7;color:#92400e}
 </style></head><body>${printContent}<div style="margin-top:8px;font-size:9px;color:#9ca3af">Generated ${date}</div></body></html>`;
-  const win=window.open('','_blank');
-  if(!win){alert('Pop-up blocked — allow pop-ups and try again.');return;}
-  win.document.write(html); win.document.close();
-  setTimeout(()=>{win.focus();win.print();},700);
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`SHEE-Scorecard-${(ci.name||'export').replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.html`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
 
-// ── JSON export ───────────────────────────────────────────────────
-function shcExportJSON(){
-  const blob=new Blob([JSON.stringify({cooperativeInfo:SHC.cooperativeInfo,governanceGate:SHC.governanceGate,scorecardType:SHC.scorecardType,weights:SHC.weights,anchors:SHC.anchors,endline:SHC.endline,baseline:SHC.baseline,results:SHC.results,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=`shee-scorecard-${SHC.cooperativeInfo.name||'export'}-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-}
 
 // ── Sample data loader ────────────────────────────────────────────
 function shcLoadSample(){
