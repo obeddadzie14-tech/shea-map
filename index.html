@@ -1532,36 +1532,36 @@ body{background:var(--dark);color:#111827}
             <div class="gov-item-title">G1 · Democratic Representation &amp; Vote</div>
             <div class="gov-item-desc">Women elect leaders by majority vote. Leadership structure and terms are documented.</div>
             <div class="gov-pills">
-              <div class="gov-pill pass-opt sel" data-g="g1" data-v="pass">✓ Pass</div>
-              <div class="gov-pill partial-opt" data-g="g1" data-v="partial">~ Partial</div>
-              <div class="gov-pill fail-opt" data-g="g1" data-v="fail">✗ Fail</div>
+              <div class="gov-pill pass-opt sel" data-g="g1" data-v="pass">Pass</div>
+              <div class="gov-pill partial-opt" data-g="g1" data-v="partial">Partial</div>
+              <div class="gov-pill fail-opt" data-g="g1" data-v="fail">Fail</div>
             </div>
           </div>
           <div class="gov-item" data-g="g2">
             <div class="gov-item-title">G2 · Grievance &amp; Non-Retaliation Mechanism</div>
             <div class="gov-item-desc">A documented grievance process exists. Members can raise concerns without fear of retaliation.</div>
             <div class="gov-pills">
-              <div class="gov-pill pass-opt sel" data-g="g2" data-v="pass">✓ Pass</div>
-              <div class="gov-pill partial-opt" data-g="g2" data-v="partial">~ Partial</div>
-              <div class="gov-pill fail-opt" data-g="g2" data-v="fail">✗ Fail</div>
+              <div class="gov-pill pass-opt sel" data-g="g2" data-v="pass">Pass</div>
+              <div class="gov-pill partial-opt" data-g="g2" data-v="partial">Partial</div>
+              <div class="gov-pill fail-opt" data-g="g2" data-v="fail">Fail</div>
             </div>
           </div>
           <div class="gov-item" data-g="g3">
             <div class="gov-item-title">G3 · Financial Transparency</div>
             <div class="gov-item-desc">Accounts are shared with members. Collective funds usage is transparent and documented.</div>
             <div class="gov-pills">
-              <div class="gov-pill pass-opt sel" data-g="g3" data-v="pass">✓ Pass</div>
-              <div class="gov-pill partial-opt" data-g="g3" data-v="partial">~ Partial</div>
-              <div class="gov-pill fail-opt" data-g="g3" data-v="fail">✗ Fail</div>
+              <div class="gov-pill pass-opt sel" data-g="g3" data-v="pass">Pass</div>
+              <div class="gov-pill partial-opt" data-g="g3" data-v="partial">Partial</div>
+              <div class="gov-pill fail-opt" data-g="g3" data-v="fail">Fail</div>
             </div>
           </div>
           <div class="gov-item" data-g="g4">
             <div class="gov-item-title">G4 · Traceable Cooperative Records</div>
             <div class="gov-item-desc">Member lists, production records, and financial records are maintained and traceable.</div>
             <div class="gov-pills">
-              <div class="gov-pill pass-opt sel" data-g="g4" data-v="pass">✓ Pass</div>
-              <div class="gov-pill partial-opt" data-g="g4" data-v="partial">~ Partial</div>
-              <div class="gov-pill fail-opt" data-g="g4" data-v="fail">✗ Fail</div>
+              <div class="gov-pill pass-opt sel" data-g="g4" data-v="pass">Pass</div>
+              <div class="gov-pill partial-opt" data-g="g4" data-v="partial">Partial</div>
+              <div class="gov-pill fail-opt" data-g="g4" data-v="fail">Fail</div>
             </div>
           </div>
         </div>
@@ -2542,7 +2542,7 @@ function renderPanel(c){
   // Operations tab
   const bBox=document.getElementById('p-bottleneck-box');
   bBox.className=`alert-box ${c.bottleneckType}`;
-  const ic={ok:'✓',warn:'⚠',danger:'✕'};
+  const ic={ok:'+',warn:'!',danger:'x'};
   bBox.querySelector('.alert-icon').textContent=ic[c.bottleneckType]||'!';
   document.getElementById('p-bottleneck').textContent=c.bottleneck||'No data.';
 
@@ -2575,7 +2575,7 @@ function renderPanel(c){
   setVal('pp-mem',c.members?c.members.toLocaleString():null);
   document.getElementById('pp-cap').textContent=c.productionCapacity?`${c.productionCapacity} t/mo`:'—';
   document.getElementById('p-insights').innerHTML=c.insights.map(i=>
-    `<div class="ins-row"><div class="ins-ic ${i.t}">${{good:'✓',warn:'!',bad:'✕'}[i.t]}</div><span class="ins-txt">${i.x}</span></div>`
+    `<div class="ins-row"><div class="ins-ic ${i.t}">${{good:'+',warn:'!',bad:'x'}[i.t]}</div><span class="ins-txt">${i.x}</span></div>`
   ).join('');
   document.getElementById('p-highlight').textContent=c.highlight||'—';
 }
@@ -2899,7 +2899,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_fw_end_avg.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
+        <div class="bve-saving pos">${n_fw_saved.toFixed(1)} t saved (${((n_fw_saved/n_fw_base)*100).toFixed(0)}%)</div>
         <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_fw_saved/n_fw_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
@@ -2909,7 +2909,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_water_end.toFixed(0)} m³</div></div>
         </div>
-        <div class="bve-saving neg">▲ +${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
+        <div class="bve-saving neg">+${(n_water_end-n_water_base).toFixed(0)} m³ (more rinsing in collective)</div>
       </div>
       <div class="imp-card">
         <div class="ic-lbl">GHG Emissions</div>
@@ -2918,7 +2918,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${n_ghg_end_avg.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="bve-saving pos">${n_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
         <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((n_ghg_saved/n_ghg_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
@@ -2928,7 +2928,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${fmtN(n_work_end)}h</div></div>
         </div>
-        <div class="bve-saving neg">▲ Collective QA adds time but improves quality</div>
+        <div class="bve-saving neg">Collective QA adds time but improves quality</div>
       </div>
     </div>
     <div class="imp-row three">
@@ -2973,7 +2973,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_fw_end.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
+        <div class="bve-saving pos">${b_fw_saved.toFixed(1)} t saved (${((b_fw_saved/b_fw_base)*100).toFixed(0)}%)</div>
         <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_fw_saved/b_fw_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
@@ -2983,7 +2983,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_water_end.toFixed(0)} m³</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
+        <div class="bve-saving pos">${(b_water_saved).toFixed(0)} m³ saved (${((b_water_saved/b_water_base)*100).toFixed(0)}%)</div>
         <div class="ic-bar"><div class="ic-bar-fill b" style="width:${Math.min(100,((b_water_saved/b_water_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
@@ -2993,7 +2993,7 @@ function calcImpact(){
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">Endline</div><div class="bve-val">${b_ghg_end.toFixed(1)} t</div></div>
         </div>
-        <div class="bve-saving pos">▼ ${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
+        <div class="bve-saving pos">${b_ghg_saved.toFixed(1)} t CO₂eq avoided</div>
         <div class="ic-bar"><div class="ic-bar-fill g" style="width:${Math.min(100,((b_ghg_saved/b_ghg_base)*100))}%"></div></div>
       </div>
       <div class="imp-card">
@@ -3366,7 +3366,7 @@ function shcRebuildInputs(){
         <div class="ind-hdr" onclick="shcToggleInd('${ind.id}')">
           <span class="ind-code ${ind.pillarClass}">${ind.id}</span>
           <span class="ind-name">${ind.name}</span>
-          <span class="ind-score-badge${scored?' scored':''}" id="ibadge-${ind.id}">${scored?'✓ Data entered':'Enter data'}</span>
+          <span class="ind-score-badge${scored?' scored':''}" id="ibadge-${ind.id}">${scored?'Data entered':'Enter data'}</span>
         </div>
         <div class="ind-body" id="ibody-${ind.id}" style="display:none">
           <div style="font-size:11px;color:#9ca3af;margin-bottom:10px">${ind.hint}</div>
@@ -3374,9 +3374,9 @@ function shcRebuildInputs(){
           <div style="margin-top:10px">
             <div style="font-size:10.5px;font-weight:700;color:#374151;margin-bottom:4px">Evidence Status</div>
             <div class="ev-pills">
-              <div class="ev-pill measured${ev==='measured'?' sel':''}" onclick="shcSetEv('${ind.id}','measured')" data-ind="${ind.id}" data-ev="measured">✓ Measured</div>
-              <div class="ev-pill estimated${ev==='estimated'?' sel':''}" onclick="shcSetEv('${ind.id}','estimated')" data-ind="${ind.id}" data-ev="estimated">~ Estimated</div>
-              <div class="ev-pill missing${ev==='missing'?' sel':''}" onclick="shcSetEv('${ind.id}','missing')" data-ind="${ind.id}" data-ev="missing">✗ Missing</div>
+              <div class="ev-pill measured${ev==='measured'?' sel':''}" onclick="shcSetEv('${ind.id}','measured')" data-ind="${ind.id}" data-ev="measured">Measured</div>
+              <div class="ev-pill estimated${ev==='estimated'?' sel':''}" onclick="shcSetEv('${ind.id}','estimated')" data-ind="${ind.id}" data-ev="estimated">Estimated</div>
+              <div class="ev-pill missing${ev==='missing'?' sel':''}" onclick="shcSetEv('${ind.id}','missing')" data-ind="${ind.id}" data-ev="missing">Missing</div>
             </div>
           </div>
           <div class="shc-fg" style="margin-top:10px">
@@ -3438,7 +3438,7 @@ function shcBuildEquipmentTable(ind, d, mode){
     });
     const total = cat.items.reduce((s,item,i)=>s+(+((shares[catKey+'_'+i])||0)),0);
     const okClass = Math.abs(total-100)<0.01 ? 'ok' : (total===0 ? '' : 'err');
-    html += `</tbody><tfoot><tr class="eq-total-row ${okClass}"><td colspan="2">Total</td><td>${total.toFixed(0)}% ${total>0&&Math.abs(total-100)>=0.01?'⚠ must = 100%':''}</td></tr></tfoot></table></div>`;
+    html += `</tbody><tfoot><tr class="eq-total-row ${okClass}"><td colspan="2">Total</td><td>${total.toFixed(0)}% ${total>0&&Math.abs(total-100)>=0.01?'must = 100%':''}</td></tr></tfoot></table></div>`;
   });
   const score = calculateEquipmentWeightedScore(ind.id, d);
   html += `<div style="font-size:11.5px;font-weight:700;color:#4338ca;margin-top:8px">Computed H1 Score: <strong>${score!=null?score.toFixed(1):'—'}</strong> / 100</div>`;
@@ -3458,7 +3458,7 @@ function shcSetVal(id, val){
   if(!store[id]) store[id]={evidenceStatus:'measured'};
   store[id].rawValue = val;
   const badge = document.getElementById('ibadge-'+id);
-  if(badge){ badge.classList.add('scored'); badge.textContent='✓ Data entered'; }
+  if(badge){ badge.classList.add('scored'); badge.textContent='Data entered'; }
 }
 function shcSetEv(id, ev){
   const store = shcGetDataStore();
@@ -3485,7 +3485,7 @@ function shcSetChecklist(id, field, val){
   else if(store[id].directScore!=null)
     store[id].rawValue = store[id].directScore;
   const badge = document.getElementById('ibadge-'+id);
-  if(badge && store[id].rawValue!=null){ badge.classList.add('scored'); badge.textContent='✓ Data entered'; }
+  if(badge && store[id].rawValue!=null){ badge.classList.add('scored'); badge.textContent='Data entered'; }
 }
 function shcSetEquip(id, key, val){
   const store = shcGetDataStore();
@@ -3729,7 +3729,7 @@ function shcRebuildWeightEditor(){
           oninput="shcSetIndWt('${ind.id}',+this.value)">
         <span class="wt-val" id="iwt-${ind.id}">${SHC.weights.indicators[ind.id]||0}</span>
       </div>`).join('') +
-      `<div class="wt-total ${okClass}" id="iwtotal-${p}">Pillar total: ${total} ${Math.abs(total-100)>=1?'⚠ should = 100':''}</div></div>`;
+      `<div class="wt-total ${okClass}" id="iwtotal-${p}">Pillar total: ${total} ${Math.abs(total-100)>=1?'should = 100':''}</div></div>`;
   }).join('');
 }
 function shcSetPillarWt(p, v){
@@ -3746,13 +3746,13 @@ function shcSetIndWt(id, v){
     const pInds=inds.filter(i=>i.pillar===ind.pillar);
     const total=pInds.reduce((s,i)=>s+(SHC.weights.indicators[i.id]||0),0);
     const tel=document.getElementById('iwtotal-'+ind.pillar);
-    if(tel){ tel.className=`wt-total ${Math.abs(total-100)<1?'ok':'err'}`; tel.textContent=`Pillar total: ${total}${Math.abs(total-100)>=1?' ⚠ should = 100':''}`; }
+    if(tel){ tel.className=`wt-total ${Math.abs(total-100)<1?'ok':'err'}`; tel.textContent=`Pillar total: ${total}${Math.abs(total-100)>=1?' should = 100':''}`; }
   }
 }
 function shcUpdateWtTotal(){
   const total=Object.values(SHC.weights.pillars).reduce((a,b)=>a+b,0);
   const el=document.getElementById('pillar-wt-total');
-  if(el){ el.className=`wt-total ${Math.abs(total-100)<1?'ok':'err'}`; el.textContent=`Total: ${total}${Math.abs(total-100)>=1?' ⚠ must = 100':''}`; }
+  if(el){ el.className=`wt-total ${Math.abs(total-100)<1?'ok':'err'}`; el.textContent=`Total: ${total}${Math.abs(total-100)>=1?' must = 100':''}`; }
 }
 
 // ── Anchor editor ─────────────────────────────────────────────────
@@ -3791,17 +3791,17 @@ function shcRenderResults(){
   if(!r){ el.innerHTML='<p style="color:#9ca3af;font-size:13px;padding:24px 0">Complete inputs to see results.</p>'; return; }
   const e = r.endline;
   const govResult = calculateGovernanceGate();
-  const extTag = govResult==='pass' ? '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">✅ Externally usable</span>'
-    : govResult==='conditional' ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">⚠ Conditional — caveat applies</span>'
-    : '<span style="background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">🚫 Internal only</span>';
+  const extTag = govResult==='pass' ? '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Externally usable</span>'
+    : govResult==='conditional' ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Conditional — caveat applies</span>'
+    : '<span style="background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">Internal only</span>';
 
   const warnBanners = document.getElementById('results-warn-banners');
   if(warnBanners){
     let warns='';
-    if(e.anyMissingCore) warns+=`<div class="banner-danger">⚠ One or more CORE indicators are missing. Score is provisional.</div>`;
+    if(e.anyMissingCore) warns+=`<div class="banner-danger">One or more CORE indicators are missing. Score is provisional.</div>`;
     const h2ev = (SHC.endline['H2']||{}).evidenceStatus;
-    if(h2ev==='missing') warns+=`<div class="banner-warn">⚠ Smoke exposure (H2) is missing — Health pillar marked partial. Overall result is provisional.</div>`;
-    e.caps.forEach(c=>{ warns+=`<div class="banner-warn">⚠ ${c}</div>`; });
+    if(h2ev==='missing') warns+=`<div class="banner-warn">Smoke exposure (H2) is missing — Health pillar marked partial. Overall result is provisional.</div>`;
+    e.caps.forEach(c=>{ warns+=`<div class="banner-warn">${c}</div>`; });
     warnBanners.innerHTML=warns;
   }
 
@@ -3882,7 +3882,7 @@ function shcRenderResults(){
     const sc = e.indScores[ind.id]||{};
     const evColor = sc.ev==='measured'?'#065f46':sc.ev==='estimated'?'#92400e':'#b91c1c';
     const evBg = sc.ev==='measured'?'#d1fae5':sc.ev==='estimated'?'#fef3c7':'#fee2e2';
-    const flag = sc.ev==='missing'&&ind.evidenceType==='core'?'⚠ Core missing':sc.ev==='missing'?'Secondary missing':sc.ev==='estimated'?'Estimated':'';
+    const flag = sc.ev==='missing'&&ind.evidenceType==='core'?'Core missing':sc.ev==='missing'?'Secondary missing':sc.ev==='estimated'?'Estimated':'';
     html += `<tr style="border-bottom:1px solid #f3f4f6;font-size:12px">
       <td style="padding:8px 10px;font-weight:900;color:${({S:'#7c3aed',H:'#ea580c',E:'#059669',En:'#2563eb'})[ind.pillar]}">${ind.id}</td>
       <td style="padding:8px 10px;color:#374151">${ind.name}</td>
@@ -3908,7 +3908,7 @@ function shcRenderScorecard(){
   const e  = r.endline;
   const grd= e.grade;
   const govResult = calculateGovernanceGate();
-  const govTag = govResult==='pass'?'✅ Full Benefits':govResult==='conditional'?'⚠ Conditional Benefits':'🚫 Benefits at Risk';
+  const govTag = govResult==='pass'?'Full Benefits':govResult==='conditional'?'Conditional Benefits':'Benefits at Risk';
   const PILLAR_META = {S:{label:'Social',color:'#7c3aed'},H:{label:'Health',color:'#ea580c'},E:{label:'Economic',color:'#059669'},En:{label:'Environmental',color:'#2563eb'}};
   const inds = shcGetIndicators();
   const typeLabels = {'nut-collective':'B · Nut — Collective Processing','nut-individual':'A · Nut — Individual Processing','butter-collective':'C · Butter — Collective Processing'};
@@ -3975,15 +3975,15 @@ function shcRenderScorecard(){
   </div>
   <div class="sc-out-section" style="display:grid;grid-template-columns:1fr 1fr">
     <div style="padding:14px 26px;border-right:1px solid #e5e7eb">
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-bottom:10px">🏆 Top Strengths</div>
+      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-bottom:10px">Top Strengths</div>
       ${e.strengths.map(s=>`<div class="sp-item strength" style="margin-bottom:5px"><span style="font-weight:900;min-width:28px">${s.id}</span><span style="flex:1;font-size:11px">${s.name}</span><span style="font-weight:900">${s.score.toFixed(0)}</span></div>`).join('')||'<div style="font-size:11px;color:#9ca3af">No data</div>'}
     </div>
     <div style="padding:14px 26px">
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-bottom:10px">🎯 Improvement Priorities</div>
+      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-bottom:10px">Improvement Priorities</div>
       ${e.priorities.map(p=>`<div class="sp-item priority" style="margin-bottom:5px"><span style="font-weight:900;min-width:28px">${p.id}</span><span style="flex:1;font-size:11px">${p.name}</span><span style="font-weight:900">${p.score.toFixed(0)}</span></div>`).join('')||'<div style="font-size:11px;color:#9ca3af">No data</div>'}
     </div>
   </div>
-  ${e.caps.length||e.anyMissingCore?`<div class="sc-out-section"><div class="sc-out-sec-hdr">Caveats &amp; Flags</div><div style="padding:12px 26px">${[...e.caps,(e.anyMissingCore?'One or more core indicators missing — score is provisional':null)].filter(Boolean).map(f=>`<div class="sp-item flag" style="margin-bottom:5px;font-size:11.5px">⚠ ${f}</div>`).join('')}</div></div>`:''}
+  ${e.caps.length||e.anyMissingCore?`<div class="sc-out-section"><div class="sc-out-sec-hdr">Caveats &amp; Flags</div><div style="padding:12px 26px">${[...e.caps,(e.anyMissingCore?'One or more core indicators missing — score is provisional':null)].filter(Boolean).map(f=>`<div class="sp-item flag" style="margin-bottom:5px;font-size:11.5px">${f}</div>`).join('')}</div></div>`:''}
   <div class="sc-out-footer">
     SHEE Cooperative Calculator &amp; Scorecard · SFC / SGG Ghana · Assessment date: ${ci.date||'—'} · Season: ${ci.season||'—'} · Assessor: ${ci.assessor||'—'} · Scorecard type: ${typeLabels[SHC.scorecardType]||SHC.scorecardType} · Functional unit: ${SHC.scorecardType==='butter-collective'?'per 1 kg raw butter':'per 1 kg dried kernels'} · This is an internal assessment tool, not a certification system. SHEE framework — SGG/SFC Ghana.
   </div>`;
@@ -4052,7 +4052,7 @@ function shcLoadSample(){
 // ── Shared PDF download helper ────────────────────────────────────
 async function exportPDF(el, filename, btn){
   const origHTML = btn ? btn.innerHTML : '';
-  if(btn){ btn.innerHTML='⏳ Generating PDF...'; btn.disabled=true; }
+  if(btn){ btn.innerHTML='Generating PDF...'; btn.disabled=true; }
 
   if(typeof html2canvas==='undefined' || typeof window.jspdf==='undefined'){
     alert('PDF libraries not ready yet — please wait a moment and try again.');
