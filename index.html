@@ -3048,11 +3048,16 @@ function nitUpdatePrintHeader(){
 
 document.getElementById('nit-export-btn').addEventListener('click', function(){
   const btn = this;
-  const el  = document.getElementById('imp-live');
+  const hdr = document.getElementById('nit-print-header');
+  const el  = document.getElementById('imp-results-area');
   const date = new Date().toISOString().slice(0,10);
   const centrePart = _selectedCentreName ? '-'+_selectedCentreName.split(' —')[0].trim().replace(/\s+/g,'-') : '';
   const seasonPart = _selectedSeasonLabel ? '-'+_selectedSeasonLabel.replace('/','-') : '';
-  exportPDF(el, `SheaRISE-Impact-Report${centrePart}${seasonPart}-${date}.pdf`, btn);
+  // Show header so it is captured in the clone (cloneNode runs synchronously before first await)
+  hdr.style.display = 'block';
+  exportPDF(el, `SheaRISE-Impact-Report${centrePart}${seasonPart}-${date}.pdf`, btn).finally(()=>{
+    hdr.style.display = '';
+  });
 });
 document.getElementById('inp-nuts').addEventListener('input', calcImpact);
 document.getElementById('inp-butter').addEventListener('input', calcImpact);
