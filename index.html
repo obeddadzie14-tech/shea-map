@@ -1505,17 +1505,17 @@ body{background:var(--dark);color:#111827}
       <div class="shc-card">
         <div class="shc-card-title">Cooperative Information</div>
         <div class="shc-form-grid">
-          <div class="shc-fg"><label>Cooperative Name *</label><input id="ci-name" placeholder="e.g. Kpalbe Timtooni Sheanuts Pickers Cooperative"></div>
-          <div class="shc-fg"><label>Processing Centre</label><input id="ci-centre" placeholder="e.g. Jinlo Centre"></div>
-          <div class="shc-fg"><label>Country</label><input id="ci-country" value="Ghana"></div>
-          <div class="shc-fg"><label>District / Region</label><input id="ci-district" placeholder="e.g. East Gonja, Savannah Region"></div>
-          <div class="shc-fg"><label>Assessment Date *</label><input id="ci-date" type="date"></div>
-          <div class="shc-fg"><label>Season</label><input id="ci-season" placeholder="e.g. 2025/26"></div>
-          <div class="shc-fg"><label>Assessor Name *</label><input id="ci-assessor" placeholder="Name of assessor"></div>
-          <div class="shc-fg"><label>Number of Members</label><input id="ci-members" type="number" min="0" placeholder="Total coop members"></div>
+          <div class="shc-fg"><label>Cooperative Name *</label><input id="ci-name" placeholder="e.g. Kpalbe Timtooni Sheanuts Pickers Cooperative" oninput="SHC.cooperativeInfo.name=this.value"></div>
+          <div class="shc-fg"><label>Processing Centre</label><input id="ci-centre" placeholder="e.g. Jinlo Centre" oninput="SHC.cooperativeInfo.centre=this.value"></div>
+          <div class="shc-fg"><label>Country</label><input id="ci-country" value="Ghana" oninput="SHC.cooperativeInfo.country=this.value"></div>
+          <div class="shc-fg"><label>District / Region</label><input id="ci-district" placeholder="e.g. East Gonja, Savannah Region" oninput="SHC.cooperativeInfo.district=this.value"></div>
+          <div class="shc-fg"><label>Assessment Date *</label><input id="ci-date" type="date" oninput="SHC.cooperativeInfo.date=this.value"></div>
+          <div class="shc-fg"><label>Season</label><input id="ci-season" placeholder="e.g. 2025/26" oninput="SHC.cooperativeInfo.season=this.value"></div>
+          <div class="shc-fg"><label>Assessor Name *</label><input id="ci-assessor" placeholder="Name of assessor" oninput="SHC.cooperativeInfo.assessor=this.value"></div>
+          <div class="shc-fg"><label>Number of Members</label><input id="ci-members" type="number" min="0" placeholder="Total coop members" oninput="SHC.cooperativeInfo.members=this.value"></div>
         </div>
         <div class="shc-form-grid cols1" style="margin-top:10px">
-          <div class="shc-fg"><label>Notes / Context</label><textarea id="ci-notes" placeholder="Any context relevant to this assessment period..."></textarea></div>
+          <div class="shc-fg"><label>Notes / Context</label><textarea id="ci-notes" placeholder="Any context relevant to this assessment period..." oninput="SHC.cooperativeInfo.notes=this.value"></textarea></div>
         </div>
       </div>
       <div class="shc-btn-row"><button class="shc-btn primary" onclick="shcGoTab('gov')">Next — Governance Gate →</button></div>
@@ -3010,7 +3010,6 @@ function calcImpact(){
     <div class="imp-row">
       <div class="imp-card highlight" style="grid-column:span 2">
         <div style="display:flex;align-items:center;gap:16px">
-          <div style="font-size:42px">🌍</div>
           <div>
             <div class="ic-val green" style="font-size:32px">${fmtT(tot_ghg_saved)} CO₂eq</div>
             <div class="ic-lbl" style="margin-top:4px">Total Greenhouse Gas Avoided</div>
@@ -3020,7 +3019,6 @@ function calcImpact(){
       </div>
       <div class="imp-card highlight" style="grid-column:span 2">
         <div style="display:flex;align-items:center;gap:16px">
-          <div style="font-size:42px">🌳</div>
           <div>
             <div class="ic-val green" style="font-size:32px">${fmtT(tot_fw_saved)}</div>
             <div class="ic-lbl" style="margin-top:4px">Total Firewood Avoided</div>
@@ -3031,6 +3029,7 @@ function calcImpact(){
     </div>
     `:''}
   `;
+  nitUpdatePrintHeader();
 }
 
 function nitUpdatePrintHeader(){
@@ -3038,9 +3037,12 @@ function nitUpdatePrintHeader(){
   const butT = parseFloat(document.getElementById('inp-butter').value)||0;
   const row = document.getElementById('iph-inputs-row');
   const date = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  let html = `<div class="iph-inp"><span>Generated:</span>${date}</div>`;
+  let html = '';
+  if(_selectedCentreName) html += `<div class="iph-inp"><span>Centre:</span>${_selectedCentreName}</div>`;
+  if(_selectedSeasonLabel) html += `<div class="iph-inp"><span>Season:</span>${_selectedSeasonLabel}</div>`;
   if(nutT>0) html += `<div class="iph-inp"><span>Dried Kernels:</span>${nutT} t</div>`;
   if(butT>0) html += `<div class="iph-inp"><span>Butter:</span>${butT} t</div>`;
+  html += `<div class="iph-inp"><span>Generated:</span>${date}</div>`;
   row.innerHTML = html;
 }
 
@@ -3048,7 +3050,9 @@ document.getElementById('nit-export-btn').addEventListener('click', function(){
   const btn = this;
   const el  = document.getElementById('imp-live');
   const date = new Date().toISOString().slice(0,10);
-  exportPDF(el, `SheaRISE-Impact-Report-${date}.pdf`, btn);
+  const centrePart = _selectedCentreName ? '-'+_selectedCentreName.split(' —')[0].trim().replace(/\s+/g,'-') : '';
+  const seasonPart = _selectedSeasonLabel ? '-'+_selectedSeasonLabel.replace('/','-') : '';
+  exportPDF(el, `SheaRISE-Impact-Report${centrePart}${seasonPart}-${date}.pdf`, btn);
 });
 document.getElementById('inp-nuts').addEventListener('input', calcImpact);
 document.getElementById('inp-butter').addEventListener('input', calcImpact);
@@ -3057,12 +3061,16 @@ document.getElementById('inp-butter').addEventListener('input', calcImpact);
 const seasonSel = document.getElementById('inp-season');
 const centreSel = document.getElementById('inp-centre');
 const centreBadge = document.getElementById('centre-loaded-badge');
+let _selectedCentreName = '';
+let _selectedSeasonLabel = '';
 
 seasonSel.addEventListener('change', () => {
   const s = seasonSel.value;
   centreSel.innerHTML = '<option value="">— select centre —</option>';
   centreBadge.style.display = 'none';
-  if(!s){ centreSel.disabled = true; return; }
+  _selectedCentreName = '';
+  _selectedSeasonLabel = s === '2526' ? '2025/26' : s === '2324' ? '2023/24' : '';
+  if(!s){ centreSel.disabled = true; _selectedSeasonLabel=''; return; }
   centreSel.disabled = false;
 
   // Build sorted list with label showing center name + DK tonnes
@@ -3110,8 +3118,12 @@ centreSel.addEventListener('change', () => {
   document.getElementById('inp-nuts').value = dkT > 0 ? dkT.toFixed(2) : '';
   calcImpact();
 
+  // Save for print header
+  _selectedSeasonLabel = s === '2526' ? '2025/26' : '2023/24';
+  _selectedCentreName = c.centerName + (c.cooperative ? ' — ' + c.cooperative : '');
+  nitUpdatePrintHeader();
+
   // Show badge
-  const seasonLabel = s === '2526' ? '2025/26' : '2023/24';
   centreBadge.innerHTML = `<div class="centre-badge">
     <strong>${c.centerName}</strong>
     <span>${c.cooperative}</span><br>
