@@ -2784,7 +2784,11 @@ const NR = {
   rev_end: 7.50,
   work_base: 16.5,
   work_end: 20.3,
-  women_per_t_fn: 20.4
+  women_per_t_fn: 20.4,
+  proc_wage: 60,
+  nat_min_wage: 6,
+  coll_per_bag: 150,
+  motorking_mult: 5
 };
 // SGG baseline/endline rates — BUTTER (per kg butter)
 const BR = {
@@ -2845,6 +2849,9 @@ function calcImpact(){
   const n_rev_gain = n_rev_end - n_rev_base;
   const n_work_base = nutKg * NR.work_base / 60;
   const n_work_end = nutKg * NR.work_end / 60;
+  const n_proc_wages = (nutKg/85) * 5 * NR.proc_wage;
+  const n_coll_pay   = (nutKg*3/85) * NR.coll_per_bag;
+  const n_labour_total = n_proc_wages + n_coll_pay;
 
   // BUTTER calculations
   const b_fw_base = butKg * BR.fw_base / 1000;
@@ -2959,6 +2966,33 @@ function calcImpact(){
           Revenue: <b style="color:#60a5fa">+${((NR.rev_end/NR.rev_base-1)*100).toFixed(0)}%</b> premium<br>
           Water: <b style="color:#fbbf24">+21%</b> (more QA rinsing)
         </div>
+      </div>
+    </div>
+    <div class="imp-row">
+      <div class="imp-card">
+        <div class="ic-lbl">Processor Daily Wage</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Nat. Min</div><div class="bve-val">GHS ${NR.nat_min_wage}/day</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">SFC Rate</div><div class="bve-val">GHS ${NR.proc_wage}/day</div></div>
+        </div>
+        <div class="bve-saving pos">${(NR.proc_wage/NR.nat_min_wage).toFixed(0)}x national minimum · GHS ${fmtN(n_proc_wages,0)} total</div>
+        <div class="ic-bar"><div class="ic-bar-fill b" style="width:100%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-lbl">Collector Payments</div>
+        <div class="imp-bve">
+          <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">25 kg/trip</div></div>
+          <div class="bve-arrow">→</div>
+          <div class="bve-col endline"><div class="bve-lbl">Motorking</div><div class="bve-val">${NR.motorking_mult}x volume</div></div>
+        </div>
+        <div class="bve-saving pos">GHS ${NR.coll_per_bag}/bag · GHS ${fmtN(n_coll_pay,0)} total</div>
+        <div class="ic-bar"><div class="ic-bar-fill g" style="width:100%"></div></div>
+      </div>
+      <div class="imp-card">
+        <div class="ic-val blue" style="margin-top:6px">GHS ${fmtN(n_labour_total,0)}</div>
+        <div class="ic-lbl">Total Labour Income</div>
+        <div class="ic-sub">Collectors + processors combined</div>
       </div>
     </div>
     `:''}
