@@ -2786,7 +2786,7 @@ const NR = {
   work_end: 20.3,
   women_per_t_fn: 20.4,
   proc_wage: 60,
-  nat_min_wage: 6,
+  nat_min_wage: 21.77,
   coll_per_bag: 150,
   motorking_mult: 5
 };
@@ -2970,17 +2970,17 @@ function calcImpact(){
     </div>
     <div class="imp-row">
       <div class="imp-card">
-        <div class="ic-lbl">Processor Daily Wage</div>
+        <div class="ic-lbl">Dried Kernel Processor Wage</div>
         <div class="imp-bve">
           <div class="bve-col baseline"><div class="bve-lbl">Nat. Min</div><div class="bve-val">GHS ${NR.nat_min_wage}/day</div></div>
           <div class="bve-arrow">→</div>
           <div class="bve-col endline"><div class="bve-lbl">SFC Rate</div><div class="bve-val">GHS ${NR.proc_wage}/day</div></div>
         </div>
-        <div class="bve-saving pos">${(NR.proc_wage/NR.nat_min_wage).toFixed(0)}x national minimum · GHS ${fmtN(n_proc_wages,0)} total</div>
+        <div class="bve-saving pos">${(NR.proc_wage/NR.nat_min_wage).toFixed(1)}x national minimum · GHS ${fmtN(n_proc_wages,0)} total</div>
         <div class="ic-bar"><div class="ic-bar-fill b" style="width:100%"></div></div>
       </div>
       <div class="imp-card">
-        <div class="ic-lbl">Collector Payments</div>
+        <div class="ic-lbl">Fresh Nut Collector Payments</div>
         <div class="imp-bve">
           <div class="bve-col baseline"><div class="bve-lbl">Baseline</div><div class="bve-val">25 kg/trip</div></div>
           <div class="bve-arrow">→</div>
@@ -2992,7 +2992,7 @@ function calcImpact(){
       <div class="imp-card">
         <div class="ic-val blue" style="margin-top:6px">GHS ${fmtN(n_labour_total,0)}</div>
         <div class="ic-lbl">Total Labour Income</div>
-        <div class="ic-sub">Collectors + processors combined</div>
+        <div class="ic-sub">Fresh nut collectors + dried kernel processors</div>
       </div>
     </div>
     `:''}
