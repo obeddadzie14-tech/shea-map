@@ -1228,19 +1228,19 @@ body{background:var(--dark);color:#111827}
     <div class="sec-lbl">Income Impact — Women in Programme</div>
     <div class="kpi-grid" style="margin-bottom:16px">
       <div class="kpi-tile">
-        <div class="kt-lbl">Seasonal Income</div>
-        <div class="kt-val" style="color:#c2410c">+120%</div>
-        <div class="kt-sub">GHS 4,500 → GHS 9,882</div>
+        <div class="kt-lbl">Seasonal Income (Collector)</div>
+        <div class="kt-val" style="color:#c2410c">+167%</div>
+        <div class="kt-sub">GHS 3,971 → GHS 10,588 per season</div>
       </div>
       <div class="kpi-tile">
-        <div class="kt-lbl">Nuts Collected</div>
-        <div class="kt-val" style="color:#1d4ed8">+400%</div>
-        <div class="kt-sub">20 kg → 100 kg / day</div>
+        <div class="kt-lbl">Nuts Collected / Day</div>
+        <div class="kt-val" style="color:#1d4ed8">+300%</div>
+        <div class="kt-sub">25 kg → 100 kg (motorking)</div>
       </div>
       <div class="kpi-tile span2">
         <div class="kt-lbl">Daily Income vs Minimum Wage</div>
-        <div class="kt-val" style="color:#0d0f14">11.8×</div>
-        <div class="kt-sub">GHS 235/day vs GHS 20 minimum · generated from pilot</div>
+        <div class="kt-val" style="color:#0d0f14">10.7×</div>
+        <div class="kt-sub">GHS 235/day vs GHS 22 national minimum</div>
       </div>
     </div>
 
@@ -1249,36 +1249,46 @@ body{background:var(--dark);color:#111827}
       <div class="kpi-tile">
         <div class="kt-lbl">Total Centres</div>
         <div class="kt-val">80</div>
-        <div class="kt-sub">Yr 1: 30 · Yr 2: 40 · Yr 3: 10</div>
+        <div class="kt-sub">Yr 1: 40 · Yr 2: 30 · Yr 3: 10</div>
       </div>
       <div class="kpi-tile">
         <div class="kt-lbl">Women at Scale</div>
-        <div class="kt-val">19,200</div>
-        <div class="kt-sub">collectors + processors</div>
+        <div class="kt-val">20,400</div>
+        <div class="kt-sub">19,200 nut collectors &amp; processors · 1,200 butter producers</div>
       </div>
       <div class="kpi-tile span2" style="background:#f0fdf4;border-color:#bbf7d0">
         <div class="kt-lbl">Total Income Generated / Year</div>
-        <div class="kt-val" style="color:#15803d">$9.4M</div>
-        <div class="kt-sub">$7.9M collectors · $1.3M processors · $100K drivers + bookkeepers</div>
+        <div class="kt-val" style="color:#15803d">$8.1M</div>
+        <div class="kt-sub">$6.1M collectors · $1.7M processors · $196K drivers &amp; bookkeepers</div>
       </div>
     </div>
 
     <div class="sec-lbl">Total Programme Investment — Ghana</div>
     <div class="kpi-grid">
       <div class="kpi-tile">
-        <div class="kt-lbl">CAPEX (Centres)</div>
+        <div class="kt-lbl">CAPEX — Nut Centres</div>
         <div class="kt-val">$4.0M</div>
-        <div class="kt-sub">equipment · tricycles · infrastructure</div>
+        <div class="kt-sub">equipment · tricycles · infrastructure · 80 centres</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kt-lbl">CAPEX — Butter Processing</div>
+        <div class="kt-val">$800K</div>
+        <div class="kt-sub">local butter processing · 10 centres</div>
       </div>
       <div class="kpi-tile">
         <div class="kt-lbl">Capacity Building</div>
         <div class="kt-val">$1.9M</div>
         <div class="kt-sub">training · cooperative support</div>
       </div>
+      <div class="kpi-tile">
+        <div class="kt-lbl">Management &amp; Reporting</div>
+        <div class="kt-val">$2.1M</div>
+        <div class="kt-sub">MEL · certification · traceability · R&amp;D</div>
+      </div>
       <div class="kpi-tile span2" style="background:#fef3c7;border-color:#fcd34d">
-        <div class="kt-lbl">Total Ghana Ask</div>
-        <div class="kt-val" style="color:#92400e">$5.92M</div>
-        <div class="kt-sub">over 3 years · 80 centres · 19,200 women</div>
+        <div class="kt-lbl">Total Ghana Investment Ask</div>
+        <div class="kt-val" style="color:#92400e">$8.86M</div>
+        <div class="kt-sub">over 3 years · 80 nut centres + 10 butter centres · 20,400 women · 20,730 total beneficiaries</div>
       </div>
     </div>
 
@@ -2279,91 +2289,91 @@ CENTERS.forEach(c=>{
 //  EXPANSION SITES (potential new centres — amber dots)
 // ═══════════════════════════════════════════════════════════════════════
 const EXPANSION_SITES=[
-  // Savelugu District
-  {name:"Zokuga",district:"Savelugu",lat:9.7502,lng:-0.8421},
-  {name:"Laligu",district:"Savelugu",lat:9.7124,lng:-0.7980},
-  {name:"Tigla",district:"Savelugu",lat:9.6892,lng:-0.8310},
-  {name:"Jegun",district:"Savelugu",lat:9.7341,lng:-0.8705},
-  {name:"Jegun-Kukuo",district:"Savelugu",lat:9.7295,lng:-0.8752},
-  {name:"Gbanga",district:"Savelugu",lat:9.6720,lng:-0.8630},
-  {name:"Tuunayili",district:"Savelugu",lat:9.7680,lng:-0.8540},
-  {name:"Kpalung",district:"Savelugu",lat:9.6430,lng:-0.8870},
-  {name:"Gushie",district:"Savelugu",lat:9.8231,lng:-0.8614},
-  // Navrongo District
-  {name:"Apemgo",district:"Navrongo",lat:10.8620,lng:-1.0540},
-  {name:"Kulbia",district:"Navrongo",lat:10.8210,lng:-1.0650},
-  {name:"Doba",district:"Navrongo",lat:10.9040,lng:-1.1320},
-  {name:"Vunania",district:"Navrongo",lat:10.8850,lng:-1.0320},
-  {name:"Gaani",district:"Navrongo",lat:10.9240,lng:-1.0780},
-  {name:"Biu",district:"Navrongo",lat:10.8480,lng:-1.1100},
-  {name:"Kologo-Nayire",district:"Navrongo",lat:10.8110,lng:-1.0920},
-  {name:"Naaga",district:"Navrongo",lat:10.8730,lng:-1.0460},
-  {name:"Kologo-Fumgu",district:"Navrongo",lat:10.8060,lng:-1.1000},
-  {name:"Tampola",district:"Navrongo",lat:10.7833,lng:-1.0833},
-  {name:"Zoogo",district:"Navrongo",lat:10.9320,lng:-1.0510},
-  // West Gonja (Damongo) District
-  {name:"Achubunyor",district:"West Gonja",lat:9.0540,lng:-1.7920},
-  {name:"Soalepe",district:"West Gonja",lat:9.1120,lng:-1.8350},
-  {name:"Bonyanto",district:"West Gonja",lat:9.0180,lng:-1.8720},
-  {name:"Mognori",district:"West Gonja",lat:9.2894,lng:-1.7746},
-  {name:"Yazori",district:"West Gonja",lat:9.1480,lng:-1.8010},
-  {name:"Kpulumbo",district:"West Gonja",lat:9.0850,lng:-1.9100},
-  {name:"Bawena",district:"West Gonja",lat:8.9760,lng:-1.8560},
-  {name:"Konkore",district:"West Gonja",lat:9.0320,lng:-1.9340},
-  {name:"Jinfrono",district:"West Gonja",lat:9.0650,lng:-1.7560},
+  // Gushegu District
+  {name:"Abambu",district:"Gushegu",lat:9.92,lng:-0.32},
+  {name:"Vigil",district:"Gushegu",lat:9.9,lng:-0.29},
+  {name:"Kumoayili",district:"Gushegu",lat:9.87,lng:-0.305},
+  {name:"Nakunga",district:"Gushegu",lat:9.868,lng:-0.301},
+  {name:"Nyingali",district:"Gushegu",lat:9.855,lng:-0.315},
+  {name:"Sugu",district:"Gushegu",lat:9.88,lng:-0.28},
+  {name:"Wantugu",district:"Gushegu",lat:9.515,lng:-1.147},
+  {name:"Yeshie",district:"Gushegu",lat:9.89,lng:-0.31},
+  {name:"Kpasablo",district:"Gushegu",lat:9.86,lng:-0.295},
+  {name:"Shebo",district:"Gushegu",lat:9.845,lng:-0.325},
   // Bole District
-  {name:"Horiyiri",district:"Bole",lat:9.0620,lng:-2.5180},
-  {name:"Kiape",district:"Bole",lat:9.0840,lng:-2.4620},
-  {name:"Kpenayiri",district:"Bole",lat:9.0130,lng:-2.4980},
-  {name:"Norkoiyiri",district:"Bole",lat:9.0980,lng:-2.5340},
-  {name:"Simarlyiri",district:"Bole",lat:9.1250,lng:-2.5060},
-  {name:"Guli",district:"Bole",lat:8.9820,lng:-2.5220},
-  {name:"Dendeyiri",district:"Bole",lat:9.0450,lng:-2.5510},
-  {name:"Sonyor-Dagaaba",district:"Bole",lat:9.1480,lng:-2.5780},
-  {name:"Serepe",district:"Bole",lat:9.0020,lng:-2.4750},
-  {name:"Manful",district:"Bole",lat:8.9680,lng:-2.5040},
-  {name:"Gbenfu",district:"Bole",lat:9.0780,lng:-2.5650},
-  {name:"Mandari",district:"Bole",lat:9.1830,lng:-2.4410},
-  {name:"Dabouyiri",district:"Bole",lat:9.0350,lng:-2.5870},
-  // Wa West District
-  {name:"Wechiau 2",district:"Wa West",lat:9.8250,lng:-2.6890},
-  {name:"Goyiri 1",district:"Wa West",lat:9.9410,lng:-2.5620},
-  {name:"Goyiri 2",district:"Wa West",lat:9.9380,lng:-2.5680},
-  {name:"Basinayiri",district:"Wa West",lat:10.0120,lng:-2.6340},
-  {name:"Grupe",district:"Wa West",lat:9.8780,lng:-2.7120},
-  {name:"Kojanyiri",district:"Wa West",lat:9.9560,lng:-2.6780},
-  {name:"Kokoremeh",district:"Wa West",lat:9.8450,lng:-2.7450},
-  {name:"Kompieni",district:"Wa West",lat:10.0340,lng:-2.7120},
-  {name:"Kpefuri",district:"Wa West",lat:9.9020,lng:-2.6210},
-  {name:"Larsiyiri",district:"Wa West",lat:9.8640,lng:-2.6560},
-  {name:"Malkayiri",district:"Wa West",lat:9.9780,lng:-2.6890},
-  {name:"Nambena 1",district:"Wa West",lat:9.8920,lng:-2.7230},
-  {name:"Nambena 2",district:"Wa West",lat:9.8880,lng:-2.7280},
-  {name:"Poru",district:"Wa West",lat:9.9230,lng:-2.5890},
-  {name:"Sansayiri",district:"Wa West",lat:9.8130,lng:-2.6720},
-  {name:"Sequriyiri",district:"Wa West",lat:9.9650,lng:-2.7340},
-  {name:"Tansagla",district:"Wa West",lat:10.0050,lng:-2.6010},
-  {name:"Talatumo",district:"Wa West",lat:9.8760,lng:-2.6430},
-  {name:"Tampoy",district:"Wa West",lat:9.8340,lng:-2.7180},
-  {name:"Domongburi",district:"Wa West",lat:9.9890,lng:-2.7560},
-  {name:"Kachiua 1",district:"Wa West",lat:9.9140,lng:-2.6540},
-  {name:"Kachiua 2",district:"Wa West",lat:9.9100,lng:-2.6590},
-  {name:"Chabari",district:"Wa West",lat:9.8560,lng:-2.6980},
-  {name:"Tuole",district:"Wa West",lat:9.9420,lng:-2.7010},
-  {name:"Tokali",district:"Wa West",lat:10.0230,lng:-2.6580},
-  {name:"Tankara",district:"Wa West",lat:9.8710,lng:-2.7680},
-  {name:"Tambiligie",district:"Wa West",lat:9.9340,lng:-2.7450},
-  {name:"Talawona",district:"Wa West",lat:9.8420,lng:-2.6320},
-  {name:"Pelinkpaare",district:"Wa West",lat:10.0560,lng:-2.6890},
-  {name:"Mervugle",district:"Wa West",lat:9.9750,lng:-2.6150},
-  {name:"Kantu",district:"Wa West",lat:9.8890,lng:-2.5980},
-  {name:"Dornye 1",district:"Wa West",lat:9.9050,lng:-2.7120},
-  {name:"Dornye 2",district:"Wa West",lat:9.9010,lng:-2.7160},
-  {name:"Dompie",district:"Wa West",lat:9.8650,lng:-2.7390},
-  {name:"Dodome",district:"Wa West",lat:9.8780,lng:-2.7540},
-  {name:"Dochere",district:"Wa West",lat:9.9180,lng:-2.6820},
-  {name:"Dalanyiri",district:"Wa West",lat:9.8260,lng:-2.7010},
-  {name:"Bulinche",district:"Wa West",lat:9.9510,lng:-2.7230}
+  {name:"Bale",district:"Bole",lat:9.09,lng:-2.615},
+  {name:"Dabuoyiri",district:"Bole",lat:9.05,lng:-2.55},
+  {name:"Abenfu",district:"Bole",lat:9.07,lng:-2.49},
+  {name:"Mwandari",district:"Bole",lat:9.04,lng:-2.52},
+  {name:"Manful",district:"Bole",lat:9.02,lng:-2.47},
+  {name:"Serepe",district:"Bole",lat:9.06,lng:-2.44},
+  {name:"Sonyor Dagaaba",district:"Bole",lat:9.08,lng:-2.41},
+  {name:"Sonyor",district:"Bole",lat:9.093,lng:-2.336},
+  {name:"Dendeyiri",district:"Bole",lat:9.01,lng:-2.5},
+  {name:"Guli",district:"Bole",lat:9.03,lng:-2.56},
+  {name:"Horiyiri",district:"Bole",lat:9.055,lng:-2.475},
+  {name:"Kiape",district:"Bole",lat:9.04,lng:-2.406},
+  {name:"Kpenayiri",district:"Bole",lat:9.015,lng:-2.53},
+  {name:"Norkoiyiri",district:"Bole",lat:9.025,lng:-2.455},
+  {name:"Simalyiri",district:"Bole",lat:9.045,lng:-2.485},
+  // Bimbilla District
+  {name:"Lepusi",district:"Bimbilla",lat:9.06,lng:-0.012},
+  {name:"Dipah",district:"Bimbilla",lat:8.99,lng:-0.06},
+  {name:"Makayili",district:"Bimbilla",lat:8.97,lng:-0.08},
+  {name:"Kariga 1",district:"Bimbilla",lat:8.98,lng:-0.05},
+  {name:"Tong",district:"Bimbilla",lat:8.96,lng:-0.09},
+  {name:"Achiriyili",district:"Bimbilla",lat:8.95,lng:-0.07},
+  {name:"Chirifoyili",district:"Bimbilla",lat:8.94,lng:-0.065},
+  {name:"Kayang",district:"Bimbilla",lat:8.975,lng:-0.045},
+  {name:"Gunguni",district:"Bimbilla",lat:8.853,lng:0.058},
+  // Sawla-Tuna-Kalba District
+  {name:"Baolige",district:"Sawla-Tuna-Kalba",lat:9.31,lng:-2.4},
+  {name:"Bonpouyiri",district:"Sawla-Tuna-Kalba",lat:9.29,lng:-2.38},
+  {name:"Dabouri",district:"Sawla-Tuna-Kalba",lat:9.27,lng:-2.36},
+  {name:"Disabouri",district:"Sawla-Tuna-Kalba",lat:9.26,lng:-2.37},
+  {name:"Ginkaa",district:"Sawla-Tuna-Kalba",lat:9.25,lng:-2.39},
+  {name:"Hojienteng",district:"Sawla-Tuna-Kalba",lat:9.28,lng:-2.345},
+  {name:"Jang",district:"Sawla-Tuna-Kalba",lat:9.3,lng:-2.32},
+  {name:"Kantamie",district:"Sawla-Tuna-Kalba",lat:9.265,lng:-2.355},
+  {name:"Konfale",district:"Sawla-Tuna-Kalba",lat:9.255,lng:-2.365},
+  {name:"Kpaltobe",district:"Sawla-Tuna-Kalba",lat:9.285,lng:-2.335},
+  {name:"Kunfugsi",district:"Sawla-Tuna-Kalba",lat:9.275,lng:-2.35},
+  {name:"Nafiyiri",district:"Sawla-Tuna-Kalba",lat:9.245,lng:-2.38},
+  {name:"Soma",district:"Sawla-Tuna-Kalba",lat:9.24,lng:-2.39},
+  {name:"Tisonyiri",district:"Sawla-Tuna-Kalba",lat:9.295,lng:-2.375},
+  {name:"Dandapari",district:"Sawla-Tuna-Kalba",lat:9.305,lng:-2.41},
+  {name:"Digizie",district:"Sawla-Tuna-Kalba",lat:9.235,lng:-2.345},
+  {name:"Dongo-Kura",district:"Sawla-Tuna-Kalba",lat:9.32,lng:-2.33},
+  {name:"Guniyiri",district:"Sawla-Tuna-Kalba",lat:9.33,lng:-2.355},
+  {name:"Jentilpe",district:"Sawla-Tuna-Kalba",lat:9.243,lng:-2.35},
+  {name:"Kaawie",district:"Sawla-Tuna-Kalba",lat:9.315,lng:-2.36},
+  {name:"Nasoyiri",district:"Sawla-Tuna-Kalba",lat:9.325,lng:-2.37},
+  {name:"Nakpala",district:"Sawla-Tuna-Kalba",lat:9.34,lng:-2.38},
+  {name:"Nyange-Kura",district:"Sawla-Tuna-Kalba",lat:9.23,lng:-2.36},
+  {name:"Jelinkon",district:"Sawla-Tuna-Kalba",lat:9.22,lng:-2.37},
+  {name:"Kwadanyine",district:"Sawla-Tuna-Kalba",lat:9.21,lng:-2.38},
+  {name:"Yoliyiri",district:"Sawla-Tuna-Kalba",lat:9.345,lng:-2.34},
+  {name:"Bugal",district:"Sawla-Tuna-Kalba",lat:9.2,lng:-2.39},
+  {name:"Chowieteyteng",district:"Sawla-Tuna-Kalba",lat:9.35,lng:-2.35},
+  {name:"Jenavari",district:"Sawla-Tuna-Kalba",lat:9.19,lng:-2.4},
+  {name:"Chaanayiri",district:"Sawla-Tuna-Kalba",lat:9.355,lng:-2.36},
+  // Central Gonja District
+  {name:"Aboase",district:"Central Gonja",lat:9.14,lng:-1.38},
+  {name:"Ajorpe",district:"Central Gonja",lat:9.12,lng:-1.36},
+  {name:"Bachera-Kura",district:"Central Gonja",lat:9.1,lng:-1.34},
+  {name:"Bonyase",district:"Central Gonja",lat:9.08,lng:-1.32},
+  {name:"Butei",district:"Central Gonja",lat:9.15,lng:-1.39},
+  {name:"Dagomba-Line",district:"Central Gonja",lat:9.11,lng:-1.37},
+  {name:"Gomda-Kura",district:"Central Gonja",lat:9.09,lng:-1.35},
+  {name:"Issah-Pe",district:"Central Gonja",lat:9.13,lng:-1.31},
+  {name:"Issahaku-Kura",district:"Central Gonja",lat:9.07,lng:-1.33},
+  {name:"Kulbonduli",district:"Central Gonja",lat:9.06,lng:-1.315},
+  {name:"Mankpang",district:"Central Gonja",lat:9.16,lng:-1.395},
+  {name:"Ntereso",district:"Central Gonja",lat:9.129,lng:-1.205},
+  {name:"Nyangwuripe",district:"Central Gonja",lat:9.05,lng:-1.3},
+  {name:"Yipala",district:"Central Gonja",lat:9.29,lng:-0.975},
+  {name:"Zonkura",district:"Central Gonja",lat:9.17,lng:-1.41},
+  {name:"Zowu",district:"Central Gonja",lat:9.04,lng:-1.29}
 ];
 
 const expIcon=L.divIcon({
@@ -2377,8 +2387,8 @@ function openExpPanel(s){
   // populate
   document.getElementById('ep-name').textContent=s.name;
   const isProgramme=s.name==='Ghana Expansion Programme';
-  document.getElementById('ep-district').textContent=isProgramme?'80 sites across 5 districts · Ghana':s.district+' District · Ghana';
-  document.getElementById('ep-coords').textContent=isProgramme?'Savelugu · Navrongo · West Gonja · Bole · Wa West':s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
+  document.getElementById('ep-district').textContent=isProgramme?'80 planned sites across 5 districts · Ghana':s.district+' District · Ghana';
+  document.getElementById('ep-coords').textContent=isProgramme?'Gushegu · Bole · Bimbilla · Sawla-Tuna-Kalba · Central Gonja':s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
   // open
   document.getElementById('exp-panel').classList.add('open');
   document.getElementById('map').classList.add('panel-open');
