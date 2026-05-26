@@ -994,8 +994,15 @@ body{background:var(--dark);color:#111827}
   <div class="leg-row"><div class="leg-pip" style="background:#f59e0b"></div><span>Planned Expansion Site</span></div>
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
-
-
+  <div class="leg-section">GFW Environmental (toggle)</div>
+  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#ff0000,#ffcc00);border-color:#ef4444"></div><span>Tree Cover Loss 2001–2022</span></div>
+  <div class="leg-row">
+    <div style="display:flex;gap:3px;align-items:center">
+      <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.7)"></div>
+      <div style="width:10px;height:10px;border-radius:50%;background:#f97316;border:1.5px solid rgba(255,255,255,.7)"></div>
+    </div>
+    <span>Active Fire Alert (7d) · High / Nominal</span>
+  </div>
 </div>
 
 <!-- Coordinate display -->
@@ -2074,10 +2081,54 @@ const lgDistricts   = L.layerGroup();
 // Collection Areas: visible by default
 const lgCollection  = L.layerGroup().addTo(map);
 
+// ── GFW Environmental Layers ────────────────────────────────────────────
+const lgTreeLoss  = L.layerGroup();
+const lgFireAlert = L.layerGroup();
+
+// Hansen/UMD/Google tree cover loss tiles — GFW (no auth required)
+// Each pixel = tree cover lost that year; brighter = more recent
+L.tileLayer(
+  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/loss_year/{z}/{x}/{y}.png',
+  {opacity:0.85, maxZoom:12,
+   attribution:'<a href="https://www.globalforestwatch.org" target="_blank">Global Forest Watch</a> · Hansen/UMD/Google/USGS/NASA'}
+).addTo(lgTreeLoss);
+
+// NASA FIRMS VIIRS active fire alerts — last 7 days, West & Central Africa
+// Filtered client-side to Northern Ghana bbox (lat 8.5–11.5, lng -3.5–1.0)
+(function loadFIRMS(){
+  fetch('https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_West_and_Central_Africa_7d.csv')
+    .then(r=>r.text())
+    .then(csv=>{
+      const rows=csv.trim().split('\n');
+      const h=rows[0].split(',');
+      const li=h.indexOf('latitude'),ln=h.indexOf('longitude'),
+            ld=h.indexOf('acq_date'),lc=h.indexOf('confidence');
+      let n=0;
+      rows.slice(1).forEach(row=>{
+        const c=row.split(',');
+        if(c.length<4) return;
+        const lat=parseFloat(c[li]),lng=parseFloat(c[ln]);
+        if(lat>=8.5&&lat<=11.5&&lng>=-3.5&&lng<=1.0){
+          const conf=(c[lc]||'').toLowerCase();
+          const clr=conf==='h'?'#ef4444':'#f97316';
+          L.circleMarker([lat,lng],{
+            radius:5,fillColor:clr,color:'rgba(255,255,255,.7)',weight:1.5,fillOpacity:.9
+          }).bindTooltip(
+            `<b>Active Fire Alert</b><br>${c[ld]||'recent'} · Confidence: ${conf==='h'?'High':'Nominal'}`,
+            {className:'zone-tip',sticky:true}
+          ).addTo(lgFireAlert);
+          n++;
+        }
+      });
+      console.log(`FIRMS: ${n} active fire alerts loaded for Northern Ghana`);
+    })
+    .catch(()=>{}); // silent fail — FIRMS CORS may block on some hosts
+})();
+
 // Layer control — bottomleft, always expanded so it never disappears
 L.control.layers(
   {'Street':topo,'Satellite':satellite,'Terrain':terrain},
-  {'Collection Areas':lgCollection},
+  {'Collection Areas':lgCollection,'Tree Cover Loss (GFW)':lgTreeLoss,'Active Fires — 7d (NASA FIRMS)':lgFireAlert},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
 
