@@ -291,7 +291,7 @@ body{background:var(--dark);color:#111827}
 }
 
 /* KPI row */
-.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;flex-shrink:0}
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;flex-shrink:0}
 .dk{background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
 .dk .dv{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1}
 .dk .dl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-top:5px}
@@ -324,7 +324,7 @@ body{background:var(--dark);color:#111827}
 @media print {
   @page{margin:12mm 14mm;size:A4}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,
+  #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,#env-panel,
   #impact-close,#nitidae-close,#nit-export-btn,.imp-input{display:none!important}
   body,html{background:#fff!important;height:auto!important;overflow:visible!important}
   #nitidae{position:static!important;transform:none!important;background:#fff!important;
@@ -951,6 +951,60 @@ body{background:var(--dark);color:#111827}
 .dvc-sub{color:rgba(255,255,255,.6);font-size:9.5px;margin-top:2px;display:flex;align-items:center;gap:4px}
 .dvc-yt{width:13px;height:9px;background:#ff0000;border-radius:1.5px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .dvc-yt svg{width:5px;height:5px}
+
+/* ── ENVIRONMENTAL MONITORING PANEL ─────────────────────────────────────── */
+#env-panel{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#env-panel.open{transform:translateY(0)}
+.env-body{
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  padding:12px 18px 14px;
+  gap:12px;
+  overflow-y:auto
+}
+.env-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex-shrink:0}
+.env-kpi{background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:default}
+.env-kv{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1}
+.env-kl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-top:5px}
+.env-ks{font-size:10px;color:rgba(17,24,39,.5);margin-top:2px}
+.env-two-col{display:grid;grid-template-columns:1fr 1.6fr;gap:12px;flex:1;min-height:0;overflow:hidden}
+.env-explain{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;overflow-y:auto}
+.env-explain-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.55);margin-bottom:10px}
+.env-explain-body{display:flex;flex-direction:column;gap:12px}
+.env-explain-item{display:flex;gap:10px;align-items:flex-start;font-size:11px;line-height:1.65;color:rgba(17,24,39,.72)}
+.env-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.env-dot.red{background:#ef4444}
+.env-dot.green{background:#16a34a}
+.env-dot.amber{background:#f59e0b}
+.env-table-card{background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;overflow:hidden}
+.env-table-scroll{flex:1;min-height:0;overflow-y:auto;margin-top:8px;max-height:380px}
+.env-fire-table{width:100%;border-collapse:collapse;font-size:11px}
+.env-fire-table th{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.45);padding:5px 8px 6px;border-bottom:1px solid var(--border);text-align:left;position:sticky;top:0;background:var(--dark);z-index:1}
+.env-fire-table td{padding:5px 8px;border-bottom:1px solid rgba(0,0,0,.05)}
+.env-fire-table tr:last-child td{border-bottom:none}
+.env-fire-table tr:hover td{background:rgba(0,0,0,.03)}
+.fire-conf{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.03em}
+.fire-high{background:rgba(239,68,68,.15);color:#ef4444}
+.fire-nom{background:rgba(249,115,22,.12);color:#f97316}
+.fire-dist{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:600}
+.fire-dist-close{background:rgba(239,68,68,.15);color:#dc2626}
+.fire-dist-mid{background:rgba(245,158,11,.12);color:#d97706}
+.fire-dist-far{background:rgba(107,114,128,.1);color:rgba(17,24,39,.45)}
+.env-credits{font-size:9.5px;color:rgba(17,24,39,.4);text-align:center;padding:2px 0 8px;flex-shrink:0}
+.env-credits a{color:rgba(17,24,39,.45);text-decoration:none}
+.env-credits a:hover{text-decoration:underline}
+.env-dk-card{border-color:rgba(22,163,74,.25)!important;cursor:pointer!important;transition:all .15s!important}
+.env-dk-card:hover{border-color:rgba(22,163,74,.5)!important;background:rgba(22,163,74,.06)!important}
+.env-layer-toggle{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.03);cursor:pointer;font-size:11px;font-weight:500;color:rgba(17,24,39,.7);margin-top:10px;transition:all .15s}
+.env-layer-toggle:hover{background:rgba(0,0,0,.06)}
+.env-layer-toggle.active{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.08);color:#15803d}
 </style>
 </head>
 <body>
@@ -983,6 +1037,10 @@ body{background:var(--dark);color:#111827}
     <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM7.25 4v4.75H12v-1.5H8.75V4h-1.5z"/></svg>
     Scorecard
   </button>
+  <button class="glass-btn" id="env-btn" style="margin-left:2px;border-color:rgba(22,163,74,.4);color:#4ade80">
+    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10.5 7 11 7 11c-.5-1 .5-3.25 2-4 .179 1 .25 2-1 3 .625.5 1 1.364 1 2.25C9 14 8.657 15 8 15z"/></svg>
+    Environment
+  </button>
 </div>
 
 <!-- Legend -->
@@ -994,14 +1052,14 @@ body{background:var(--dark);color:#111827}
   <div class="leg-row"><div class="leg-pip" style="background:#f59e0b"></div><span>Planned Expansion Site</span></div>
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
-  <div class="leg-section">GFW Environmental (toggle)</div>
-  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#ff0000,#ffcc00);border-color:#ef4444"></div><span>Tree Cover Loss 2001–2022</span></div>
+  <div class="leg-section">Environmental (GFW / NASA)</div>
+  <div class="leg-row"><div class="leg-swatch" style="background:rgba(22,163,74,.35);border-color:#16a34a"></div><span>Tree Canopy Cover ≥30% (GFW)</span></div>
   <div class="leg-row">
     <div style="display:flex;gap:3px;align-items:center">
       <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.7)"></div>
       <div style="width:10px;height:10px;border-radius:50%;background:#f97316;border:1.5px solid rgba(255,255,255,.7)"></div>
     </div>
-    <span>Active Fire Alert (7d) · High / Nominal</span>
+    <span>Active Fire (7d) · High / Nominal confidence</span>
   </div>
 </div>
 
@@ -1323,6 +1381,11 @@ body{background:var(--dark);color:#111827}
       <div class="dk"><div class="dv" style="color:#4ade80">+96%</div><div class="dl">YoY FN Growth</div><div class="dd">492 t → 964 t Fresh Nuts</div></div>
       <div class="dk"><div class="dv" style="color:#f9a8d4" id="dash-women-served">—</div><div class="dl">Women Impacted</div><div class="dd">Collectors + processors across centres</div></div>
       <div class="dk"><div class="dv">16,184</div><div class="dl">Coop Members</div><div class="dd">Total across 10 cooperatives</div></div>
+      <div class="dk env-dk-card" id="env-dk" onclick="openEnvPanel()">
+        <div class="dv" id="env-fire-count" style="color:#16a34a;font-size:20px">…</div>
+        <div class="dl">Fire Alerts</div>
+        <div class="dd" id="env-fire-sub" style="cursor:pointer">Loading NASA FIRMS data</div>
+      </div>
     </div>
 
     <div class="charts-flex">
@@ -1361,6 +1424,121 @@ body{background:var(--dark);color:#111827}
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+
+<!-- ENVIRONMENTAL MONITORING PANEL -->
+<div id="env-panel">
+  <div class="nit-header" style="background:linear-gradient(135deg,#052e16,#14532d)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 16 16" fill="#4ade80" width="22" height="22"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10.5 7 11 7 11c-.5-1 .5-3.25 2-4 .179 1 .25 2-1 3 .625.5 1 1.364 1 2.25C9 14 8.657 15 8 15z"/></svg>
+      </div>
+      <div>
+        <div class="nit-title" style="color:#fff">Environmental Monitoring</div>
+        <div class="nit-subtitle" style="color:rgba(255,255,255,.6)">Active Fire Alerts · Tree Cover · GFW / NASA FIRMS · Northern Ghana</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="dash-close" id="env-dash-btn" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8)">← Dashboard</button>
+      <button class="dash-close" id="env-close" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8)">View Map</button>
+    </div>
+  </div>
+  <div class="env-body">
+
+    <!-- KPI summary row -->
+    <div class="env-kpi-row">
+      <div class="env-kpi">
+        <div class="env-kv" id="ep-total">…</div>
+        <div class="env-kl">Fire Alerts · Region</div>
+        <div class="env-ks">Northern Ghana · 7-day window</div>
+      </div>
+      <div class="env-kpi" style="border-color:rgba(239,68,68,.25)">
+        <div class="env-kv" id="ep-near" style="color:#ef4444">…</div>
+        <div class="env-kl">Within 50 km of Centres</div>
+        <div class="env-ks">Active shea collection zones</div>
+      </div>
+      <div class="env-kpi" style="border-color:rgba(249,115,22,.25)">
+        <div class="env-kv" id="ep-high" style="color:#f97316">…</div>
+        <div class="env-kl">High-Confidence Alerts</div>
+        <div class="env-ks">NASA FIRMS confidence = High</div>
+      </div>
+      <div class="env-kpi" style="border-color:rgba(22,163,74,.25);background:rgba(22,163,74,.04)">
+        <div class="env-kv" style="color:#16a34a;font-size:18px" id="ep-status">Checking…</div>
+        <div class="env-kl">Zone Status</div>
+        <div class="env-ks">Shea collection area risk level</div>
+      </div>
+    </div>
+
+    <!-- Two-column layout: explanation left, fire table right -->
+    <div class="env-two-col">
+
+      <!-- Left: explanation + layer toggles -->
+      <div class="env-explain">
+        <div class="env-explain-title">Why this matters for shea</div>
+        <div class="env-explain-body">
+          <div class="env-explain-item">
+            <span class="env-dot red"></span>
+            <span><b>Fire Alerts (NASA FIRMS):</b> Savanna fires in Northern Ghana are a major seasonal threat to shea trees — especially Nov–Mar dry season. NASA's Suomi NPP satellite detects active fires daily via thermal imaging. Fires within 50 km of a collection centre may disrupt nut collection and damage regenerating trees.</span>
+          </div>
+          <div class="env-explain-item">
+            <span class="env-dot green"></span>
+            <span><b>Tree Canopy Cover (GFW Hansen):</b> The green map layer highlights areas with ≥30% canopy density. In Northern Ghana's savanna-parkland, shea agroforestry sits below this threshold — the layer shows denser woodland patches near collection zones that provide habitat and watershed services critical to nut yield.</span>
+          </div>
+          <div class="env-explain-item">
+            <span class="env-dot amber"></span>
+            <span><b>Proximity Analysis:</b> Each fire alert is matched to the nearest SFC shea collection centre using GPS coordinates. Alerts ≤25 km = <b style="color:#dc2626">Close</b>, ≤50 km = <b style="color:#d97706">Near</b>, &gt;50 km = <b style="color:rgba(17,24,39,.4)">Distant</b>. SFC field teams use this to prioritise early-season monitoring visits.</span>
+          </div>
+          <div class="env-explain-item">
+            <span class="env-dot" style="background:#60a5fa"></span>
+            <span><b>Data refresh:</b> Fire data is updated daily from NASA FIRMS (Near Real-Time). Tree cover data reflects the Hansen GFW v1.10 dataset (2000–2023). Toggle both layers via the map controls at bottom-left.</span>
+          </div>
+        </div>
+        <!-- Layer toggles -->
+        <div style="margin-top:14px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px">Map Layers</div>
+          <div class="env-layer-toggle" id="env-toggle-canopy" onclick="toggleEnvLayer('canopy')">
+            <div style="width:14px;height:14px;border-radius:3px;background:rgba(22,163,74,.4);border:1px solid #16a34a;flex-shrink:0"></div>
+            Tree Canopy Cover ≥30% (GFW Hansen v1.10)
+          </div>
+          <div class="env-layer-toggle" style="margin-top:6px" id="env-toggle-fire" onclick="toggleEnvLayer('fire')">
+            <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.5);flex-shrink:0"></div>
+            Active Fire Alerts — 7-day rolling (NASA FIRMS)
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: fire table -->
+      <div class="env-table-card">
+        <div class="cc-title">Active Fire Alerts — by Proximity to Shea Centres</div>
+        <div class="cc-sub">Source: NASA FIRMS VIIRS NRT · Suomi NPP · 7-day rolling · Updated daily · Showing top 25 by proximity</div>
+        <div class="env-table-scroll">
+          <table class="env-fire-table">
+            <thead>
+              <tr>
+                <th>Confidence</th>
+                <th>Date</th>
+                <th>Nearest Centre</th>
+                <th>Distance</th>
+                <th>Fire Power</th>
+              </tr>
+            </thead>
+            <tbody id="env-fire-tbody">
+              <tr><td colspan="5" style="text-align:center;padding:20px;opacity:.4;font-size:11px">Loading fire alert data from NASA FIRMS…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /env-two-col -->
+
+    <!-- Data credits -->
+    <div class="env-credits">
+      Data: <a href="https://www.globalforestwatch.org" target="_blank">Global Forest Watch</a> (Hansen/UMD/Google/USGS/NASA) &nbsp;·&nbsp;
+      <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> (VIIRS NRT C2) &nbsp;·&nbsp; Tree cover 2000–2023 · Fire alerts updated daily
+    </div>
+
   </div>
 </div>
 
@@ -2081,54 +2259,168 @@ const lgDistricts   = L.layerGroup();
 // Collection Areas: visible by default
 const lgCollection  = L.layerGroup().addTo(map);
 
-// ── GFW Environmental Layers ────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+//  ENVIRONMENTAL MONITORING — GFW Tree Cover + NASA FIRMS Fire Alerts
+//  · Hansen v1.10 first_30 tiles: areas with ≥30% canopy cover (green)
+//  · NASA FIRMS VIIRS NRT: 7-day active fire alerts, West Africa
+//  · Fetch chain: direct → corsproxy.io → allorigins fallback
+//  · Proximity: haversine distance fire→nearest shea centre
+// ══════════════════════════════════════════════════════════════════════════
 const lgTreeLoss  = L.layerGroup();
 const lgFireAlert = L.layerGroup();
 
-// Hansen/UMD/Google tree cover loss tiles — GFW (no auth required)
-// Each pixel = tree cover lost that year; brighter = more recent
+// ── Tree canopy cover ≥30% — green overlay, visible in savanna/parkland ──
+// first_30 tiles: pixels where canopy cover ≥30% in Hansen baseline period
 L.tileLayer(
-  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/loss_year/{z}/{x}/{y}.png',
-  {opacity:0.85, maxZoom:12,
-   attribution:'<a href="https://www.globalforestwatch.org" target="_blank">Global Forest Watch</a> · Hansen/UMD/Google/USGS/NASA'}
+  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/first_30/{z}/{x}/{y}.png',
+  {opacity:0.55, maxZoom:12,
+   attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA'}
 ).addTo(lgTreeLoss);
 
-// NASA FIRMS VIIRS active fire alerts — last 7 days, West & Central Africa
-// Filtered client-side to Northern Ghana bbox (lat 8.5–11.5, lng -3.5–1.0)
-(function loadFIRMS(){
-  fetch('https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_West_and_Central_Africa_7d.csv')
-    .then(r=>r.text())
-    .then(csv=>{
-      const rows=csv.trim().split('\n');
-      const h=rows[0].split(',');
-      const li=h.indexOf('latitude'),ln=h.indexOf('longitude'),
-            ld=h.indexOf('acq_date'),lc=h.indexOf('confidence');
-      let n=0;
-      rows.slice(1).forEach(row=>{
-        const c=row.split(',');
-        if(c.length<4) return;
-        const lat=parseFloat(c[li]),lng=parseFloat(c[ln]);
-        if(lat>=8.5&&lat<=11.5&&lng>=-3.5&&lng<=1.0){
-          const conf=(c[lc]||'').toLowerCase();
-          const clr=conf==='h'?'#ef4444':'#f97316';
-          L.circleMarker([lat,lng],{
-            radius:5,fillColor:clr,color:'rgba(255,255,255,.7)',weight:1.5,fillOpacity:.9
-          }).bindTooltip(
-            `<b>Active Fire Alert</b><br>${c[ld]||'recent'} · Confidence: ${conf==='h'?'High':'Nominal'}`,
-            {className:'zone-tip',sticky:true}
-          ).addTo(lgFireAlert);
-          n++;
-        }
-      });
-      console.log(`FIRMS: ${n} active fire alerts loaded for Northern Ghana`);
-    })
-    .catch(()=>{}); // silent fail — FIRMS CORS may block on some hosts
-})();
+// ── Haversine distance in km ────────────────────────────────────────────
+function hvDist(lat1,lng1,lat2,lng2){
+  const R=6371,d2r=Math.PI/180;
+  const dLat=(lat2-lat1)*d2r, dLng=(lng2-lng1)*d2r;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
 
-// Layer control — bottomleft, always expanded so it never disappears
+// ── Fire data store (populated after fetch) ────────────────────────────
+let gfwFireAlerts=[];
+
+// ── Fetch FIRMS CSV with 3-tier fallback ───────────────────────────────
+function loadFIRMS(){
+  const CSV='https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_West_and_Central_Africa_7d.csv';
+  const P1='https://corsproxy.io/?'+encodeURIComponent(CSV);
+  const P2='https://api.allorigins.win/raw?url='+encodeURIComponent(CSV);
+  fetch(CSV)
+    .catch(()=>fetch(P1))
+    .catch(()=>fetch(P2))
+    .then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.text();})
+    .then(parseFIRMS)
+    .catch(()=>{ parseFIRMS(null); });
+}
+
+function parseFIRMS(csv){
+  if(!csv){
+    updateEnvUI([]);
+    return;
+  }
+  const rows=csv.trim().split('\n');
+  if(rows.length<2){updateEnvUI([]);return;}
+  const h=rows[0].split(',');
+  const li=h.indexOf('latitude'),ln=h.indexOf('longitude'),
+        ld=h.indexOf('acq_date'),lc=h.indexOf('confidence'),
+        lfrp=h.indexOf('frp');
+  const fires=[];
+  rows.slice(1).forEach(row=>{
+    const c=row.split(',');
+    if(c.length<4) return;
+    const lat=parseFloat(c[li]),lng=parseFloat(c[ln]);
+    if(isNaN(lat)||isNaN(lng)) return;
+    // Northern Ghana bounding box
+    if(lat>=8.0&&lat<=11.5&&lng>=-3.5&&lng<=1.0){
+      const conf=(c[lc]||'').toLowerCase();
+      const frp=parseFloat(c[lfrp])||0;
+      // Find nearest active shea centre
+      let nearest=null, minDist=Infinity;
+      CENTERS.forEach(ctr=>{
+        const d=hvDist(lat,lng,ctr.lat,ctr.lng);
+        if(d<minDist){minDist=d;nearest=ctr;}
+      });
+      fires.push({lat,lng,date:c[ld]||'',conf,frp,nearest,dist:Math.round(minDist)});
+    }
+  });
+  fires.sort((a,b)=>a.dist-b.dist);
+  gfwFireAlerts=fires;
+  // Populate fire markers on map
+  lgFireAlert.clearLayers();
+  fires.forEach(f=>{
+    const isHigh=f.conf==='h';
+    L.circleMarker([f.lat,f.lng],{
+      radius:isHigh?6:4,
+      fillColor:isHigh?'#ef4444':'#f97316',
+      color:'rgba(255,255,255,.6)',weight:1.5,fillOpacity:.9
+    }).bindTooltip(
+      `<b>🔥 Active Fire Alert</b><br>Date: ${f.date}<br>Confidence: ${isHigh?'High':'Nominal'}<br>Nearest centre: ${f.nearest?f.nearest.name:'—'} (${f.dist} km)${f.frp>0?'<br>Fire power: '+f.frp.toFixed(1)+' MW':''}`,
+      {className:'zone-tip',sticky:true}
+    ).addTo(lgFireAlert);
+  });
+  updateEnvUI(fires);
+  console.log('GFW/FIRMS: '+fires.length+' fire alerts in Northern Ghana bbox');
+}
+
+function updateEnvUI(fires){
+  const near50=fires.filter(f=>f.dist<=50).length;
+  const high=fires.filter(f=>f.conf==='h').length;
+  const near25=fires.filter(f=>f.dist<=25).length;
+  // Dashboard KPI card
+  const fcEl=document.getElementById('env-fire-count');
+  const fsEl=document.getElementById('env-fire-sub');
+  if(fcEl) fcEl.textContent=near50>0?near50:fires.length>0?'✓ 0':'—';
+  if(fsEl){
+    if(fires.length===0) fsEl.textContent='Fire data unavailable · Click for details';
+    else if(near50===0) fsEl.textContent='No fires within 50 km · '+fires.length+' in region';
+    else fsEl.textContent=near50+' within 50 km · Click for details';
+  }
+  // Env panel summary KPIs
+  const ept=document.getElementById('ep-total');
+  const epn=document.getElementById('ep-near');
+  const eph=document.getElementById('ep-high');
+  const eps=document.getElementById('ep-status');
+  if(ept) ept.textContent=fires.length||'—';
+  if(epn) epn.textContent=near50;
+  if(eph) eph.textContent=high;
+  if(eps){
+    if(fires.length===0) eps.textContent='No data';
+    else if(near25>0){eps.textContent='⚠ High Risk';eps.style.color='#ef4444';}
+    else if(near50>0){eps.textContent='⚡ Monitor';eps.style.color='#f59e0b';}
+    else{eps.textContent='✓ Clear';eps.style.color='#16a34a';}
+  }
+  // Fire table
+  const tbody=document.getElementById('env-fire-tbody');
+  if(!tbody) return;
+  if(fires.length===0){
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;opacity:.45;font-size:11px">Fire data unavailable — CORS blocked or no active fires detected in the region</td></tr>';
+    return;
+  }
+  const top=fires.slice(0,25);
+  tbody.innerHTML=top.map(f=>{
+    const isH=f.conf==='h';
+    const distCls=f.dist<=25?'fire-dist-close':f.dist<=50?'fire-dist-mid':'fire-dist-far';
+    return '<tr>'
+      +'<td><span class="fire-conf '+(isH?'fire-high':'fire-nom')+'">'+(isH?'HIGH':'NOM')+'</span></td>'
+      +'<td style="font-size:10.5px;color:rgba(17,24,39,.7)">'+f.date+'</td>'
+      +'<td style="font-size:10.5px">'+( f.nearest?f.nearest.name:'—')+'</td>'
+      +'<td><span class="fire-dist '+distCls+'">'+f.dist+' km</span></td>'
+      +'<td style="font-size:10px;color:rgba(17,24,39,.5)">'+(f.frp>0?f.frp.toFixed(0)+' MW':'—')+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+// ── Map layer toggle helpers (called from env panel buttons) ───────────
+let envLayerState={canopy:false,fire:false};
+function toggleEnvLayer(which){
+  const lg=which==='canopy'?lgTreeLoss:lgFireAlert;
+  const btn=document.getElementById('env-toggle-'+which);
+  if(envLayerState[which]){
+    map.removeLayer(lg);
+    envLayerState[which]=false;
+    if(btn) btn.classList.remove('active');
+  } else {
+    map.addLayer(lg);
+    envLayerState[which]=true;
+    if(btn) btn.classList.add('active');
+  }
+}
+
+// Kick off fire data load on page init
+loadFIRMS();
+
+// Layer control — bottomleft, always expanded
 L.control.layers(
   {'Street':topo,'Satellite':satellite,'Terrain':terrain},
-  {'Collection Areas':lgCollection,'Tree Cover Loss (GFW)':lgTreeLoss,'Active Fires — 7d (NASA FIRMS)':lgFireAlert},
+  {'Collection Areas':lgCollection,'Tree Canopy ≥30% (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
 
@@ -2847,6 +3139,12 @@ function openNitidae(){document.getElementById('nitidae').classList.add('open');
 function closeNitidae(){document.getElementById('nitidae').classList.remove('open');}
 document.getElementById('dash-nitidae-btn').addEventListener('click',()=>{closeDash();openNitidae();});
 document.getElementById('nitidae-close').addEventListener('click',()=>{closeNitidae();openDash();});
+
+function openEnvPanel(){document.getElementById('env-panel').classList.add('open');}
+function closeEnvPanel(){document.getElementById('env-panel').classList.remove('open');}
+document.getElementById('env-btn').addEventListener('click',openEnvPanel);
+document.getElementById('env-close').addEventListener('click',()=>{closeEnvPanel();});
+document.getElementById('env-dash-btn').addEventListener('click',()=>{closeEnvPanel();openDash();});
 
 // ── IMPACT CALCULATOR ─────────────────────────────────────────────
 // SGG baseline/endline rates — NUTS (per kg dried kernel)
