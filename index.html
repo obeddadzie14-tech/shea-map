@@ -23,6 +23,8 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 *:not(input):not(textarea):not(select){cursor:default;user-select:none}
 input,textarea,select{user-select:text}
+/* Leaflet layer control — labels are clickable, show pointer not I-beam */
+.leaflet-control-layers label,.leaflet-control-layers span,.leaflet-control-layers-selector{cursor:pointer!important;user-select:none!important}
 button,[class*="btn"],[class*="pill"],.ind-hdr,.tab-btn,.nav-btn,.panel-close,.glass-btn,.shc-tab-btn,.mode-toggle button,.inp-quick button,tr[data-cid],select,a{cursor:pointer!important}
 input,textarea{cursor:text!important}
 :root{
