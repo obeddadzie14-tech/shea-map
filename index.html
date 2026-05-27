@@ -1005,6 +1005,8 @@ body{background:var(--dark);color:#111827}
 .env-layer-toggle{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.03);cursor:pointer;font-size:11px;font-weight:500;color:rgba(17,24,39,.7);margin-top:10px;transition:all .15s}
 .env-layer-toggle:hover{background:rgba(0,0,0,.06)}
 .env-layer-toggle.active{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.08);color:#15803d}
+/* Colorise Hansen treecover2000 grayscale tiles → green shading */
+.leaflet-tile-pane .gfw-canopy-tiles{filter:sepia(1) saturate(6) hue-rotate(82deg) brightness(1.1)}
 </style>
 </head>
 <body>
@@ -1053,7 +1055,7 @@ body{background:var(--dark);color:#111827}
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
   <div class="leg-section">Environmental (GFW / NASA)</div>
-  <div class="leg-row"><div class="leg-swatch" style="background:rgba(22,163,74,.35);border-color:#16a34a"></div><span>Tree Canopy Cover ≥30% (GFW)</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:rgba(22,163,74,.35);border-color:#16a34a"></div><span>Tree Canopy Density 2000 (GFW)</span></div>
   <div class="leg-row">
     <div style="display:flex;gap:3px;align-items:center">
       <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.7)"></div>
@@ -1484,7 +1486,7 @@ body{background:var(--dark);color:#111827}
           </div>
           <div class="env-explain-item">
             <span class="env-dot green"></span>
-            <span><b>Tree Canopy Cover (GFW Hansen):</b> The green map layer highlights areas with ≥30% canopy density. In Northern Ghana's savanna-parkland, shea agroforestry sits below this threshold — the layer shows denser woodland patches near collection zones that provide habitat and watershed services critical to nut yield.</span>
+            <span><b>Tree Canopy Cover (GFW Hansen):</b> The green layer shows tree canopy density per pixel in year 2000 — brighter green means denser cover (up to 100%). In Northern Ghana savanna, shea parklands typically register 10–30% per pixel, showing up as mid-green. Denser woodland patches near collection zones buffer watershed services and protect shea fruit yield.</span>
           </div>
           <div class="env-explain-item">
             <span class="env-dot amber"></span>
@@ -1500,7 +1502,7 @@ body{background:var(--dark);color:#111827}
           <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px">Map Layers</div>
           <div class="env-layer-toggle" id="env-toggle-canopy" onclick="toggleEnvLayer('canopy')">
             <div style="width:14px;height:14px;border-radius:3px;background:rgba(22,163,74,.4);border:1px solid #16a34a;flex-shrink:0"></div>
-            Tree Canopy Cover ≥30% (GFW Hansen v1.10)
+            Tree Canopy Density 2000 (GFW Hansen v1.10)
           </div>
           <div class="env-layer-toggle" style="margin-top:6px" id="env-toggle-fire" onclick="toggleEnvLayer('fire')">
             <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.5);flex-shrink:0"></div>
@@ -2269,11 +2271,12 @@ const lgCollection  = L.layerGroup().addTo(map);
 const lgTreeLoss  = L.layerGroup();
 const lgFireAlert = L.layerGroup();
 
-// ── Tree canopy cover ≥30% — green overlay, visible in savanna/parkland ──
-// first_30 tiles: pixels where canopy cover ≥30% in Hansen baseline period
+// ── Tree canopy cover — Hansen treecover2000 (% density per pixel) ─────────
+// treecover2000: each pixel = % canopy cover in year 2000 (0–100)
+// Tiles are grayscale; CSS filter converts to green shading for readability
 L.tileLayer(
-  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/first_30/{z}/{x}/{y}.png',
-  {opacity:0.55, maxZoom:12,
+  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/treecover2000/{z}/{x}/{y}.png',
+  {opacity:0.70, maxZoom:12, className:'gfw-canopy-tiles',
    attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA'}
 ).addTo(lgTreeLoss);
 
@@ -2420,7 +2423,7 @@ loadFIRMS();
 // Layer control — bottomleft, always expanded
 L.control.layers(
   {'Street':topo,'Satellite':satellite,'Terrain':terrain},
-  {'Collection Areas':lgCollection,'Tree Canopy ≥30% (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
+  {'Collection Areas':lgCollection,'Tree Canopy Density (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
 
