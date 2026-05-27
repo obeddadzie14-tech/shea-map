@@ -1007,10 +1007,7 @@ body{background:var(--dark);color:#111827}
 .env-layer-toggle{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.03);cursor:pointer;font-size:11px;font-weight:500;color:rgba(17,24,39,.7);margin-top:10px;transition:all .15s}
 .env-layer-toggle:hover{background:rgba(0,0,0,.06)}
 .env-layer-toggle.active{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.08);color:#15803d}
-/* Colorise Hansen treecover2000 grayscale tiles → green shading
-   brightness(6) amplifies the dark savanna pixels (5–25% cover) so they
-   become clearly visible; sepia+hue-rotate then shifts the result to green */
-.leaflet-tile-pane .gfw-canopy-tiles{filter:brightness(6) saturate(0) sepia(1) saturate(8) hue-rotate(88deg) brightness(0.85)}
+/* loss_year tiles are pre-coloured (red/orange by year) — no filter needed */
 </style>
 </head>
 <body>
@@ -1059,7 +1056,7 @@ body{background:var(--dark);color:#111827}
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
   <div class="leg-section">Environmental (GFW / NASA)</div>
-  <div class="leg-row"><div class="leg-swatch" style="background:rgba(22,163,74,.35);border-color:#16a34a"></div><span>Tree Canopy Density 2000 (GFW)</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#7f1d1d,#ef4444,#f97316);border-color:#ef4444"></div><span>Tree Cover Loss 2001–2023 (GFW)</span></div>
   <div class="leg-row">
     <div style="display:flex;gap:3px;align-items:center">
       <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.7)"></div>
@@ -1490,7 +1487,7 @@ body{background:var(--dark);color:#111827}
           </div>
           <div class="env-explain-item">
             <span class="env-dot green"></span>
-            <span><b>Tree Canopy Cover (GFW Hansen):</b> The green layer shows tree canopy density per pixel in year 2000 — brighter green means denser cover (up to 100%). In Northern Ghana savanna, shea parklands typically register 10–30% per pixel, showing up as mid-green. Denser woodland patches near collection zones buffer watershed services and protect shea fruit yield.</span>
+            <span><b>Tree Cover Loss (GFW Hansen):</b> Red/orange pixels mark where tree cover was removed between 2001 and 2023 — brighter orange = more recent loss (last 5 years), darker red = older clearing. In Northern Ghana this captures bush burning, charcoal cutting, and agricultural expansion that threaten shea tree regeneration. Dense clusters near collection centres indicate high deforestation pressure on shea habitat.</span>
           </div>
           <div class="env-explain-item">
             <span class="env-dot amber"></span>
@@ -1505,8 +1502,8 @@ body{background:var(--dark);color:#111827}
         <div style="margin-top:14px">
           <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px">Map Layers</div>
           <div class="env-layer-toggle" id="env-toggle-canopy" onclick="toggleEnvLayer('canopy')">
-            <div style="width:14px;height:14px;border-radius:3px;background:rgba(22,163,74,.4);border:1px solid #16a34a;flex-shrink:0"></div>
-            Tree Canopy Density 2000 (GFW Hansen v1.10)
+            <div style="width:14px;height:14px;border-radius:3px;background:linear-gradient(135deg,#991b1b,#f97316);flex-shrink:0"></div>
+            Tree Cover Loss 2001–2023 (GFW Hansen v1.10)
           </div>
           <div class="env-layer-toggle" style="margin-top:6px" id="env-toggle-fire" onclick="toggleEnvLayer('fire')">
             <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.5);flex-shrink:0"></div>
@@ -2271,7 +2268,7 @@ const lgCollection  = L.layerGroup().addTo(map);
 
 // ══════════════════════════════════════════════════════════════════════════
 //  ENVIRONMENTAL MONITORING — GFW Tree Cover + NASA FIRMS Fire Alerts
-//  · Hansen v1.10 first_30 tiles: areas with ≥30% canopy cover (green)
+//  · Hansen v1.10 loss_year tiles: year of tree loss (red=old, orange=recent)
 //  · NASA FIRMS VIIRS NRT: 7-day active fire alerts, West Africa
 //  · Fetch chain: direct → corsproxy.io → allorigins fallback
 //  · Proximity: haversine distance fire→nearest shea centre
@@ -2279,12 +2276,13 @@ const lgCollection  = L.layerGroup().addTo(map);
 const lgTreeLoss  = L.layerGroup();
 const lgFireAlert = L.layerGroup();
 
-// ── Tree canopy cover — Hansen treecover2000 (% density per pixel) ─────────
-// treecover2000: each pixel = % canopy cover in year 2000 (0–100)
-// Tiles are grayscale; CSS filter converts to green shading for readability
+// ── Tree cover LOSS — Hansen loss_year (year of loss 2001–2023, red/orange) ──
+// Each pixel = year a tree-covered cell was cleared. Color: bright = recent.
+// Visible in savanna because ANY clearing event (burning, charcoal, farm
+// expansion) shows up as a coloured pixel regardless of base cover density.
 L.tileLayer(
-  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/treecover2000/{z}/{x}/{y}.png',
-  {opacity:0.85, maxZoom:12, className:'gfw-canopy-tiles',
+  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/loss_year/{z}/{x}/{y}.png',
+  {opacity:0.9, maxZoom:12,
    attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA'}
 ).addTo(lgTreeLoss);
 
@@ -2431,7 +2429,7 @@ loadFIRMS();
 // Layer control — bottomleft, always expanded
 L.control.layers(
   {'Street':topo,'Satellite':satellite,'Terrain':terrain},
-  {'Collection Areas':lgCollection,'Tree Canopy Density (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
+  {'Collection Areas':lgCollection,'Tree Cover Loss 2001-2023 (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
 
