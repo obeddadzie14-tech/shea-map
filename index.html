@@ -1005,8 +1005,10 @@ body{background:var(--dark);color:#111827}
 .env-layer-toggle{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.03);cursor:pointer;font-size:11px;font-weight:500;color:rgba(17,24,39,.7);margin-top:10px;transition:all .15s}
 .env-layer-toggle:hover{background:rgba(0,0,0,.06)}
 .env-layer-toggle.active{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.08);color:#15803d}
-/* Colorise Hansen treecover2000 grayscale tiles → green shading */
-.leaflet-tile-pane .gfw-canopy-tiles{filter:sepia(1) saturate(6) hue-rotate(82deg) brightness(1.1)}
+/* Colorise Hansen treecover2000 grayscale tiles → green shading
+   brightness(6) amplifies the dark savanna pixels (5–25% cover) so they
+   become clearly visible; sepia+hue-rotate then shifts the result to green */
+.leaflet-tile-pane .gfw-canopy-tiles{filter:brightness(6) saturate(0) sepia(1) saturate(8) hue-rotate(88deg) brightness(0.85)}
 </style>
 </head>
 <body>
@@ -2276,7 +2278,7 @@ const lgFireAlert = L.layerGroup();
 // Tiles are grayscale; CSS filter converts to green shading for readability
 L.tileLayer(
   'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/treecover2000/{z}/{x}/{y}.png',
-  {opacity:0.70, maxZoom:12, className:'gfw-canopy-tiles',
+  {opacity:0.85, maxZoom:12, className:'gfw-canopy-tiles',
    attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA'}
 ).addTo(lgTreeLoss);
 
