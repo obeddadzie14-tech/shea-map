@@ -1110,8 +1110,8 @@ body{background:var(--dark);color:#111827}
   <div id="p-butter-banner" style="display:none;margin:0 18px 10px;padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(245,158,11,.1));border:1.5px solid rgba(245,158,11,.5);display:none;align-items:center;gap:10px">
     <div style="font-size:20px;flex-shrink:0">🧈</div>
     <div>
-      <div style="font-size:11px;font-weight:800;color:#92400e;letter-spacing:.03em;text-transform:uppercase">Merged — Butter Processing Centre</div>
-      <div style="font-size:10.5px;color:#b45309;margin-top:2px" id="p-butter-note">This centre has been merged into a dedicated shea butter processing hub.</div>
+      <div style="font-size:11px;font-weight:800;color:#92400e;letter-spacing:.03em;text-transform:uppercase">+ Butter Processing Centre On-Site</div>
+      <div style="font-size:10.5px;color:#b45309;margin-top:2px" id="p-butter-note">Alongside the nut processing centre, this community also hosts a dedicated shea butter processing facility.</div>
     </div>
   </div>
 
@@ -2853,7 +2853,7 @@ function renderPanel(c){
     if(c.butterMerge){
       butterBanner.style.display='flex';
       const note=document.getElementById('p-butter-note');
-      if(note) note.textContent='This centre has been merged into a dedicated shea butter processing hub. Wechiau and Murugu now jointly operate as an integrated butter production facility.';
+      if(note) note.textContent='Alongside the nut processing centre, '+c.community+' also hosts a dedicated shea butter processing facility operating in the same area.';
     } else {
       butterBanner.style.display='none';
     }
