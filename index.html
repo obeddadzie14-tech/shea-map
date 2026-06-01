@@ -1106,6 +1106,15 @@ body{background:var(--dark);color:#111827}
     </div>
   </div>
 
+  <!-- Butter Processing Centre merge banner (shown only for merged centres) -->
+  <div id="p-butter-banner" style="display:none;margin:0 18px 10px;padding:10px 14px;border-radius:10px;background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(245,158,11,.1));border:1.5px solid rgba(245,158,11,.5);display:none;align-items:center;gap:10px">
+    <div style="font-size:20px;flex-shrink:0">🧈</div>
+    <div>
+      <div style="font-size:11px;font-weight:800;color:#92400e;letter-spacing:.03em;text-transform:uppercase">Merged — Butter Processing Centre</div>
+      <div style="font-size:10.5px;color:#b45309;margin-top:2px" id="p-butter-note">This centre has been merged into a dedicated shea butter processing hub.</div>
+    </div>
+  </div>
+
   <!-- Photo strip -->
   <div class="photo-strip" id="p-photos"></div>
 
@@ -2014,7 +2023,7 @@ const CENTERS = [
     highlight:"Nakpala centre serves the Sawla area of the Suntaa Maal cooperative. With an experienced Field Officer, this centre has clear growth potential given the 37 active women collectors already engaged."
   },
   {
-    id:"GHA-UW-005", centerName:"Wechiau Centre", community:"Wechiau",
+    id:"GHA-UW-005", centerName:"Wechiau Centre", community:"Wechiau", butterMerge:true,
     cooperative:"Wechiau Hippo Sanctuary Organic Shea Nuts Collectors Cooperative",
     lat:9.823578, lng:-2.685471, district:"Wa West", region:"Upper West Region",
     performance:"high", established:2021, founded:2014, partneredSFC:2014, members:2705,
@@ -2023,7 +2032,7 @@ const CENTERS = [
     prev2324coop:336, bottleneck:"Tribal conflict severely impacted operations and member safety.",
     bottleneckType:"danger",
     allCommunities:[{name:"Wechiau",established:2021},{name:"Kpanfa",established:2023}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Organic Certified",c:"t-green"},{l:"Conflict Impact",c:"t-rose"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Organic Certified",c:"t-green"},{l:"Butter Hub",c:"t-amber"},{l:"Conflict Impact",c:"t-rose"}],
     insights:[
       {t:"bad",x:"212 bags (18,020 kg) — tribal conflict disrupted operations, well below 12 t/mo capacity."},
       {t:"good",x:"Organic certification maintained — premium pricing pathway preserved for recovery season."}
@@ -2152,7 +2161,7 @@ const CENTERS = [
     highlight:"Kanjayilli is the network's second-highest producing centre this season with 1,839 bags (156,315 kg). Combined with Jinlo, the Kpalbe cooperative contributes 3,081 bags — 27% of the entire network output for 2025/26."
   },
   {
-    id:"GHA-SA-003", centerName:"Murugu Centre", community:"Murugu",
+    id:"GHA-SA-003", centerName:"Murugu Centre", community:"Murugu", butterMerge:true,
     cooperative:"Damongo Sunkpa Sheanuts Pickers Cooperative",
     lat:9.343775, lng:-1.706426, district:"West Gonja", region:"Savannah Region",
     performance:"high", established:2021, founded:2014, partneredSFC:2014, members:1364,
@@ -2161,7 +2170,7 @@ const CENTERS = [
     prev2324coop:321, bottleneck:"Bad harvest — low nut availability in the collection zone this season.",
     bottleneckType:"danger",
     allCommunities:[{name:"Murugu",established:2021},{name:"Zowu",established:2023}],
-    tags:[{l:"Traceable",c:"t-blue"},{l:"Harvest Risk",c:"t-rose"},{l:"Quality Focused",c:"t-violet"}],
+    tags:[{l:"Traceable",c:"t-blue"},{l:"Butter Hub",c:"t-amber"},{l:"Harvest Risk",c:"t-rose"},{l:"Quality Focused",c:"t-violet"}],
     insights:[
       {t:"bad",x:"Only 47 bags (3,995 kg) — extreme underperformance due to poor harvest season."},
       {t:"good",x:"Members actively enforce SFC quality standards and accurate measurement practices."}
@@ -2837,6 +2846,18 @@ function renderPanel(c){
   document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
   const defTab=document.querySelector('.tab-btn[data-tab="overview"]');
   if(defTab){defTab.classList.add('active');const p=document.getElementById('tab-overview');if(p)p.classList.add('active');}
+
+  // Butter Processing Centre banner
+  const butterBanner=document.getElementById('p-butter-banner');
+  if(butterBanner){
+    if(c.butterMerge){
+      butterBanner.style.display='flex';
+      const note=document.getElementById('p-butter-note');
+      if(note) note.textContent='This centre has been merged into a dedicated shea butter processing hub. Wechiau and Murugu now jointly operate as an integrated butter production facility.';
+    } else {
+      butterBanner.style.display='none';
+    }
+  }
 
   // Hero
   document.getElementById('p-name').textContent=c.centerName;
