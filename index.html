@@ -344,7 +344,7 @@ body{background:var(--dark);color:#111827}
 @media print {
   @page{margin:12mm 14mm;size:A4}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,#env-panel,
+  #map,#header,#top-right,#legend,#coords,#north,#stats,#panel,#dash,#env-panel,#projects-panel,
   #impact-close,#nitidae-close,#nit-export-btn,.imp-input{display:none!important}
   body,html{background:#fff!important;height:auto!important;overflow:visible!important}
   #nitidae{position:static!important;transform:none!important;background:#fff!important;
@@ -1026,6 +1026,107 @@ body{background:var(--dark);color:#111827}
 .env-layer-toggle:hover{background:rgba(0,0,0,.06)}
 .env-layer-toggle.active{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.08);color:#15803d}
 /* loss_year tiles are pre-coloured (red/orange by year) — no filter needed */
+/* ── IMPACT PROJECTS PANEL ──────────────────────────────────────────────── */
+#projects-panel{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--dark);
+  transform:translateY(100%);
+  transition:transform .48s var(--tr);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+#projects-panel.open{transform:translateY(0)}
+.proj-body{
+  flex:1;min-height:0;
+  display:grid;
+  grid-template-columns:270px 1fr;
+  overflow:hidden
+}
+
+/* ── Sidebar ── */
+.proj-sidebar{
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  padding:10px 8px;
+  display:flex;flex-direction:column;gap:5px;
+  background:rgba(0,0,0,.02)
+}
+.proj-sidebar-label{
+  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(17,24,39,.35);padding:4px 8px 6px
+}
+.proj-card-item{
+  border-radius:10px;padding:11px 13px;cursor:pointer;
+  border:1px solid transparent;transition:all .15s;
+  border-left:3px solid transparent;
+  background:transparent
+}
+.proj-card-item:hover{background:rgba(0,0,0,.04);border-color:var(--border)}
+.proj-card-item.active{background:rgba(0,0,0,.05);border-color:var(--border);border-left-color:var(--proj-accent)}
+.pci-name{font-size:12px;font-weight:700;color:#111827;line-height:1.2}
+.pci-partner{font-size:10px;color:rgba(17,24,39,.5);margin-top:2px}
+.pci-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.pci-period{font-size:9.5px;color:rgba(17,24,39,.4)}
+.proj-status{display:inline-block;padding:2px 7px;border-radius:10px;font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.proj-status.active{background:rgba(34,197,94,.12);color:#15803d}
+.proj-status.completed{background:rgba(107,114,128,.1);color:rgba(17,24,39,.5)}
+
+/* ── Detail pane ── */
+.proj-detail{overflow-y:auto;display:flex;flex-direction:column}
+.proj-detail-inner{padding:20px 26px;display:flex;flex-direction:column;gap:16px;flex:1}
+
+/* Project detail header */
+.proj-dh{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+.proj-dh-title{font-size:22px;font-weight:800;letter-spacing:-.02em;color:#111827;line-height:1.2}
+.proj-dh-sub{font-size:12px;color:rgba(17,24,39,.55);margin-top:4px;font-weight:500}
+.proj-dh-meta{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.proj-dh-pill{font-size:10px;color:rgba(17,24,39,.5);background:rgba(0,0,0,.05);border-radius:20px;padding:3px 10px}
+.proj-dh-invest{font-size:10.5px;font-weight:600;color:rgba(17,24,39,.7);background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:8px;padding:5px 12px}
+.partner-logo-ph{
+  width:110px;border:1.5px dashed rgba(17,24,39,.18);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;min-height:64px;flex-shrink:0
+}
+.ph-tag{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,24,39,.3)}
+.ph-name{font-size:10px;font-weight:600;color:rgba(17,24,39,.55);margin-top:4px;line-height:1.3}
+
+/* SDG badges row */
+.sdg-row{display:flex;gap:6px;flex-wrap:wrap}
+.sdg-badge{
+  width:56px;height:56px;border-radius:7px;overflow:hidden;
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:5px 3px;cursor:default;
+  transition:transform .12s
+}
+.sdg-badge:hover{transform:scale(1.06)}
+.sdg-num{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.sdg-lbl{font-size:6px;font-weight:700;color:rgba(255,255,255,.88);text-align:center;
+  line-height:1.2;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.sdg-row-label{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(17,24,39,.4);margin-bottom:6px}
+
+/* Metrics row */
+.proj-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.proj-metric{background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:12px;padding:13px 16px}
+.pm-val{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#111827;line-height:1}
+.pm-lbl{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.45);margin-top:5px}
+.pm-sub{font-size:10px;color:rgba(17,24,39,.45);margin-top:2px}
+
+/* Two-column content */
+.proj-content{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.proj-box{background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.proj-box-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.5);margin-bottom:8px}
+.proj-desc{font-size:11.5px;line-height:1.75;color:rgba(17,24,39,.72)}
+.proj-ach-list{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;list-style:none}
+.proj-ach-list li{display:flex;gap:8px;font-size:11px;line-height:1.5;color:rgba(17,24,39,.7);align-items:flex-start}
+.proj-ach-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--proj-accent,#6366f1);flex-shrink:0;margin-top:5px}
+
+/* Tagline bar */
+.proj-tagline{padding:10px 16px;border-radius:10px;border-left:3px solid var(--proj-accent,#6366f1);background:rgba(0,0,0,.03);font-size:11.5px;font-style:italic;color:rgba(17,24,39,.6);line-height:1.6}
+
+/* Placeholder credit footer */
+.proj-footer{font-size:9px;color:rgba(17,24,39,.3);text-align:right;padding-bottom:6px}
+
 </style>
 </head>
 <body>
@@ -1077,6 +1178,10 @@ body{background:var(--dark);color:#111827}
     <button class="glass-btn" id="env-btn" style="border-color:rgba(22,163,74,.4);color:#4ade80">
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10.5 7 11 7 11c-.5-1 .5-3.25 2-4 .179 1 .25 2-1 3 .625.5 1 1.364 1 2.25C9 14 8.657 15 8 15z"/></svg>
       Environment
+    </button>
+    <button class="glass-btn" id="proj-btn" style="border-color:rgba(99,102,241,.4);color:#818cf8">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h5v5H2zm7 0h5v5H9zm0 7h5v5H9zM2 9h5v5H2z" opacity=".8"/></svg>
+      Projects
     </button>
   </div>
 </div>
@@ -1411,6 +1516,7 @@ body{background:var(--dark);color:#111827}
     <div style="display:flex;gap:8px;align-items:center">
       <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">Assess</button>
       <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">Scorecard</button>
+      <button class="dash-close" id="dash-projects-btn" style="background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.35);color:#818cf8">Projects</button>
       <button class="dash-close" id="dash-close">View Map</button>
     </div>
   </div>
@@ -1590,6 +1696,80 @@ body{background:var(--dark);color:#111827}
     </div>
 
   </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     IMPACT PROJECTS PANEL
+     ══════════════════════════════════════════════════════════════ -->
+<div id="projects-panel">
+
+  <!-- Header -->
+  <div class="nit-header" style="background:linear-gradient(135deg,#1e1b4b,#312e81)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img src="sfc-logo.png" alt="SFC" style="height:44px;width:auto;flex-shrink:0">
+      <div>
+        <div class="nit-title" style="color:#fff">Impact Projects</div>
+        <div class="nit-subtitle" style="color:rgba(255,255,255,.6)">Partner Programmes · Sustainability Portfolio · SDG-Aligned Initiatives</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="dash-close" id="proj-dash-btn" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8)">← Dashboard</button>
+      <button class="dash-close" id="proj-close" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8)">View Map</button>
+    </div>
+  </div>
+
+  <!-- Body: sidebar + detail -->
+  <div class="proj-body">
+
+    <!-- Sidebar -->
+    <div class="proj-sidebar">
+      <div class="proj-sidebar-label">7 Active Programmes</div>
+      <div class="proj-card-item active" data-proj="invest-jobs" style="--proj-accent:#A21942" onclick="selectProject('invest-jobs')">
+        <div class="pci-name">Invest for Jobs</div>
+        <div class="pci-partner">GIZ · BMZ · Global Shea Alliance</div>
+        <div class="pci-row"><span class="pci-period">2021 – 2022</span><span class="proj-status completed">Completed</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="bsr" style="--proj-accent:#DD1367" onclick="selectProject('bsr')">
+        <div class="pci-name">BSR Financial Resilience</div>
+        <div class="pci-partner">Business for Social Responsibility</div>
+        <div class="pci-row"><span class="pci-period">2024 – 2025</span><span class="proj-status active">Active</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="econobio" style="--proj-accent:#3F7E44" onclick="selectProject('econobio')">
+        <div class="pci-name">ECONOBIO II</div>
+        <div class="pci-partner">Noé · AFD · Sofi Tucker Foundation</div>
+        <div class="pci-row"><span class="pci-period">2021 – 2024</span><span class="proj-status completed">Completed</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="maison-karite" style="--proj-accent:#FD9D24" onclick="selectProject('maison-karite')">
+        <div class="pci-name">Maison Karité</div>
+        <div class="pci-partner">Maison Karité</div>
+        <div class="pci-row"><span class="pci-period">2021</span><span class="proj-status completed">Completed</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="shkeeper" style="--proj-accent:#56C02B" onclick="selectProject('shkeeper')">
+        <div class="pci-name">SheKeeper</div>
+        <div class="pci-partner">USAID</div>
+        <div class="pci-row"><span class="pci-period">2022 – Present</span><span class="proj-status active">Active</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="gslerp" style="--proj-accent:#3F7E44" onclick="selectProject('gslerp')">
+        <div class="pci-name">GSLERP</div>
+        <div class="pci-partner">A Rocha Ghana · USDA</div>
+        <div class="pci-row"><span class="pci-period">2022 – 2026</span><span class="proj-status active">Active</span></div>
+      </div>
+      <div class="proj-card-item" data-proj="hlo" style="--proj-accent:#4C9F38" onclick="selectProject('hlo')">
+        <div class="pci-name">Henry Lamotte Oils</div>
+        <div class="pci-partner">Henry Lamotte Oils GmbH</div>
+        <div class="pci-row"><span class="pci-period">2023 – 2024</span><span class="proj-status completed">Completed</span></div>
+      </div>
+    </div>
+
+    <!-- Detail pane (populated by JS) -->
+    <div class="proj-detail" id="proj-detail-pane">
+      <div class="proj-detail-inner" id="proj-detail-inner">
+        <!-- Rendered by selectProject() -->
+      </div>
+    </div>
+
+  </div><!-- /proj-body -->
 </div>
 
 <!-- NITIDAE / IMPACT CALCULATOR -->
@@ -4668,6 +4848,321 @@ function clearSearch(){
   document.getElementById('search-dropdown').style.display='none';
   document.getElementById('search-input').focus();
 }
+
+
+// ══════════════════════════════════════════════════════════════════════════
+//  IMPACT PROJECTS — Data + Render
+// ══════════════════════════════════════════════════════════════════════════
+
+const SDG_META = {
+  1:  {color:'#E5243B', title:'No Poverty'},
+  3:  {color:'#4C9F38', title:'Good Health & Wellbeing'},
+  4:  {color:'#C5192D', title:'Quality Education'},
+  5:  {color:'#FF3A21', title:'Gender Equality'},
+  8:  {color:'#A21942', title:'Decent Work & Growth'},
+  10: {color:'#DD1367', title:'Reduced Inequalities'},
+  11: {color:'#FD9D24', title:'Sustainable Communities'},
+  13: {color:'#3F7E44', title:'Climate Action'},
+  15: {color:'#56C02B', title:'Life on Land'},
+  17: {color:'#19486A', title:'Partnerships for Goals'},
+};
+
+const PROJECTS = [
+  {
+    id:'invest-jobs',
+    name:'Invest for Jobs',
+    subtitle:'Cooperative Strengthening & Market Access',
+    partner:'GIZ · BMZ · Global Shea Alliance',
+    period:'2021 – 2022',
+    status:'completed',
+    region:'Northern Ghana',
+    investment:'Total Programme: €1.15M · SFC Contribution: $173,222 (€155,691)',
+    sdgs:[1,5,8,17],
+    accent:'#A21942',
+    tagline:'A GIZ-implemented initiative demonstrating how strategic public-private partnerships create lasting economic infrastructure for women-led cooperatives.',
+    metrics:[
+      {v:'11,000+',l:'Women Impacted',s:'collectors and processors'},
+      {v:'10',l:'Cooperatives Established',s:'formally registered with Government of Ghana'},
+      {v:'8',l:'Warehouses Constructed',s:'strategic locations across North'},
+      {v:'€1.15M',l:'Total Programme Value',s:'GIZ / BMZ investment'},
+    ],
+    desc:'SFC partnered with the Global Shea Alliance under the Invest for Jobs Initiative, implemented by GIZ on behalf of the German Federal Ministry for Economic Cooperation and Development (BMZ). The project strengthened women-led cooperatives, built post-harvest infrastructure, and created direct market linkages between women producers and international buyers — with impact continuing beyond the project close in 2022.',
+    achievements:[
+      '10 women-led cooperatives formally established and registered with the Government of Ghana',
+      '8 shea nut warehouses constructed and fully equipped with pallets, scales, and storage equipment',
+      'Centralized processing facilities with drying platforms, cracking platforms, and mechanized dryers',
+      'Direct sourcing relationships established between cooperatives and international shea buyers',
+      'Cooperative governance, business management, and organic production training delivered',
+      'Tree planting training and seedling distribution for shea parkland conservation',
+    ],
+  },
+  {
+    id:'bsr',
+    name:'BSR Financial Resilience',
+    subtitle:'Financial Literacy · Cooperative Productivity · Peer Education',
+    partner:'Business for Social Responsibility (BSR)',
+    period:'2024 – 2025',
+    status:'active',
+    region:'Northern Ghana',
+    investment:'[ Confidential ]',
+    sdgs:[4,5,8,10],
+    accent:'#DD1367',
+    tagline:'A peer educator model that cascades financial resilience from trained women leaders to thousands of cooperative members and their households.',
+    metrics:[
+      {v:'6,880',l:'Women Directly Trained',s:'peer educators + participants (2024–2025)'},
+      {v:'41,280',l:'Total Programme Reach',s:'including household members'},
+      {v:'43%',l:'Peak Butter Yield',s:'up from 28% at baseline'},
+      {v:'~2 weeks',l:'Production Cycle',s:'down from 3–4 weeks for 5 metric tons'},
+    ],
+    desc:'The BSR Financial Resilience Training Program uses a Training of Trainers approach. Selected women are trained as Peer Educators who then cascade practical financial literacy, budgeting, savings, and productivity skills to their cooperative members. Each participant is encouraged to share lessons with at least five household members — creating a multiplier effect that reaches far beyond direct training participants.',
+    achievements:[
+      '734 Peer Educators trained across butter and nut processing cooperatives (2024–2025)',
+      'Butter yield improved from 28–33% to 33–43% per production batch following training',
+      'Production time for 5 metric tons reduced from 3–4 weeks to approximately 2 weeks',
+      '90–95% of 2024 participants reported improvements in time management and financial planning',
+      'Estimated 34,400 household members reached through knowledge-sharing cascade',
+      '325 baseline surveys completed for long-term impact tracking across the 2025 cohort',
+    ],
+  },
+  {
+    id:'econobio',
+    name:'ECONOBIO II',
+    subtitle:'Biodiversity Conservation Through Sustainable Livelihoods',
+    partner:'Noé · French Development Agency (AFD) · Sofi Tucker Foundation',
+    period:'2021 – 2024',
+    status:'completed',
+    region:'Western Region & Northern Ghana',
+    investment:'€112,000 processing centre (AFD/Sofi Tucker) · Conservation premium: 5 pesewas/coconut',
+    sdgs:[1,5,13,15,17],
+    accent:'#3F7E44',
+    tagline:'Proving that biodiversity conservation and economic development are not in conflict — they are mutually reinforcing when structured correctly.',
+    metrics:[
+      {v:'4,600',l:'Producers Empowered',s:'65% women across six value chains'},
+      {v:'GHS 20M',l:'Income Generated',s:'for farmers and processors'},
+      {v:'300,000',l:'Hectares Under Management',s:'community forest — CREMAs'},
+      {v:'196,000',l:'Tree Seedlings Planted',s:'landscape restoration'},
+    ],
+    desc:'ECONOBIO II worked across six sustainable value chains — shea butter, coconut oil, cocoa, baobab, honey, and NTFPs — to create economic incentives for communities to protect rather than degrade their natural resources. SFC served as a private sector partner, providing technical support, certification training, and market access. A conservation financing mechanism linked every coconut purchase directly to biodiversity protection funding.',
+    achievements:[
+      'GHS 145,000 raised in Conservation Funds through a 5 pesewas per coconut pricing mechanism',
+      'Jomoro Community-Managed Virgin Coconut Oil Centre producing ~100 metric tons annually launched 2024',
+      '11 CREMAs supported, 770 CREMA leaders empowered — 19% female representation',
+      '8 CREMAs fully mapped, 3 CREMA management plans developed',
+      '1,800 community conservation patrols conducted across 300,000 hectares',
+      'Protection of Roloway monkey habitat — critically threatened species — in Ankasa-Tano landscape',
+    ],
+  },
+  {
+    id:'maison-karite',
+    name:'Maison Karité',
+    subtitle:'Community Milling Infrastructure · Women\'s Processing Independence',
+    partner:'Maison Karité',
+    period:'2021',
+    status:'completed',
+    region:'Janshegu, Northern Ghana',
+    investment:'€2,000 (Maison Karité) · GHS 600 (community contribution)',
+    sdgs:[5,8,11],
+    accent:'#FD9D24',
+    tagline:'A focused €2,000 investment that ended milling dependency for 60 women, opened a new community income stream, and created a shared hub for training and financial inclusion.',
+    metrics:[
+      {v:'60',l:'Women Directly Benefiting',s:'Janshegu Shea Butter Cooperative'},
+      {v:'600+',l:'Indirectly Benefiting',s:'through community milling services'},
+      {v:'€2,000',l:'Partner Contribution',s:'Maison Karité donation'},
+      {v:'1',l:'Milling Facility Built',s:'+ machine installed November 2021'},
+    ],
+    desc:'SFC partnered with Maison Karité to address a critical bottleneck for the 60-member Janshegu Shea Butter Cooperative: dependence on external milling services that added costs, delays, and reduced margins. A dedicated milling room was constructed and a machine installed — importantly sourced from Madame Laceera, a women-led machine manufacturer — creating dual impact across the shea ecosystem.',
+    achievements:[
+      'Milling room construction completed October 2021 — machine installed and operational November 2021',
+      'Machine sourced from Madame Laceera, a woman entrepreneur who manufactures milling equipment — dual impact',
+      'Cooperative now processes shea nuts independently, eliminating external transport costs and scheduling delays',
+      'Cooperative rents milling services to external groups, generating new revenue stream for future investment',
+      'Facility now used for financial literacy workshops, cooperative meetings, and community training',
+      'Women contributed GHS 600 from Community Development Fund before external funding — demonstrating ownership',
+    ],
+  },
+  {
+    id:'shkeeper',
+    name:'SheKeeper',
+    subtitle:'Women-Led Beekeeping · Income Diversification · Ecosystem Protection',
+    partner:'USAID',
+    period:'2022 – Present',
+    status:'active',
+    region:'Northern Ghana',
+    investment:'USAID funded',
+    sdgs:[5,8,13,15],
+    accent:'#56C02B',
+    tagline:'Integrating beekeeping into shea communities creates year-round income while aligning women\'s economic interests with the protection of the ecosystems that sustain shea production.',
+    metrics:[
+      {v:'200',l:'Women Registered & Trained',s:'modern beekeeping practices'},
+      {v:'2,060',l:'Beehives Installed',s:'across participating communities'},
+      {v:'902.5 kg',l:'Honeycomb Harvested',s:'2023 first harvest season'},
+      {v:'6',l:'Cooperatives Trained',s:'across Ghana under USAID programme'},
+    ],
+    desc:'The SheKeeper Project addresses a fundamental challenge for women in Northern Ghana: highly seasonal income from shea activities. By introducing modern beekeeping alongside existing shea work, women gain a complementary income source that generates revenue year-round. Critically, the initiative creates direct economic incentives to protect shea trees and natural vegetation — since healthy ecosystems support both honey production and shea fruiting.',
+    achievements:[
+      '200 women trained in beehive management, colony monitoring, harvesting, and safety procedures',
+      '2,060 beehives installed across SFC-affiliated shea cooperatives in Northern Ghana',
+      '902.5 kg of honeycomb successfully harvested in the 2023 season by two SheKeeper cooperatives',
+      '2 cooperatives now actively producing honey as a commercial enterprise',
+      'Beeswax, honeycomb, and value-added bee products identified as future income streams',
+      'Women report stronger motivation to protect trees and natural habitats linked to hive productivity',
+    ],
+  },
+  {
+    id:'gslerp',
+    name:'GSLERP',
+    subtitle:'Ghana Shea Landscape Emission Reduction Project · Parkland Restoration at Scale',
+    partner:'A Rocha Ghana · USDA Forest Service',
+    period:'2022 – 2026',
+    status:'active',
+    region:'Northern Ghana Shea Belt',
+    investment:'SFC: $600,357 · A Rocha Ghana: up to $500,000',
+    sdgs:[5,8,13,15],
+    accent:'#3F7E44',
+    tagline:'Restoring shea parklands at landscape scale through tree planting, community nurseries, and cooperative infrastructure — linking climate mitigation with women\'s livelihoods.',
+    metrics:[
+      {v:'297,461',l:'Shea Trees Targeted',s:'50% survivability rate target'},
+      {v:'60',l:'Women Employed',s:'in community nursery operations'},
+      {v:'$1.1M+',l:'Combined Investment',s:'SFC + A Rocha Ghana'},
+      {v:'2026',l:'Project Completion',s:'running to December 2026'},
+    ],
+    desc:'GSLERP is a four-year landscape restoration initiative targeting the shea belt of Northern Ghana. A Rocha Ghana leads ecological activities — nursery establishment, tree planting, and community training — while SFC\'s $600,357 contribution funds Output 2.2: warehouse construction and the strengthening of women shea cooperatives. The project directly links climate mitigation, biodiversity restoration, and women\'s economic empowerment.',
+    achievements:[
+      'SFC commitment of $600,357 secured for cooperative infrastructure and training activities (Output 2.2)',
+      'A Rocha Ghana awarded up to $500,000 for parkland restoration (Outputs 2.1 and 2.2)',
+      '6 community-based nurseries to be established for shea and non-shea tree seedlings',
+      '297,461 shea trees targeted for planting (50% survivability) across Northern Ghana shea belt',
+      '40,894 non-shea trees targeted (80% survivability) for biodiversity enrichment',
+      '3,383 hectares of land targeted for fallow vegetation management to restore shea landscape',
+    ],
+  },
+  {
+    id:'hlo',
+    name:'Henry Lamotte Oils',
+    subtitle:'Clean Roasting Technology · Worker Health · Carbon Reduction',
+    partner:'Henry Lamotte Oils GmbH',
+    period:'2023 – 2024',
+    status:'completed',
+    region:'Jakpahi, Northern Ghana',
+    investment:'[ Confidential ]',
+    sdgs:[3,5,8,13,15],
+    accent:'#4C9F38',
+    tagline:'Four improved roasters replaced open-fire processing — eliminating smoke exposure, slashing CO₂ emissions by 80%, and ending firewood dependency through circular reuse of shea press cake.',
+    metrics:[
+      {v:'70%',l:'Particulate Matter Reduction',s:'improved health conditions for women'},
+      {v:'80%',l:'CO₂ Emissions Reduction',s:'per SDG 13 target achievement'},
+      {v:'90%',l:'Firewood Use Reduction',s:'shea press cake used as clean fuel'},
+      {v:'4',l:'Improved Roasters Installed',s:'Malbigahinda Cooperative, Jakpahi'},
+    ],
+    desc:'SFC and Henry Lamotte Oils GmbH partnered to upgrade the Malbigahinda Shea Processing Cooperative. Traditional open-fire roasting exposed women to heavy smoke, required large quantities of firewood — driving deforestation — and produced significant CO₂ emissions. Four improved closed roasting ovens replaced the old system, using shea press cake as fuel. This creates a circular economy within the value chain: a processing by-product becomes the energy source.',
+    achievements:[
+      '4 improved closed-chamber roasting ovens installed at the Jakpahi cooperative (August 2023)',
+      '1 tricycle provided to support raw material transport and cooperative logistics',
+      'Up to 70% reduction in particulate matter exposure — direct improvement in women\'s occupational health',
+      'Up to 80% reduction in CO₂ emissions from roasting operations — exceeding SDG 13 targets',
+      'Up to 90% reduction in firewood consumption — shea press cake repurposed as fuel (circular model)',
+      'Faster roasting cycles and improved shea butter quality reported by cooperative members',
+    ],
+  },
+];
+
+let activeProjectId = 'invest-jobs';
+
+function renderSDGBadge(num) {
+  const m = SDG_META[num];
+  if(!m) return '';
+  return '<div class="sdg-badge" style="background:'+m.color+'" title="SDG '+num+' — '+m.title+'">'
+    +'<div class="sdg-num">'+num+'</div>'
+    +'<div class="sdg-lbl">'+m.title+'</div>'
+    +'</div>';
+}
+
+function renderProject(id) {
+  const p = PROJECTS.find(function(x){ return x.id===id; });
+  if(!p) return;
+  activeProjectId = id;
+
+  // Update sidebar active state
+  document.querySelectorAll('.proj-card-item').forEach(function(el){
+    el.classList.toggle('active', el.dataset.proj===id);
+  });
+
+  const statusBadge = '<span class="proj-status '+p.status+'">'+(p.status==='active'?'Active':'Completed')+'</span>';
+
+  const metricsHTML = p.metrics.map(function(m){
+    return '<div class="proj-metric" style="border-top:3px solid '+p.accent+'">'
+      +'<div class="pm-val">'+m.v+'</div>'
+      +'<div class="pm-lbl">'+m.l+'</div>'
+      +'<div class="pm-sub">'+m.s+'</div>'
+      +'</div>';
+  }).join('');
+
+  const sdgHTML = p.sdgs.map(renderSDGBadge).join('');
+
+  const achHTML = p.achievements.map(function(a){
+    return '<li>'+a+'</li>';
+  }).join('');
+
+  const inner = document.getElementById('proj-detail-inner');
+  inner.style.setProperty('--proj-accent', p.accent);
+  inner.innerHTML = ''
+    // Header
+    +'<div class="proj-dh">'
+    +'<div>'
+    +'<div class="proj-dh-title">'+p.name+'</div>'
+    +'<div class="proj-dh-sub">'+p.subtitle+'</div>'
+    +'<div class="proj-dh-meta">'
+    +statusBadge
+    +'<span class="proj-dh-pill">'+p.period+'</span>'
+    +'<span class="proj-dh-pill">'+p.region+'</span>'
+    +'</div>'
+    +'<div style="margin-top:8px"><span class="proj-dh-invest">Investment: '+p.investment+'</span></div>'
+    +'</div>'
+    +'<div class="partner-logo-ph">'
+    +'<div class="ph-tag">Partner Logo</div>'
+    +'<div class="ph-name">'+p.partner+'</div>'
+    +'</div>'
+    +'</div>'
+    // Tagline
+    +'<div class="proj-tagline" style="border-left-color:'+p.accent+'">'+p.tagline+'</div>'
+    // SDG row
+    +'<div>'
+    +'<div class="sdg-row-label">Sustainable Development Goals</div>'
+    +'<div class="sdg-row">'+sdgHTML+'</div>'
+    +'</div>'
+    // Metrics
+    +'<div class="proj-metrics">'+metricsHTML+'</div>'
+    // Two-column content
+    +'<div class="proj-content">'
+    +'<div class="proj-box">'
+    +'<div class="proj-box-title">Project Overview</div>'
+    +'<div class="proj-desc">'+p.desc+'</div>'
+    +'</div>'
+    +'<div class="proj-box">'
+    +'<div class="proj-box-title">Key Achievements</div>'
+    +'<ul class="proj-ach-list" style="--proj-accent:'+p.accent+'">'+achHTML+'</ul>'
+    +'</div>'
+    +'</div>'
+    +'<div class="proj-footer">Data sourced from SFC project reports &middot; Partner logos to be added</div>';
+}
+
+function selectProject(id) { renderProject(id); }
+
+function openProjectsPanel() {
+  document.getElementById('projects-panel').classList.add('open');
+  renderProject(activeProjectId);
+}
+function closeProjectsPanel() {
+  document.getElementById('projects-panel').classList.remove('open');
+}
+
+document.getElementById('proj-btn').addEventListener('click', openProjectsPanel);
+document.getElementById('proj-close').addEventListener('click', closeProjectsPanel);
+document.getElementById('proj-dash-btn').addEventListener('click', function(){ closeProjectsPanel(); openDash(); });
+document.getElementById('dash-projects-btn').addEventListener('click', function(){ closeDash(); openProjectsPanel(); });
+
+// Render default project on load
+renderProject('invest-jobs');
 
 </script>
 </body>
