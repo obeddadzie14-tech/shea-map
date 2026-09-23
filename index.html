@@ -1186,8 +1186,8 @@ body{background:var(--dark);color:#111827}
       <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
       Dashboard
     </button>
-    <button class="glass-btn" id="impact-btn" style="border-color:rgba(245,158,11,.4);color:#fbbf24">
-      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.5a5.5 5.5 0 110 11 5.5 5.5 0 010-11zM7.25 4v4.75H12v-1.5H8.75V4h-1.5z"/></svg>
+    <button class="glass-btn sc-locked" id="impact-btn" title="Internal use only — staff sign-in required" style="border-color:rgba(245,158,11,.4);color:#fbbf24">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 7V5a3 3 0 016 0v2h.5A1.5 1.5 0 0113 8.5v5a1.5 1.5 0 01-1.5 1.5h-7A1.5 1.5 0 013 13.5v-5A1.5 1.5 0 014.5 7H5zm1.5 0h3V5a1.5 1.5 0 00-3 0v2z"/></svg>
       Scorecard
     </button>
     <button class="glass-btn" id="env-btn" style="border-color:rgba(22,163,74,.4);color:#4ade80">
@@ -1530,7 +1530,7 @@ body{background:var(--dark);color:#111827}
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="dash-close" id="dash-nitidae-btn" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.35);color:#10b981">Assess</button>
-      <button class="dash-close" id="dash-impact-btn" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">Scorecard</button>
+      <button class="dash-close sc-locked" id="dash-impact-btn" title="Internal use only — staff sign-in required" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24">&#128274; Scorecard</button>
       <button class="dash-close" id="dash-projects-btn" style="background:rgba(123,65,32,.1);border-color:rgba(123,65,32,.4);color:#7b4120">Projects</button>
       <button class="dash-close" id="dash-close">View Map</button>
     </div>
@@ -2054,6 +2054,49 @@ body{background:var(--dark);color:#111827}
 
 </div>
 
+<!-- Scorecard staff sign-in popup (internal use only) -->
+<div id="sc-lock" role="dialog" aria-modal="true" aria-labelledby="sc-lock-title">
+  <div class="scl-card">
+    <button class="scl-x" id="sc-lock-close" aria-label="Close">&times;</button>
+    <div class="scl-badge">&#128274; Internal use only</div>
+    <h2 id="sc-lock-title">SHEE Cooperative Scorecard</h2>
+    <p class="scl-lead">A restricted assessment tool for SFC field and sustainability staff.</p>
+    <ul class="scl-list">
+      <li><b>Assess cooperatives</b> across Social, Health, Economic and Environmental indicators.</li>
+      <li><b>Feeds the map live:</b> submitted assessments update centre performance ratings and the dashboard.</li>
+      <li><b>Controlled data:</b> scores, member records and assessor notes are not public.</li>
+    </ul>
+    <form id="sc-lock-form" autocomplete="on">
+      <label>Staff email<input type="email" id="sc-lock-email" placeholder="name@savannahfruits.com" required></label>
+      <label>Password<input type="password" id="sc-lock-pass" placeholder="••••••••" required></label>
+      <button type="submit" class="scl-btn">Sign in</button>
+      <p id="sc-lock-msg" class="scl-msg" hidden>Access is limited to authorised SFC staff accounts. Contact the SFC data team to request access.</p>
+    </form>
+    <p class="scl-foot">Public visitors can explore centre performance on the map and in the Dashboard.</p>
+  </div>
+</div>
+<style>
+#sc-lock{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);backdrop-filter:blur(6px)}
+#sc-lock.open{display:flex}
+.scl-card{position:relative;width:100%;max-width:420px;max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:16px;padding:28px 26px 22px;box-shadow:0 24px 60px rgba(0,0,0,.25);color:#111827;animation:sclIn .2s ease-out}
+@keyframes sclIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+.scl-x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:24px;line-height:1;color:#9ca3af;cursor:pointer}
+.scl-x:hover{color:#111827}
+.scl-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:999px;padding:4px 10px}
+#sc-lock h2{margin:12px 0 4px;font-size:20px}
+.scl-lead{margin:0 0 12px;font-size:13.5px;color:#4b5563}
+.scl-list{margin:0 0 18px;padding-left:18px;font-size:13px;line-height:1.55;color:#374151}
+.scl-list li{margin-bottom:4px}
+#sc-lock-form label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:10px}
+#sc-lock-form input{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font:inherit;font-size:14px;outline:none;box-sizing:border-box}
+#sc-lock-form input:focus{border-color:#8dc63f;box-shadow:0 0 0 3px rgba(141,198,63,.2)}
+.scl-btn{width:100%;margin-top:4px;padding:11px;border:0;border-radius:10px;background:#1a2744;color:#fff;font:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.scl-btn:hover{background:#24365e}
+.scl-msg{margin:10px 0 0;padding:9px 11px;font-size:12.5px;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:8px}
+.scl-foot{margin:14px 0 0;font-size:11.5px;color:#9ca3af;text-align:center}
+.sc-locked{opacity:.75}
+.sc-locked:hover{opacity:1}
+</style>
 <script src="lib/leaflet.js"></script>
 <script src="lib/chart.umd.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
@@ -3286,7 +3329,7 @@ function closeDash(){document.getElementById('dash').classList.remove('open');}
 
 document.getElementById('dash-btn').addEventListener('click',openDash);
 document.getElementById('dash-close').addEventListener('click',closeDash);
-document.getElementById('dash-impact-btn').addEventListener('click',()=>{closeDash();openImpact();});
+document.getElementById('dash-impact-btn').addEventListener('click',openScLock);
 
 // Open dashboard on page load instead of map
 openDash();
@@ -3398,7 +3441,23 @@ function buildDashCharts(){
 // ═══════════════════════════════════════════════════════════════════════
 function openImpact(){document.getElementById('impact').classList.add('open');shcInit();}
 function closeImpact(){document.getElementById('impact').classList.remove('open');}
-document.getElementById('impact-btn').addEventListener('click',openImpact);
+// Scorecard is internal-only: buttons open the staff sign-in popup instead of the tool
+function openScLock(){
+  const m=document.getElementById('sc-lock');
+  document.getElementById('sc-lock-msg').hidden=true;
+  m.classList.add('open');
+  setTimeout(()=>document.getElementById('sc-lock-email').focus(),50);
+}
+function closeScLock(){document.getElementById('sc-lock').classList.remove('open');}
+document.getElementById('impact-btn').addEventListener('click',openScLock);
+document.getElementById('sc-lock-close').addEventListener('click',closeScLock);
+document.getElementById('sc-lock').addEventListener('click',e=>{if(e.target.id==='sc-lock')closeScLock();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeScLock();});
+document.getElementById('sc-lock-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  document.getElementById('sc-lock-msg').hidden=false;
+  document.getElementById('sc-lock-pass').value='';
+});
 document.getElementById('impact-close').addEventListener('click',closeImpact);
 
 function openNitidae(){document.getElementById('nitidae').classList.add('open');}
