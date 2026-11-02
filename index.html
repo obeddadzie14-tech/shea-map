@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Shea R.I.S.E Dashboard</title>
+<title>Impact Dashboard</title>
 <!-- Open Graph / Link Preview -->
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://impact.savannahfruits.com"/>
@@ -1202,9 +1202,110 @@ body{color:var(--sfc-ink)}
 .exp-cta-btn{background:var(--sfc-gold);color:#000;font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500}
 .exp-cta-btn:hover{background:#e5a92c}
 
+/* ═══ ENTRY GATE — video cover + visitor details ═══ */
+#gate{position:fixed;inset:0;z-index:6000;background:#120d08;color:#fff;overflow:hidden;transition:opacity .6s ease,visibility .6s}
+#gate.gone{opacity:0;visibility:hidden;pointer-events:none}
+#gate video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#gate .g-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,13,8,.88) 0%,rgba(18,13,8,.6) 45%,rgba(18,13,8,.25) 100%),linear-gradient(0deg,rgba(18,13,8,.6) 0%,transparent 40%)}
+#gate .g-inner{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;padding:32px clamp(20px,6vw,96px);max-width:900px}
+#gate .g-logo{position:absolute;top:28px;left:clamp(20px,6vw,96px);height:64px;width:auto;filter:brightness(0) invert(1)}
+#gate .g-eyebrow{font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--sfc-gold);margin-bottom:14px}
+#gate h1{font-family:var(--head);font-weight:700;text-transform:uppercase;font-size:clamp(40px,7vw,92px);line-height:.95;letter-spacing:-.01em;margin:0 0 18px}
+#gate .g-lead{font-family:'Outfit',sans-serif;font-size:clamp(15px,1.4vw,18px);line-height:1.55;color:rgba(255,255,255,.85);max-width:560px;margin:0 0 30px}
+#gate .g-enter{align-self:flex-start;font-family:var(--head);font-weight:600;font-size:17px;letter-spacing:.06em;text-transform:uppercase;background:var(--sfc-gold);color:#000;border:0;border-radius:8px;padding:15px 34px;cursor:pointer;transition:transform .15s,background .15s}
+#gate .g-enter:hover{background:#ffcd5c;transform:translateY(-1px)}
+#gate .g-form{display:none;width:100%;max-width:420px;background:rgba(248,242,236,.97);color:var(--sfc-ink);border-radius:14px;padding:22px 22px 18px;box-shadow:0 24px 60px rgba(0,0,0,.4);animation:sclIn .25s ease-out}
+#gate.asking .g-enter{display:none}
+#gate.asking .g-form{display:block}
+#gate.asking h1{font-size:clamp(32px,4.2vw,54px);margin-bottom:16px}
+#gate.asking .g-lead{display:none}
+#gate .g-form h2{font-family:var(--head);text-transform:uppercase;font-size:20px;margin:0 0 4px;color:var(--sfc-brown)}
+#gate .g-form p{font-size:13px;color:#5b4a38;margin:0 0 14px}
+#gate .g-form label{display:block;font-size:12px;font-weight:600;color:#4a3b2b;margin-bottom:10px}
+#gate .g-form input{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1.5px solid #e3d6c6;border-radius:10px;font:inherit;font-size:14px;outline:none;background:#fff;box-sizing:border-box}
+#gate .g-form input:focus{border-color:var(--sfc-tan);box-shadow:0 0 0 3px rgba(171,126,74,.2)}
+#gate .g-form button{width:100%;margin-top:6px;padding:12px;border:0;border-radius:10px;background:var(--sfc-brown);color:#fff;font-family:var(--head);text-transform:uppercase;letter-spacing:.05em;font-size:15px;font-weight:500;cursor:pointer}
+#gate .g-form button:hover{background:var(--sfc-red)}
+#gate .g-form button:disabled{opacity:.6}
+#gate .g-small{font-size:11px;color:#8a7763;margin:10px 0 0;text-align:center}
+@media (max-width:640px){
+  #gate .g-shade{background:linear-gradient(0deg,rgba(18,13,8,.92) 0%,rgba(18,13,8,.55) 60%,rgba(18,13,8,.35) 100%)}
+  #gate .g-inner{justify-content:flex-end;padding-bottom:36px}
+  #gate .g-logo{height:48px;top:20px}
+}
+
 </style>
 </head>
 <body>
+
+<!-- ENTRY GATE: video cover; visitors leave name/email/organisation to enter -->
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <video autoplay muted loop playsinline preload="auto" poster="media/hero-poster.jpg">
+    <source src="media/hero.mp4" type="video/mp4">
+  </video>
+  <div class="g-shade"></div>
+  <img class="g-logo" src="sfc-logo.png" alt="The Savannah Fruits Company">
+  <div class="g-inner">
+    <div class="g-eyebrow">The Savannah Fruits Company · Northern Ghana</div>
+    <h1 id="gate-title">Impact<br>Dashboard</h1>
+    <p class="g-lead">Live sourcing, cooperative performance and community impact from our women-led post-harvest centres, traceable from parkland to shelf.</p>
+    <button type="button" class="g-enter" id="gate-enter">Enter Dashboard</button>
+    <form class="g-form" id="gate-form">
+      <h2>Before you enter</h2>
+      <p>Tell us who you are so we can follow up with you.</p>
+      <label>Full name<input type="text" name="name" required autocomplete="name"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      <label>Organisation<input type="text" name="organisation" required autocomplete="organization"></label>
+      <button type="submit" id="gate-go">View Dashboard</button>
+      <p class="g-small">Your details are only used by SFC to follow up on your visit.</p>
+    </form>
+  </div>
+</div>
+<script>
+// ── Lead emails (entry gate + expansion request) ─────────────────────────
+// Sent to obed@savannahfruits.com via Web3Forms ("Impact Dashboard" form in Obed's
+// Web3Forms account). FormSubmit (private inbox ID) is the fallback if the key is cleared.
+// Never waits more than 20 s.
+const FORMSUBMIT_ID='10c43bdcd8e7b55bf7039e9892222232';
+const WEB3FORMS_KEY='7cf4195e-4e9e-45ca-bba4-7307279d672e';
+async function sendLead(fields,subject){
+  const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),20000);
+  try{
+    const useW3=!!WEB3FORMS_KEY;
+    const url=useW3?'https://api.web3forms.com/submit':`https://formsubmit.co/ajax/${FORMSUBMIT_ID}`;
+    const body=useW3
+      ?{access_key:WEB3FORMS_KEY,subject,from_name:'SFC Impact Dashboard',replyto:fields.email,...fields}
+      :{...fields,_subject:subject,_replyto:fields.email,_template:'table',_captcha:'false'};
+    const r=await fetch(url,{method:'POST',signal:ctl.signal,headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||String(j.success)!=='true') throw new Error(j.message||'send failed');
+    return true;
+  }finally{clearTimeout(timer);}
+}
+
+// Entry gate: shown once per browser; visitor details are emailed to SFC
+(function(){
+  const gate=document.getElementById('gate'), KEY='sfcGateEntered';
+  let seen=false; try{seen=localStorage.getItem(KEY)==='1';}catch(e){}
+  if(seen){gate.remove();return;}
+  const vid=gate.querySelector('video');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) vid.removeAttribute('autoplay');
+  document.getElementById('gate-enter').addEventListener('click',()=>{
+    gate.classList.add('asking');
+    setTimeout(()=>gate.querySelector('input[name=name]').focus(),60);
+  });
+  document.getElementById('gate-form').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const d=Object.fromEntries(new FormData(e.target)), btn=document.getElementById('gate-go');
+    btn.disabled=true; btn.textContent='Opening…';
+    // Send in the background (max ~3 s wait) — never block entry on the email service
+    await Promise.race([sendLead(d,`Impact dashboard visitor — ${d.organisation}`).catch(()=>{}),new Promise(r=>setTimeout(r,3000))]);
+    try{localStorage.setItem(KEY,'1');}catch(e){}
+    gate.classList.add('gone');
+    setTimeout(()=>{vid.pause();gate.remove();},700);
+  });
+})();
+</script>
 
 <div id="map"></div>
 
@@ -1221,7 +1322,7 @@ body{color:var(--sfc-ink)}
 
 <!-- Header -->
 <div id="header">
-  <div class="brand"><div class="brand-dot"></div>Shea R.I.S.E Dashboard</div>
+  <div class="brand"><div class="brand-dot"></div>Impact Dashboard</div>
   <div class="sub">Post-Harvest Intelligence · Northern Ghana · 2023–24 &amp; 2025–26</div>
 </div>
 
@@ -1591,7 +1692,7 @@ body{color:var(--sfc-ink)}
     <div style="display:flex;align-items:center;gap:14px">
       <img src="sfc-logo.png" alt="SFC" style="height:52px;width:auto;flex-shrink:0">
       <div>
-        <div class="dash-title">Shea R.I.S.E Dashboard</div>
+        <div class="dash-title">Impact Dashboard</div>
         <div class="dash-subtitle">SFC Shea · Northern Ghana · 2023–24 vs 2025–26 · KG Focus</div>
       </div>
     </div>
@@ -1952,7 +2053,7 @@ body{color:var(--sfc-ink)}
     <!-- RIGHT: Results -->
     <div class="imp-results" id="imp-results-area">
       <div id="nit-print-header">
-        <div class="iph-title">SHEE Scorecard Report — Shea R.I.S.E Dashboard, Northern Ghana</div>
+        <div class="iph-title">SHEE Scorecard Report — Impact Dashboard, Northern Ghana</div>
         <div class="iph-meta">Social · Health · Economic · Environmental · Baseline vs Endline (SGG/SFC Project Data)</div>
         <div class="iph-inputs" id="iph-inputs-row"></div>
       </div>
@@ -3559,8 +3660,7 @@ document.getElementById('sc-lock-close').addEventListener('click',closeScLock);
 document.getElementById('sc-lock').addEventListener('click',e=>{if(e.target.id==='sc-lock')closeScLock();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeScLock();closeExpReq();}});
 
-// Expansion locations request: emails the requester's details to SFC via FormSubmit
-const EXP_REQ_ENDPOINT='https://formsubmit.co/ajax/obed@savannahfruits.com';
+// Expansion locations request: emails the requester's details to SFC (see sendLead)
 function openExpReq(){
   const m=document.getElementById('exp-req');
   document.getElementById('exp-req-msg').hidden=true;
@@ -3577,14 +3677,11 @@ document.getElementById('exp-req-form').addEventListener('submit',async e=>{
   const d=Object.fromEntries(new FormData(f));
   btn.disabled=true; btn.textContent='Sending…'; msg.hidden=true;
   try{
-    const r=await fetch(EXP_REQ_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-      body:JSON.stringify({...d,_subject:`Shea R.I.S.E. expansion locations request — ${d.organisation}`,_replyto:d.email,_template:'table',_captcha:'false'})});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok||String(j.success)!=='true') throw new Error(j.message||'send failed');
+    await sendLead(d,`Expansion locations request — ${d.organisation}`);
     msg.className='scl-msg ok'; msg.textContent='Thank you — your request has been sent. The SFC team will be in touch by email.';
     f.reset();
   }catch(err){
-    msg.className='scl-msg'; msg.textContent='Sorry, the request could not be sent. Please try again in a moment.';
+    msg.className='scl-msg'; msg.innerHTML='Sorry, the request could not be sent. Please email <a href="mailto:obed@savannahfruits.com">obed@savannahfruits.com</a> instead.';
   }
   msg.hidden=false; btn.disabled=false; btn.textContent='Send request';
 });
