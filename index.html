@@ -1283,14 +1283,16 @@ async function sendLead(fields,subject){
   }finally{clearTimeout(timer);}
 }
 
-// Entry gate: shown once per browser; visitor details are emailed to SFC
+// Entry gate: the video cover shows on every page load. Visitors fill in their details
+// once per browser (emailed to SFC); after that, Enter Dashboard goes straight in.
 (function(){
   const gate=document.getElementById('gate'), KEY='sfcGateEntered';
   let seen=false; try{seen=localStorage.getItem(KEY)==='1';}catch(e){}
-  if(seen){gate.remove();return;}
   const vid=gate.querySelector('video');
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) vid.removeAttribute('autoplay');
+  const enter=()=>{gate.classList.add('gone');setTimeout(()=>{vid.pause();gate.remove();},700);};
   document.getElementById('gate-enter').addEventListener('click',()=>{
+    if(seen){enter();return;}
     gate.classList.add('asking');
     setTimeout(()=>gate.querySelector('input[name=name]').focus(),60);
   });
@@ -1301,8 +1303,7 @@ async function sendLead(fields,subject){
     // Send in the background (max ~3 s wait) — never block entry on the email service
     await Promise.race([sendLead(d,`Impact dashboard visitor — ${d.organisation}`).catch(()=>{}),new Promise(r=>setTimeout(r,3000))]);
     try{localStorage.setItem(KEY,'1');}catch(e){}
-    gate.classList.add('gone');
-    setTimeout(()=>{vid.pause();gate.remove();},700);
+    enter();
   });
 })();
 </script>
