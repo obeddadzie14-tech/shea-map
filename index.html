@@ -1372,13 +1372,15 @@ async function sendLead(fields,subject){
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
   <div class="leg-section">Environmental (GFW / NASA)</div>
-  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#7f1d1d,#ef4444,#f97316);border-color:#ef4444"></div><span>Tree Cover Loss 2001–2023 (GFW)</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#7f1d1d,#ef4444,#f97316);border-color:#ef4444"></div><span>Tree Cover Loss 2001–2025 (GFW)</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:#e6488f;border-color:#c0306f"></div><span>Disturbance Alerts, 90 days (GFW)</span></div>
+  <div class="leg-row"><div class="leg-swatch" style="background:linear-gradient(90deg,#c8a96a,#9ccf6a,#2d7a2d);border-color:#5c8a3a"></div><span>Vegetation Health NDVI (NASA)</span></div>
   <div class="leg-row">
     <div style="display:flex;gap:3px;align-items:center">
       <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.7)"></div>
       <div style="width:10px;height:10px;border-radius:50%;background:#f97316;border:1.5px solid rgba(255,255,255,.7)"></div>
     </div>
-    <span>Active Fire (7d) · High / Nominal confidence</span>
+    <span>Active Fire (5d) · High / Nominal confidence</span>
   </div>
 </div>
 
@@ -1557,6 +1559,11 @@ async function sendLead(fields,subject){
         <div class="pg-cell"><div class="pg-lbl">Magazia</div><div class="pg-val" id="pp-mag">—</div></div>
         <div class="pg-cell"><div class="pg-lbl">Total Members</div><div class="pg-val" id="pp-mem">—</div></div>
         <div class="pg-cell"><div class="pg-lbl">Capacity</div><div class="pg-val" id="pp-cap">—</div></div>
+      </div>
+
+      <div class="sec-lbl">Climate · Last 30 Days <span style="font-weight:500;letter-spacing:0;text-transform:none;opacity:.8">— NASA POWER</span></div>
+      <div class="kpi-grid" id="p-climate" style="margin-bottom:16px">
+        <div class="kpi-tile span2"><div class="kt-sub">Loading NASA climate data…</div></div>
       </div>
 
       <div class="sec-lbl">Operational Insights</div>
@@ -1788,7 +1795,7 @@ async function sendLead(fields,subject){
       <div class="env-kpi">
         <div class="env-kv" id="ep-total">…</div>
         <div class="env-kl">Fire Alerts · Region</div>
-        <div class="env-ks">Northern Ghana · 7-day window</div>
+        <div class="env-ks">Northern Ghana · 5-day window</div>
       </div>
       <div class="env-kpi" style="border-color:rgba(239,68,68,.25)">
         <div class="env-kv" id="ep-near" style="color:#ef4444">…</div>
@@ -1816,11 +1823,11 @@ async function sendLead(fields,subject){
         <div class="env-explain-body">
           <div class="env-explain-item">
             <span class="env-dot red"></span>
-            <span><b>Fire Alerts (NASA FIRMS):</b> Savanna fires in Northern Ghana are a major seasonal threat to shea trees — especially Nov–Mar dry season. NASA's Suomi NPP satellite detects active fires daily via thermal imaging. Fires within 50 km of a collection centre may disrupt nut collection and damage regenerating trees.</span>
+            <span><b>Fire Alerts (NASA FIRMS):</b> Savanna fires in Northern Ghana are a major seasonal threat to shea trees — especially Nov–Mar dry season. NASA/NOAA's VIIRS satellites (NOAA-20 and NOAA-21) detect active fires daily via thermal imaging. Fires within 50 km of a collection centre may disrupt nut collection and damage regenerating trees.</span>
           </div>
           <div class="env-explain-item">
             <span class="env-dot green"></span>
-            <span><b>Tree Cover Loss (GFW Hansen):</b> Red/orange pixels mark where tree cover was removed between 2001 and 2023 — brighter orange = more recent loss (last 5 years), darker red = older clearing. In Northern Ghana this captures bush burning, charcoal cutting, and agricultural expansion that threaten shea tree regeneration. Dense clusters near collection centres indicate high deforestation pressure on shea habitat.</span>
+            <span><b>Tree Cover Loss (GFW Hansen):</b> Red/orange pixels mark where tree cover was removed between 2001 and 2025 — brighter orange = more recent loss (last 5 years), darker red = older clearing. In Northern Ghana this captures bush burning, charcoal cutting, and agricultural expansion that threaten shea tree regeneration. Dense clusters near collection centres indicate high deforestation pressure on shea habitat.</span>
           </div>
           <div class="env-explain-item">
             <span class="env-dot amber"></span>
@@ -1828,7 +1835,7 @@ async function sendLead(fields,subject){
           </div>
           <div class="env-explain-item">
             <span class="env-dot" style="background:#60a5fa"></span>
-            <span><b>Data refresh:</b> Fire data is updated daily from NASA FIRMS (Near Real-Time). Tree cover data reflects the Hansen GFW v1.10 dataset (2000–2023). Toggle both layers via the map controls at bottom-left.</span>
+            <span><b>Data refresh:</b> Fire data is updated daily from NASA FIRMS (Near Real-Time). Tree cover data reflects the Hansen GFC v1.13 dataset (2000–2025). Toggle both layers via the map controls at bottom-left.</span>
           </div>
         </div>
         <!-- Layer toggles -->
@@ -1836,11 +1843,11 @@ async function sendLead(fields,subject){
           <div style="font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(17,24,39,.4);margin-bottom:6px">Map Layers</div>
           <div class="env-layer-toggle" id="env-toggle-canopy" onclick="toggleEnvLayer('canopy')">
             <div style="width:14px;height:14px;border-radius:3px;background:linear-gradient(135deg,#991b1b,#f97316);flex-shrink:0"></div>
-            Tree Cover Loss 2001–2023 (GFW Hansen v1.10)
+            Tree Cover Loss 2001–2025 (GFW Hansen v1.13)
           </div>
           <div class="env-layer-toggle" style="margin-top:6px" id="env-toggle-fire" onclick="toggleEnvLayer('fire')">
             <div style="width:14px;height:14px;border-radius:50%;background:#ef4444;border:1.5px solid rgba(255,255,255,.5);flex-shrink:0"></div>
-            Active Fire Alerts — 7-day rolling (NASA FIRMS)
+            Active Fire Alerts — 5-day rolling (NASA FIRMS)
           </div>
           <button onclick="closeEnvPanel()" style="margin-top:12px;width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(22,163,74,.4);background:rgba(22,163,74,.1);color:#15803d;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
             <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3.5 7.5h-5.29l2.15-2.15-1.06-1.06L4 7.5l-.75.75.75.75 3.25 3.25 1.06-1.06-2.15-2.19H11.5v-1.5z"/></svg>
@@ -1852,7 +1859,7 @@ async function sendLead(fields,subject){
       <!-- Right: fire table -->
       <div class="env-table-card">
         <div class="cc-title">Active Fire Alerts — by Proximity to Shea Centres</div>
-        <div class="cc-sub">Source: NASA FIRMS VIIRS NRT · Suomi NPP · 7-day rolling · Updated daily · Showing top 25 by proximity</div>
+        <div class="cc-sub">Source: NASA FIRMS VIIRS NRT · NOAA-20 / NOAA-21 · 5-day rolling · Updated daily · Showing top 25 by proximity</div>
         <div class="env-table-scroll">
           <table class="env-fire-table">
             <thead>
@@ -1876,7 +1883,7 @@ async function sendLead(fields,subject){
     <!-- Data credits -->
     <div class="env-credits">
       Data: <a href="https://www.globalforestwatch.org" target="_blank">Global Forest Watch</a> (Hansen/UMD/Google/USGS/NASA) &nbsp;·&nbsp;
-      <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> (VIIRS NRT C2) &nbsp;·&nbsp; Tree cover 2000–2023 · Fire alerts updated daily
+      <a href="https://firms.modaps.eosdis.nasa.gov" target="_blank">NASA FIRMS</a> (VIIRS NRT C2) &nbsp;·&nbsp; Tree cover 2000–2025 · Fire alerts updated daily
     </div>
 
   </div>
@@ -2759,24 +2766,47 @@ const lgDistricts   = L.layerGroup();
 const lgCollection  = L.layerGroup().addTo(map);
 
 // ══════════════════════════════════════════════════════════════════════════
-//  ENVIRONMENTAL MONITORING — GFW Tree Cover + NASA FIRMS Fire Alerts
-//  · Hansen v1.10 loss_year tiles: year of tree loss (red=old, orange=recent)
-//  · NASA FIRMS VIIRS NRT: 7-day active fire alerts, West Africa
-//  · Fetch chain: direct → corsproxy.io → allorigins fallback
+//  ENVIRONMENTAL MONITORING — institutional data sources only
+//  · Hansen GFC v1.13 (UMD/Google, used by Global Forest Watch): tree cover loss 2001–2025
+//  · GFW DIST-ALERT (UMD GLAD lab): vegetation disturbance alerts, updated daily, rolling 90 days
+//  · NASA GIBS MODIS Terra NDVI 8-day: vegetation health (latest composite)
+//  · NASA FIRMS VIIRS NRT (Area API): 5-day active fire alerts, Northern Ghana
+//  · Fetched directly from the FIRMS Area API with a free MAP_KEY
 //  · Proximity: haversine distance fire→nearest shea centre
 // ══════════════════════════════════════════════════════════════════════════
 const lgTreeLoss  = L.layerGroup();
 const lgFireAlert = L.layerGroup();
 
-// ── Tree cover LOSS — Hansen loss_year (year of loss 2001–2023, red/orange) ──
+// ── Tree cover LOSS — Hansen loss_year (year of loss 2001–2025, red/orange) ──
 // Each pixel = year a tree-covered cell was cleared. Color: bright = recent.
 // Visible in savanna because ANY clearing event (burning, charcoal, farm
 // expansion) shows up as a coloured pixel regardless of base cover density.
 L.tileLayer(
-  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.10/loss_year/{z}/{x}/{y}.png',
-  {opacity:0.9, maxZoom:12,
-   attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA'}
+  'https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.13/loss_year/{z}/{x}/{y}.png',
+  {opacity:0.9, maxZoom:19, maxNativeZoom:12,
+   attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> · Hansen/UMD/Google/USGS/NASA GFC v1.13'}
 ).addTo(lgTreeLoss);
+
+// ── Vegetation disturbance alerts — GFW DIST-ALERT (UMD GLAD), rolling 90 days ──
+// Near-real-time, all land cover types (incl. savanna); GFW's standard pink rendering.
+const lgDistAlert = L.layerGroup();
+const DIST_DAYS = 90;
+(function(){
+  const iso=d=>d.toISOString().slice(0,10), end=new Date(), start=new Date(Date.now()-DIST_DAYS*864e5);
+  L.tileLayer(
+    `https://tiles.globalforestwatch.org/umd_glad_dist_alerts/latest/dynamic/{z}/{x}/{y}.png?start_date=${iso(start)}&end_date=${iso(end)}&render_type=true_color`,
+    {opacity:0.95, maxZoom:19, maxNativeZoom:12,
+     attribution:'<a href="https://www.globalforestwatch.org" target="_blank">GFW</a> DIST-ALERT · UMD GLAD'}
+  ).addTo(lgDistAlert);
+})();
+
+// ── Vegetation health — NASA GIBS MODIS Terra NDVI, latest 8-day composite ──
+const lgNDVI = L.layerGroup();
+L.tileLayer(
+  'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_NDVI_8Day/default/default/GoogleMapsCompatible_Level9/{z}/{y}/{x}.png',
+  {opacity:0.75, maxZoom:19, maxNativeZoom:9,
+   attribution:'<a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> · MODIS Terra NDVI'}
+).addTo(lgNDVI);
 
 // ── Haversine distance in km ────────────────────────────────────────────
 function hvDist(lat1,lng1,lat2,lng2){
@@ -2789,17 +2819,25 @@ function hvDist(lat1,lng1,lat2,lng2){
 // ── Fire data store (populated after fetch) ────────────────────────────
 let gfwFireAlerts=[];
 
-// ── Fetch FIRMS CSV with 3-tier fallback ───────────────────────────────
+// ── Fetch fires from the NASA FIRMS Area API (free MAP_KEY, CORS-enabled) ─────
+// VIIRS on NOAA-20 + NOAA-21, Northern Ghana box, last 5 days (API maximum).
+const FIRMS_MAP_KEY='748ef7a63ca3a0041a867f50755e9a30';
+const FIRMS_DAYS=5;
+let firmsLoaded=false;
 function loadFIRMS(){
-  const CSV='https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_West_and_Central_Africa_7d.csv';
-  const P1='https://corsproxy.io/?'+encodeURIComponent(CSV);
-  const P2='https://api.allorigins.win/raw?url='+encodeURIComponent(CSV);
-  fetch(CSV)
-    .catch(()=>fetch(P1))
-    .catch(()=>fetch(P2))
-    .then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.text();})
-    .then(parseFIRMS)
-    .catch(()=>{ parseFIRMS(null); });
+  const bbox='-3.5,8,1,11.5';
+  const url=src=>`https://firms.modaps.eosdis.nasa.gov/api/area/csv/${FIRMS_MAP_KEY}/${src}/${bbox}/${FIRMS_DAYS}`;
+  const get=src=>fetch(url(src)).then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.text();})
+    .then(t=>{if(!/^latitude,/.test(t)) throw new Error(t.slice(0,80)); return t;});
+  Promise.allSettled([get('VIIRS_NOAA20_NRT'),get('VIIRS_NOAA21_NRT')]).then(res=>{
+    const ok=res.filter(r=>r.status==='fulfilled').map(r=>r.value);
+    if(!ok.length){ console.warn('FIRMS unavailable',res); parseFIRMS(null); return; }
+    firmsLoaded=true;
+    // merge: one header + data rows from each satellite
+    const [head,...rest]=ok[0].trim().split('\n');
+    const rows=[head,...rest,...ok.slice(1).flatMap(t=>t.trim().split('\n').slice(1))];
+    parseFIRMS(rows.join('\n'));
+  });
 }
 
 function parseFIRMS(csv){
@@ -2843,7 +2881,7 @@ function parseFIRMS(csv){
       fillColor:isHigh?'#ef4444':'#f97316',
       color:'rgba(255,255,255,.6)',weight:1.5,fillOpacity:.9
     }).bindTooltip(
-      `<b>🔥 Active Fire Alert</b><br>Date: ${f.date}<br>Confidence: ${isHigh?'High':'Nominal'}<br>Nearest centre: ${f.nearest?f.nearest.name:'—'} (${f.dist} km)${f.frp>0?'<br>Fire power: '+f.frp.toFixed(1)+' MW':''}`,
+      `<b>🔥 Active Fire Alert</b><br>Date: ${f.date}<br>Confidence: ${isHigh?'High':'Nominal'}<br>Nearest centre: ${f.nearest?f.nearest.centerName:'—'} (${f.dist} km)${f.frp>0?'<br>Fire power: '+f.frp.toFixed(1)+' MW':''}`,
       {className:'zone-tip',sticky:true}
     ).addTo(lgFireAlert);
   });
@@ -2860,7 +2898,7 @@ function updateEnvUI(fires){
   const fsEl=document.getElementById('env-fire-sub');
   if(fcEl) fcEl.textContent=near50>0?near50:fires.length>0?'✓ 0':'—';
   if(fsEl){
-    if(fires.length===0) fsEl.textContent='Fire data unavailable · Click for details';
+    if(fires.length===0) fsEl.textContent=firmsLoaded?'No active fires in the last '+FIRMS_DAYS+' days':'Fire data unavailable · Click for details';
     else if(near50===0) fsEl.textContent='No fires within 50 km · '+fires.length+' in region';
     else fsEl.textContent=near50+' within 50 km · Click for details';
   }
@@ -2869,11 +2907,11 @@ function updateEnvUI(fires){
   const epn=document.getElementById('ep-near');
   const eph=document.getElementById('ep-high');
   const eps=document.getElementById('ep-status');
-  if(ept) ept.textContent=fires.length||'—';
+  if(ept) ept.textContent=fires.length||(firmsLoaded?'0':'—');
   if(epn) epn.textContent=near50;
   if(eph) eph.textContent=high;
   if(eps){
-    if(fires.length===0) eps.textContent='No data';
+    if(fires.length===0){eps.textContent=firmsLoaded?'✓ Clear':'No data';if(firmsLoaded)eps.style.color='#16a34a';}
     else if(near25>0){eps.textContent='⚠ High Risk';eps.style.color='#ef4444';}
     else if(near50>0){eps.textContent='⚡ Monitor';eps.style.color='#f59e0b';}
     else{eps.textContent='✓ Clear';eps.style.color='#16a34a';}
@@ -2882,7 +2920,7 @@ function updateEnvUI(fires){
   const tbody=document.getElementById('env-fire-tbody');
   if(!tbody) return;
   if(fires.length===0){
-    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;opacity:.45;font-size:11px">Fire data unavailable — CORS blocked or no active fires detected in the region</td></tr>';
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;opacity:.45;font-size:11px">'+(firmsLoaded?'No active fires detected in Northern Ghana in the last '+FIRMS_DAYS+' days':'Fire data unavailable — NASA FIRMS could not be reached')+'</td></tr>';
     return;
   }
   const top=fires.slice(0,25);
@@ -2892,7 +2930,7 @@ function updateEnvUI(fires){
     return '<tr>'
       +'<td><span class="fire-conf '+(isH?'fire-high':'fire-nom')+'">'+(isH?'HIGH':'NOM')+'</span></td>'
       +'<td style="font-size:10.5px;color:rgba(17,24,39,.7)">'+f.date+'</td>'
-      +'<td style="font-size:10.5px">'+( f.nearest?f.nearest.name:'—')+'</td>'
+      +'<td style="font-size:10.5px">'+( f.nearest?f.nearest.centerName:'—')+'</td>'
       +'<td><span class="fire-dist '+distCls+'">'+f.dist+' km</span></td>'
       +'<td style="font-size:10px;color:rgba(17,24,39,.5)">'+(f.frp>0?f.frp.toFixed(0)+' MW':'—')+'</td>'
       +'</tr>';
@@ -2921,7 +2959,11 @@ loadFIRMS();
 // Layer control — bottomleft, always expanded
 L.control.layers(
   {'Street':topo,'Satellite':satellite,'Terrain':terrain},
-  {'Collection Areas':lgCollection,'Tree Cover Loss 2001-2023 (GFW)':lgTreeLoss,'Active Fires — 7d (NASA)':lgFireAlert},
+  {'Collection Areas':lgCollection,
+   'Tree Cover Loss 2001-2025 (GFW)':lgTreeLoss,
+   'Disturbance Alerts — 90d (GFW)':lgDistAlert,
+   'Active Fires — 5d (NASA)':lgFireAlert,
+   'Vegetation Health NDVI (NASA)':lgNDVI},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
 
@@ -3465,6 +3507,39 @@ function renderPanel(c){
     `<div class="ins-row"><div class="ins-ic ${i.t}">${{good:'+',warn:'!',bad:'x'}[i.t]}</div><span class="ins-txt">${i.x}</span></div>`
   ).join('');
   document.getElementById('p-highlight').textContent=c.highlight||'—';
+  renderClimate(c);
+}
+
+// ── Centre climate — NASA POWER (Langley Research Center), Agroclimatology ──
+// Daily satellite/reanalysis-based rainfall & temperature at the centre's location.
+// POWER lags ~2–4 days, so the window ends 3 days ago; missing days (-999) are skipped.
+const climateCache={};
+function renderClimate(c){
+  const el=document.getElementById('p-climate'); if(!el) return;
+  const tile=(lbl,val,sub)=>`<div class="kpi-tile"><div class="kt-lbl">${lbl}</div><div class="kt-val">${val}</div><div class="kt-sub">${sub}</div></div>`;
+  const draw=d=>{
+    if(!d){el.innerHTML='<div class="kpi-tile span2"><div class="kt-sub">NASA POWER climate data unavailable right now.</div></div>';return;}
+    el.innerHTML=tile('Rainfall',`${d.rain.toFixed(0)} mm`,`${d.rainDays} rain days · ${d.from} – ${d.to}`)
+      +tile('Avg Max Temp',`${d.tmax.toFixed(1)}°C`,`Peak ${d.tpeak.toFixed(1)}°C`)
+      +`<div class="kpi-tile span2" style="padding:8px 12px"><div class="kt-sub">Source: <a href="https://power.larc.nasa.gov" target="_blank" rel="noopener">NASA POWER</a> daily agroclimatology at ${c.lat.toFixed(3)}°N, ${Math.abs(c.lng).toFixed(3)}°W</div></div>`;
+  };
+  if(c.id in climateCache){draw(climateCache[c.id]);return;}
+  el.innerHTML='<div class="kpi-tile span2"><div class="kt-sub">Loading NASA climate data…</div></div>';
+  const ymd=d=>d.toISOString().slice(0,10).replace(/-/g,'');
+  const end=new Date(Date.now()-3*864e5), start=new Date(end.getTime()-29*864e5);
+  fetch(`https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M_MAX&community=AG&latitude=${c.lat}&longitude=${c.lng}&start=${ymd(start)}&end=${ymd(end)}&format=JSON`)
+    .then(r=>{if(!r.ok) throw new Error(r.status); return r.json();})
+    .then(j=>{
+      const P=j.properties.parameter, days=Object.keys(P.PRECTOTCORR).filter(k=>P.PRECTOTCORR[k]>-900&&P.T2M_MAX[k]>-900);
+      if(!days.length) throw new Error('no data');
+      const rain=days.map(k=>P.PRECTOTCORR[k]), tmax=days.map(k=>P.T2M_MAX[k]);
+      const fmt=k=>new Date(+k.slice(0,4),+k.slice(4,6)-1,+k.slice(6)).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      return {rain:rain.reduce((a,b)=>a+b,0), rainDays:rain.filter(v=>v>=1).length,
+              tmax:tmax.reduce((a,b)=>a+b,0)/tmax.length, tpeak:Math.max(...tmax),
+              from:fmt(days[0]), to:fmt(days[days.length-1])};
+    })
+    .catch(()=>null)
+    .then(d=>{ if(d) climateCache[c.id]=d; if(activeC===c) draw(d); });
 }
 
 function setVal(id,v){
