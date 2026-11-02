@@ -18,6 +18,9 @@
 <meta name="twitter:image" content="https://impact.savannahfruits.com/og-image.png"/>
 <link rel="preconnect" href="https://server.arcgisonline.com"/>
 <link rel="preconnect" href="https://drive.google.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"/>
 <link rel="stylesheet" href="lib/leaflet.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -1141,6 +1144,63 @@ body{background:var(--dark);color:#111827}
 .proj-gallery-caption{font-size:9px;color:rgba(17,24,39,.35);text-align:right;
   letter-spacing:.04em;padding:2px 2px 0}
 
+/* ═══════════════════════════════════════════════════════════════════════
+   SFC BRAND LAYER — matches savannahfruits.com
+   Oswald (uppercase headings) · Outfit (body/UI) · earth palette
+   Data colours (green = high, red = low performance) are left untouched.
+   ═══════════════════════════════════════════════════════════════════════ */
+:root{
+  --sfc-red:#9d2d20;--sfc-brown:#775024;--sfc-tan:#ab7e4a;--sfc-sand:#d6b78f;
+  --sfc-cream:#f8f2ec;--sfc-gold:#f5bd41;--sfc-ink:#1f1a14;
+  --glass:rgba(248,242,236,.95);--border:rgba(119,80,36,.16);
+  --head:'Oswald','Arial Narrow',sans-serif
+}
+html,body{font-family:'Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{color:var(--sfc-ink)}
+
+/* Headings & big numbers → Oswald */
+#header .brand,.hero-title h2,.dash-title,.imp-title,.nit-title,.proj-dh-title,
+#sc-lock h2,#exp-req h2,.exp-cta-t{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;font-weight:700}
+#header .brand{font-size:15px;color:var(--sfc-ink)}
+.brand-dot{background:var(--sfc-gold);box-shadow:0 0 6px var(--sfc-gold)}
+.dash-title{color:var(--sfc-red)}
+.hero-title h2{color:var(--sfc-ink)}
+.dv,.kt-val,.s-pill strong{font-family:var(--head);font-weight:600;letter-spacing:0}
+.s-pill strong{color:var(--sfc-red)}
+
+/* Small caps labels → brand tan */
+.sec-lbl,#legend h3,.leg-section,.shc-card-title,.leaflet-control-layers-subgroup-name{color:var(--sfc-tan)!important}
+
+/* Map buttons (filters + panel nav) */
+.glass-btn{font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:11.5px;font-weight:600;color:var(--sfc-brown)!important;border-color:rgba(119,80,36,.28)!important}
+.glass-btn:hover{background:rgba(214,183,143,.35)}
+.glass-btn.active-filter{background:var(--sfc-brown)!important;border-color:var(--sfc-brown)!important;color:var(--sfc-cream)!important}
+.glass-btn.sc-locked{opacity:.7}
+
+/* Search, layers, zoom */
+.sr-item:hover{background:rgba(214,183,143,.25)}
+.sr-name b{color:var(--sfc-red)}
+.leaflet-control-layers-list input{accent-color:var(--sfc-brown)}
+.leaflet-bar a,.leaflet-bar a:hover{background:var(--sfc-cream);color:var(--sfc-brown);border-color:rgba(119,80,36,.16)}
+.n-arrow{border-bottom-color:var(--sfc-brown)}
+
+/* Side panels */
+.panel-hero{border-bottom-color:var(--sfc-sand)}
+
+/* Dashboard */
+#dash{background:var(--sfc-cream)}
+.dash-header{background:var(--sfc-cream);border-bottom:3px solid var(--sfc-sand)}
+.dash-header .dash-close{font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500;background:transparent!important;border:1.5px solid var(--sfc-tan)!important;color:var(--sfc-brown)!important;border-radius:8px}
+.dash-header .dash-close:hover{background:rgba(214,183,143,.35)!important}
+.dash-header #dash-close{background:var(--sfc-gold)!important;border-color:var(--sfc-gold)!important;color:#000!important}
+
+/* Popups */
+.scl-btn{background:var(--sfc-brown);font-family:var(--head);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.scl-btn:hover{background:var(--sfc-red)}
+.exp-cta{background:var(--sfc-cream);border-color:var(--sfc-sand)}
+.exp-cta-t{color:var(--sfc-brown)}
+.exp-cta-btn{background:var(--sfc-gold);color:#000;font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500}
+.exp-cta-btn:hover{background:#e5a92c}
 
 </style>
 </head>
@@ -1207,7 +1267,6 @@ body{background:var(--dark);color:#111827}
   <div class="leg-section">Centre Performance</div>
   <div class="leg-row"><div class="leg-pip" style="background:#22c55e"></div><span>High Performance Centre</span></div>
   <div class="leg-row"><div class="leg-pip" style="background:#ef4444"></div><span>Low Performance Centre</span></div>
-  <div class="leg-row"><div class="leg-pip" style="background:#f59e0b"></div><span>Planned Expansion Site</span></div>
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
   <div class="leg-section">Environmental (GFW / NASA)</div>
@@ -1434,6 +1493,14 @@ body{background:var(--dark);color:#111827}
 
   <div class="panel-body" style="padding:16px 18px">
 
+    <div class="exp-cta">
+      <div>
+        <div class="exp-cta-t">Planned sites &amp; districts</div>
+        <div class="exp-cta-s">Site locations are shared on request with partners and investors.</div>
+      </div>
+      <button type="button" class="exp-cta-btn" id="exp-req-open">View locations &amp; districts</button>
+    </div>
+
     <div class="sec-lbl" style="margin-top:4px">Investment Case — Per Centre</div>
     <div class="kpi-grid" style="margin-bottom:16px">
       <div class="kpi-tile">
@@ -1558,7 +1625,7 @@ body{background:var(--dark);color:#111827}
     <div class="charts-flex">
       <div class="cc">
         <div class="cc-title">FN Volume by Cooperative — 2023/24 vs 2025/26 (kg)</div>
-        <div class="cc-sub">Fresh Nuts purchased · 1 bag = 85 kg · Green = 2025/26 · Indigo = 2023/24</div>
+        <div class="cc-sub">Fresh Nuts purchased · 1 bag = 85 kg · Red = 2025/26 · Sand = 2023/24</div>
         <canvas id="ch-compare"></canvas>
       </div>
       <div class="right-col">
@@ -2075,9 +2142,37 @@ body{background:var(--dark);color:#111827}
     <p class="scl-foot">Public visitors can explore centre performance on the map and in the Dashboard.</p>
   </div>
 </div>
+<!-- Expansion locations request popup -->
+<div id="exp-req" role="dialog" aria-modal="true" aria-labelledby="exp-req-title">
+  <div class="scl-card">
+    <button class="scl-x" id="exp-req-close" aria-label="Close">&times;</button>
+    <div class="scl-badge">Request access</div>
+    <h2 id="exp-req-title">Expansion sites &amp; districts</h2>
+    <p class="scl-lead">Locations of the 80 planned Shea R.I.S.E. centres are shared with partners, funders and investors. Leave your details and the SFC team will be in touch.</p>
+    <form id="exp-req-form">
+      <label>Full name<input type="text" name="name" required autocomplete="name"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      <label>Organisation<input type="text" name="organisation" required autocomplete="organization"></label>
+      <button type="submit" class="scl-btn" id="exp-req-send">Send request</button>
+      <p id="exp-req-msg" class="scl-msg" hidden></p>
+    </form>
+    <p class="scl-foot">Your details are only used to respond to this request.</p>
+  </div>
+</div>
 <style>
-#sc-lock{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);backdrop-filter:blur(6px)}
-#sc-lock.open{display:flex}
+#sc-lock,#exp-req{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,.45);backdrop-filter:blur(6px)}
+#sc-lock.open,#exp-req.open{display:flex}
+#exp-req h2{margin:12px 0 4px;font-size:20px}
+#exp-req-form label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:10px}
+#exp-req-form input{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font:inherit;font-size:14px;outline:none;box-sizing:border-box}
+#exp-req-form input:focus{border-color:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2)}
+#exp-req-send:disabled{opacity:.6;cursor:default}
+.scl-msg.ok{color:#166534;background:#f0fdf4;border-color:#bbf7d0}
+.exp-cta{display:flex;flex-direction:column;gap:10px;margin:0 0 18px;padding:14px;border:1px solid #fcd34d;background:#fffbeb;border-radius:12px}
+.exp-cta-t{font-size:13.5px;font-weight:700;color:#92400e}
+.exp-cta-s{font-size:12px;color:#78350f;opacity:.8;margin-top:2px}
+.exp-cta-btn{padding:10px 14px;border:0;border-radius:10px;background:#f59e0b;color:#fff;font:inherit;font-weight:600;font-size:13.5px;cursor:pointer}
+.exp-cta-btn:hover{background:#d97706}
 .scl-card{position:relative;width:100%;max-width:420px;max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:16px;padding:28px 26px 22px;box-shadow:0 24px 60px rgba(0,0,0,.25);color:#111827;animation:sclIn .2s ease-out}
 @keyframes sclIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
 .scl-x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:24px;line-height:1;color:#9ca3af;cursor:pointer}
@@ -2521,12 +2616,19 @@ const DATA_2526 = [
 // ═══════════════════════════════════════════════════════════════════════
 //  MAP INIT — multi-layer professional setup
 // ═══════════════════════════════════════════════════════════════════════
-const topo = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-  {maxZoom:19,attribution:'Tiles &copy; Esri &mdash; Source: Esri, HERE, Garmin, USGS, OpenStreetMap contributors'}
+// "Street" view: Esri light grey canvas — roads are faint so centre dots stand out,
+// with Esri's place-name labels drawn on top
+const topoBase = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+  {maxZoom:19,maxNativeZoom:16,attribution:'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, OpenStreetMap contributors'}
 );
-// Backup: if an Esri street tile fails to load, fetch the same tile from OpenStreetMap
-topo.on('tileerror', e => {
+const topoLabels = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+  {maxZoom:19,maxNativeZoom:16}
+);
+const topo = L.layerGroup([topoBase, topoLabels]);
+// Backup: if an Esri base tile fails to load, fetch the same tile from OpenStreetMap
+topoBase.on('tileerror', e => {
   const t = e.tile, c = e.coords;
   if (t.dataset.osm) return;
   t.dataset.osm = '1';
@@ -2884,8 +2986,8 @@ const PERF_GLOW={high:"rgba(34,197,94,.45)",low:"rgba(239,68,68,.45)",expansion:
 
 function mkIcon(perf,sel){
   const c=PERF_CLR[perf]||PERF_CLR.low,g=PERF_GLOW[perf]||PERF_GLOW.low;
-  const sz=sel?20:13,bw=sel?3:2;
-  const sh=sel?`0 0 0 4px ${g},0 3px 10px rgba(0,0,0,.3)`:`0 1px 5px rgba(0,0,0,.28)`;
+  const sz=sel?20:15,bw=sel?3:2.5;
+  const sh=sel?`0 0 0 4px ${g},0 3px 10px rgba(0,0,0,.3)`:`0 0 0 1px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.4)`;
   return L.divIcon({
     html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${c};border:${bw}px solid #fff;box-shadow:${sh};transition:all .22s cubic-bezier(.16,1,.3,1);cursor:pointer"></div>`,
     className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
@@ -3009,8 +3111,8 @@ const EXPANSION_SITES=[
 ];
 
 const expIcon=L.divIcon({
-  html:`<div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);cursor:pointer"></div>`,
-  className:'',iconSize:[10,10],iconAnchor:[5,5]
+  html:`<div style="width:12px;height:12px;border-radius:50%;background:#f59e0b;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.18),0 2px 5px rgba(0,0,0,.35);cursor:pointer"></div>`,
+  className:'',iconSize:[12,12],iconAnchor:[6,6]
 });
 
 function openExpPanel(s){
@@ -3019,8 +3121,8 @@ function openExpPanel(s){
   // populate
   document.getElementById('ep-name').textContent=s.name;
   const isProgramme=s.name==='Ghana Expansion Programme';
-  document.getElementById('ep-district').textContent=isProgramme?'80 planned sites across 5 districts · Ghana':s.district+' District · Ghana';
-  document.getElementById('ep-coords').textContent=isProgramme?'Gushegu · Bole · Bimbilla · Sawla-Tuna-Kalba · Central Gonja':s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
+  document.getElementById('ep-district').textContent=isProgramme?'80 planned sites · Northern Ghana':s.district+' District · Ghana';
+  document.getElementById('ep-coords').textContent=isProgramme?'Locations available on request':s.lat.toFixed(4)+'°N  '+Math.abs(s.lng).toFixed(4)+'°W';
   // open
   document.getElementById('exp-panel').classList.add('open');
   document.getElementById('map').classList.add('panel-open');
@@ -3036,8 +3138,11 @@ function closeExpPanel(){
 
 document.getElementById('exp-panel-close').addEventListener('click',closeExpPanel);
 
+// Expansion sites are kept off the public map for now — locations are shared on request
+// (see "View locations & districts" in the expansion panel)
+const SHOW_EXPANSION_SITES=false;
 const expMarkers=[];
-EXPANSION_SITES.forEach(s=>{
+if(SHOW_EXPANSION_SITES) EXPANSION_SITES.forEach(s=>{
   const mk=L.marker([s.lat,s.lng],{icon:expIcon,interactive:true}).addTo(map);
   mk.bindTooltip(`<b>${s.name}</b> · ${s.district}`,{direction:'top',offset:[0,-7],className:'zone-tip'});
   mk.on('click',e=>{
@@ -3351,13 +3456,13 @@ function buildDashCharts(){
         {
           label:'2023–24 FN (kg)',
           data:DATA_2324.map(d=>d.kg),
-          backgroundColor:'rgba(99,102,241,.7)',
+          backgroundColor:'rgba(214,183,143,.9)',
           borderRadius:3,borderSkipped:false
         },
         {
           label:'2025–26 FN (kg)',
           data:d2526vals,
-          backgroundColor:'rgba(34,197,94,.75)',
+          backgroundColor:'rgba(157,45,32,.85)',
           borderRadius:3,borderSkipped:false
         }
       ]
@@ -3452,7 +3557,37 @@ function closeScLock(){document.getElementById('sc-lock').classList.remove('open
 document.getElementById('impact-btn').addEventListener('click',openScLock);
 document.getElementById('sc-lock-close').addEventListener('click',closeScLock);
 document.getElementById('sc-lock').addEventListener('click',e=>{if(e.target.id==='sc-lock')closeScLock();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeScLock();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeScLock();closeExpReq();}});
+
+// Expansion locations request: emails the requester's details to SFC via FormSubmit
+const EXP_REQ_ENDPOINT='https://formsubmit.co/ajax/obed@savannahfruits.com';
+function openExpReq(){
+  const m=document.getElementById('exp-req');
+  document.getElementById('exp-req-msg').hidden=true;
+  m.classList.add('open');
+  setTimeout(()=>m.querySelector('input[name=name]').focus(),50);
+}
+function closeExpReq(){document.getElementById('exp-req').classList.remove('open');}
+document.getElementById('exp-req-open').addEventListener('click',openExpReq);
+document.getElementById('exp-req-close').addEventListener('click',closeExpReq);
+document.getElementById('exp-req').addEventListener('click',e=>{if(e.target.id==='exp-req')closeExpReq();});
+document.getElementById('exp-req-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, btn=document.getElementById('exp-req-send'), msg=document.getElementById('exp-req-msg');
+  const d=Object.fromEntries(new FormData(f));
+  btn.disabled=true; btn.textContent='Sending…'; msg.hidden=true;
+  try{
+    const r=await fetch(EXP_REQ_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({...d,_subject:`Shea R.I.S.E. expansion locations request — ${d.organisation}`,_replyto:d.email,_template:'table',_captcha:'false'})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||String(j.success)!=='true') throw new Error(j.message||'send failed');
+    msg.className='scl-msg ok'; msg.textContent='Thank you — your request has been sent. The SFC team will be in touch by email.';
+    f.reset();
+  }catch(err){
+    msg.className='scl-msg'; msg.textContent='Sorry, the request could not be sent. Please try again in a moment.';
+  }
+  msg.hidden=false; btn.disabled=false; btn.textContent='Send request';
+});
 document.getElementById('sc-lock-form').addEventListener('submit',e=>{
   e.preventDefault();
   document.getElementById('sc-lock-msg').hidden=false;
