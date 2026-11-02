@@ -1202,6 +1202,13 @@ body{color:var(--sfc-ink)}
 .exp-cta-btn{background:var(--sfc-gold);color:#000;font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500}
 .exp-cta-btn:hover{background:#e5a92c}
 
+/* Layer / legend hover explainers */
+#layer-tip{position:fixed;z-index:4000;max-width:270px;padding:10px 13px;border-radius:10px;background:#2a1f15;color:#f8f2ec;font-family:'Outfit',sans-serif;font-size:12.5px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.28);pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s}
+#layer-tip.on{opacity:1;transform:none}
+.has-tip{cursor:help}
+.leaflet-control-layers label.has-tip{cursor:pointer!important}
+.has-tip span{text-decoration:underline dotted rgba(119,80,36,.45);text-underline-offset:3px}
+
 /* ═══ ENTRY GATE — video cover + visitor details ═══ */
 #gate{position:fixed;inset:0;z-index:6000;background:#120d08;color:#fff;overflow:hidden;transition:opacity .6s ease,visibility .6s}
 #gate.gone{opacity:0;visibility:hidden;pointer-events:none}
@@ -2966,6 +2973,42 @@ L.control.layers(
    'Vegetation Health NDVI (NASA)':lgNDVI},
   {position:'bottomleft',collapsed:false}
 ).addTo(map);
+
+// ── Plain-English hover explainers for map layers & legend ─────────────
+// Matched by label text, so they apply to both the layer list and the legend.
+const LAYER_HELP=[
+  ['High Performance','A centre meeting or beating its fresh-nut targets this season, with steady output from its members.'],
+  ['Low Performance','A centre below its target this season. Click the dot to see the main bottleneck, such as equipment, transport or access.'],
+  ['Collection','The land each centre’s women collect shea nuts from. These mapped boundaries show exactly where nuts are sourced, which is the basis of SFC’s parkland-to-shelf traceability.'],
+  ['Tree Cover Loss','Where trees have been cleared since 2001, mapped from satellite images by the University of Maryland and Global Forest Watch. Brighter orange means more recent. Clearing near a collection area can mean fewer shea trees in years to come.'],
+  ['Disturbance Alerts','Fresh signs of vegetation loss in the last 90 days, such as clearing, burning or new farmland, detected by satellite and updated daily by Global Forest Watch. Useful for spotting new pressure on shea parklands early.'],
+  ['Active Fire','Fires detected by NASA satellites in the past 5 days. Bush fires near a centre can damage shea trees and disrupt nut collection, especially in the November–March dry season. Click a dot for its distance to the nearest centre.'],
+  ['Vegetation Health','How green and healthy the land is, from NASA’s latest 8-day satellite picture. Deeper green means denser, healthier vegetation; pale or brown means dry, bare or stressed land.'],
+  ['Street','A clean reference map with towns, roads and borders, best for presentations.'],
+  ['Satellite','Real aerial imagery for seeing villages, farms and tree cover around each centre.'],
+  ['Terrain','Shaded relief showing hills, valleys and rivers across the region.']
+];
+(function(){
+  const tip=document.createElement('div'); tip.id='layer-tip'; document.body.appendChild(tip);
+  const help=t=>(LAYER_HELP.find(([k])=>t.includes(k))||[])[1];
+  const show=(el,text)=>{
+    tip.textContent=text; tip.classList.add('on');
+    const r=el.getBoundingClientRect(), w=tip.offsetWidth, h=tip.offsetHeight;
+    let x=r.right+12, y=r.top+r.height/2-h/2;
+    if(x+w>innerWidth-8) x=Math.max(8,r.left-w-12);
+    tip.style.left=x+'px'; tip.style.top=Math.max(8,Math.min(y,innerHeight-h-8))+'px';
+  };
+  const hide=()=>tip.classList.remove('on');
+  const els=[...document.querySelectorAll('.leaflet-control-layers label'),...document.querySelectorAll('#legend .leg-row')];
+  els.forEach(el=>{
+    const text=help(el.textContent.trim()); if(!text) return;
+    el.classList.add('has-tip');
+    el.addEventListener('mouseenter',()=>show(el,text));
+    el.addEventListener('mouseleave',hide);
+    el.addEventListener('touchstart',()=>{show(el,text);clearTimeout(el._t);el._t=setTimeout(hide,4500);},{passive:true});
+  });
+  window.addEventListener('scroll',hide,true);
+})();
 
 // Coordinate display
 const coordEl=document.getElementById('coords');
