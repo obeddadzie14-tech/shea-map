@@ -1316,8 +1316,8 @@ async function sendLead(fields,subject){
 <div id="legend">
   <h3>Map Legend</h3>
   <div class="leg-section">Centre Performance</div>
-  <div class="leg-row"><div class="leg-pip" style="background:#22c55e"></div><span>High Performance Centre</span></div>
-  <div class="leg-row"><div class="leg-pip" style="background:#ef4444"></div><span>Low Performance Centre</span></div>
+  <div class="leg-row"><div class="nut-mk leg"></div><span>High Performance Centre</span></div>
+  <div class="leg-row"><div class="nut-mk leg low"></div><span>Low Performance Centre</span></div>
   <div class="leg-section">Collection Areas</div>
   <div class="leg-row"><div class="leg-swatch" style="background:rgba(34,197,94,.13);border-color:#22c55e;border-style:dashed"></div><span>Collection Zone</span></div>
   <div class="leg-section">Environmental (GFW / NASA)</div>
@@ -3105,12 +3105,12 @@ COLLECTION_AREAS.forEach(area=>{
 const PERF_CLR={high:"#22c55e",low:"#ef4444",expansion:"#f59e0b"};
 const PERF_GLOW={high:"rgba(34,197,94,.45)",low:"rgba(239,68,68,.45)",expansion:"rgba(245,158,11,.45)"};
 
+// Centre markers are shea nuts (media/shea-nut.png). Low-performing centres sit in a red
+// ring; the selected centre is larger with an ink ring.
 function mkIcon(perf,sel){
-  const c=PERF_CLR[perf]||PERF_CLR.low,g=PERF_GLOW[perf]||PERF_GLOW.low;
-  const sz=sel?20:15,bw=sel?3:2.5;
-  const sh=sel?`0 0 0 4px ${g},0 3px 10px rgba(0,0,0,.3)`:`0 0 0 1px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.4)`;
+  const sz=sel?52:36, cls=['nut-mk',perf==='low'?'low':'',sel?'sel':''].join(' ');
   return L.divIcon({
-    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${c};border:${bw}px solid #fff;box-shadow:${sh};transition:all .22s cubic-bezier(.16,1,.3,1);cursor:pointer"></div>`,
+    html:`<div class="${cls}" style="width:${sz}px;height:${sz}px"></div>`,
     className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
   });
 }
@@ -5753,6 +5753,17 @@ button,input,select,textarea{font-family:inherit}
 #gate .g-lead{font-family:var(--narrow);font-size:clamp(17px,1.5vw,21px)}
 #gate .g-enter{border-radius:0;background:var(--off);color:var(--ink);font-family:var(--narrow);text-transform:uppercase;letter-spacing:.14em;font-size:13px;font-weight:700;padding:16px 30px}
 #gate .g-enter:hover{background:var(--sand);color:var(--off);transform:none}
+
+/* Shea nut centre markers */
+.nut-mk{border-radius:50%;background:url(media/shea-nut.png) center/88% no-repeat;cursor:pointer;
+  filter:drop-shadow(0 2px 3px rgba(28,31,36,.35));transition:transform .2s cubic-bezier(.16,1,.3,1)}
+.nut-mk:hover{transform:scale(1.12)}
+.nut-mk.low{background-color:rgba(244,242,239,.85);background-size:74%;box-shadow:0 0 0 2.5px #dc2626;filter:none}
+.nut-mk.sel{background-color:rgba(244,242,239,.92);background-size:76%;box-shadow:0 0 0 2.5px var(--ink),0 6px 16px rgba(28,31,36,.3);filter:none}
+.nut-mk.low.sel{box-shadow:0 0 0 3px #dc2626,0 6px 16px rgba(28,31,36,.3)}
+.nut-mk.leg{width:22px;height:22px;flex-shrink:0;cursor:default;filter:none}
+.nut-mk.leg.low{box-shadow:0 0 0 1.5px #dc2626}
+.nut-mk.leg:hover{transform:none}
 
 /* District layer */
 .dist-label{overflow:visible}
