@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://drive.google.com"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif&display=swap"/>
 <link rel="stylesheet" href="lib/leaflet.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -1144,64 +1144,6 @@ body{background:var(--dark);color:#111827}
 .proj-gallery-caption{font-size:9px;color:rgba(17,24,39,.35);text-align:right;
   letter-spacing:.04em;padding:2px 2px 0}
 
-/* ═══════════════════════════════════════════════════════════════════════
-   SFC BRAND LAYER — matches savannahfruits.com
-   Oswald (uppercase headings) · Outfit (body/UI) · earth palette
-   Data colours (green = high, red = low performance) are left untouched.
-   ═══════════════════════════════════════════════════════════════════════ */
-:root{
-  --sfc-red:#9d2d20;--sfc-brown:#775024;--sfc-tan:#ab7e4a;--sfc-sand:#d6b78f;
-  --sfc-cream:#f8f2ec;--sfc-gold:#f5bd41;--sfc-ink:#1f1a14;
-  --glass:rgba(248,242,236,.95);--border:rgba(119,80,36,.16);
-  --head:'Oswald','Arial Narrow',sans-serif
-}
-html,body{font-family:'Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-body{color:var(--sfc-ink)}
-
-/* Headings & big numbers → Oswald */
-#header .brand,.hero-title h2,.dash-title,.imp-title,.nit-title,.proj-dh-title,
-#sc-lock h2,#exp-req h2,.exp-cta-t{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;font-weight:700}
-#header .brand{font-size:15px;color:var(--sfc-ink)}
-.brand-dot{background:var(--sfc-gold);box-shadow:0 0 6px var(--sfc-gold)}
-.dash-title{color:var(--sfc-red)}
-.hero-title h2{color:var(--sfc-ink)}
-.dv,.kt-val,.s-pill strong{font-family:var(--head);font-weight:600;letter-spacing:0}
-.s-pill strong{color:var(--sfc-red)}
-
-/* Small caps labels → brand tan */
-.sec-lbl,#legend h3,.leg-section,.shc-card-title,.leaflet-control-layers-subgroup-name{color:var(--sfc-tan)!important}
-
-/* Map buttons (filters + panel nav) */
-.glass-btn{font-family:'Outfit',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:11.5px;font-weight:600;color:var(--sfc-brown)!important;border-color:rgba(119,80,36,.28)!important}
-.glass-btn:hover{background:rgba(214,183,143,.35)}
-.glass-btn.active-filter{background:var(--sfc-brown)!important;border-color:var(--sfc-brown)!important;color:var(--sfc-cream)!important}
-.glass-btn.sc-locked{opacity:.7}
-
-/* Search, layers, zoom */
-.sr-item:hover{background:rgba(214,183,143,.25)}
-.sr-name b{color:var(--sfc-red)}
-.leaflet-control-layers-list input{accent-color:var(--sfc-brown)}
-.leaflet-bar a,.leaflet-bar a:hover{background:var(--sfc-cream);color:var(--sfc-brown);border-color:rgba(119,80,36,.16)}
-.n-arrow{border-bottom-color:var(--sfc-brown)}
-
-/* Side panels */
-.panel-hero{border-bottom-color:var(--sfc-sand)}
-
-/* Dashboard */
-#dash{background:var(--sfc-cream)}
-.dash-header{background:var(--sfc-cream);border-bottom:3px solid var(--sfc-sand)}
-.dash-header .dash-close{font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500;background:transparent!important;border:1.5px solid var(--sfc-tan)!important;color:var(--sfc-brown)!important;border-radius:8px}
-.dash-header .dash-close:hover{background:rgba(214,183,143,.35)!important}
-.dash-header #dash-close{background:var(--sfc-gold)!important;border-color:var(--sfc-gold)!important;color:#000!important}
-
-/* Popups */
-.scl-btn{background:var(--sfc-brown);font-family:var(--head);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
-.scl-btn:hover{background:var(--sfc-red)}
-.exp-cta{background:var(--sfc-cream);border-color:var(--sfc-sand)}
-.exp-cta-t{color:var(--sfc-brown)}
-.exp-cta-btn{background:var(--sfc-gold);color:#000;font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-weight:500}
-.exp-cta-btn:hover{background:#e5a92c}
-
 /* Layer / legend hover explainers */
 #layer-tip{position:fixed;z-index:4000;max-width:270px;padding:10px 13px;border-radius:10px;background:#2a1f15;color:#f8f2ec;font-family:'Outfit',sans-serif;font-size:12.5px;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,.28);pointer-events:none;opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s}
 #layer-tip.on{opacity:1;transform:none}
@@ -1451,7 +1393,7 @@ async function sendLead(fields,subject){
   <div class="panel-body">
     <!-- OVERVIEW TAB -->
     <div class="tab-pane" id="tab-overview">
-      <div class="sec-lbl" style="margin-top:4px">Season Comparison · FN → Dried Kernels</div>
+      <div class="sec-lbl" style="margin-top:4px">Season comparison · Fresh nuts and dried kernels</div>
       <div class="yr-compare">
         <div class="yr-tile y2526">
           <div class="yt-season">2025 / 26</div>
@@ -1477,20 +1419,20 @@ async function sendLead(fields,subject){
 
       <div class="kpi-grid" style="margin-bottom:16px">
         <div class="kpi-tile span2">
-          <div class="kt-lbl">Fresh Nuts Growth — 2025/26 vs 2023/24</div>
+          <div class="kt-lbl">Fresh nuts, 2025/26 against 2023/24</div>
           <div class="kt-val" id="ov-yoy">—</div>
-          <div class="kt-sub">Year on year</div>
+          <div class="kt-sub">Change in fresh nuts bought from this centre</div>
         </div>
       </div>
 
       <div class="sec-lbl">Network Position (KG)</div>
       <div id="prog-section">
         <div class="prog-row">
-          <div class="prog-hd"><span class="prog-lbl">Fresh Nuts 2025/26 vs Network Max (163,455 kg)</span><span class="prog-val" id="pr-bags-val">—</span></div>
+          <div class="prog-hd"><span class="prog-lbl">Fresh nuts 2025/26, against the largest centre (163,455 kg)</span><span class="prog-val" id="pr-bags-val">—</span></div>
           <div class="prog-track"><div class="prog-fill green" id="pr-bags" style="width:0%"></div></div>
         </div>
         <div class="prog-row">
-          <div class="prog-hd"><span class="prog-lbl">Dried KG vs Network Max (53,125 kg)</span><span class="prog-val" id="pr-dry-val">—</span></div>
+          <div class="prog-hd"><span class="prog-lbl">Dried kernels, against the largest centre (53,125 kg)</span><span class="prog-val" id="pr-dry-val">—</span></div>
           <div class="prog-track"><div class="prog-fill green" id="pr-dry" style="width:0%"></div></div>
         </div>
       </div>
@@ -1568,7 +1510,7 @@ async function sendLead(fields,subject){
         <div class="pg-cell"><div class="pg-lbl">Capacity</div><div class="pg-val" id="pp-cap">—</div></div>
       </div>
 
-      <div class="sec-lbl">Climate · Last 30 Days <span style="font-weight:500;letter-spacing:0;text-transform:none;opacity:.8">— NASA POWER</span></div>
+      <div class="sec-lbl">Climate · Last 30 days <span>· NASA POWER</span></div>
       <div class="kpi-grid" id="p-climate" style="margin-bottom:16px">
         <div class="kpi-tile span2"><div class="kt-sub">Loading NASA climate data…</div></div>
       </div>
@@ -1741,7 +1683,7 @@ async function sendLead(fields,subject){
     <div class="charts-flex">
       <div class="cc">
         <div class="cc-title">FN Volume by Cooperative — 2023/24 vs 2025/26 (kg)</div>
-        <div class="cc-sub">Fresh Nuts purchased · 1 bag = 85 kg · Red = 2025/26 · Sand = 2023/24</div>
+        <div class="cc-sub">Fresh Nuts purchased · 1 bag = 85 kg · Brown = 2025/26 · Sand = 2023/24</div>
         <canvas id="ch-compare"></canvas>
       </div>
       <div class="right-col">
@@ -3676,13 +3618,13 @@ function buildDashCharts(){
         {
           label:'2023–24 FN (kg)',
           data:DATA_2324.map(d=>d.kg),
-          backgroundColor:'rgba(214,183,143,.9)',
+          backgroundColor:'rgba(171,148,111,.45)',
           borderRadius:3,borderSkipped:false
         },
         {
           label:'2025–26 FN (kg)',
           data:d2526vals,
-          backgroundColor:'rgba(157,45,32,.85)',
+          backgroundColor:'rgba(133,83,32,.92)',
           borderRadius:3,borderSkipped:false
         }
       ]
@@ -5612,5 +5554,217 @@ document.getElementById('dash-projects-btn').addEventListener('click', function(
 renderProject('invest-jobs');
 
 </script>
+<style id="house-system">
+/* ═══════════════════════════════════════════════════════════════════════
+   SFC HOUSE SYSTEM, as measured from "Shea Is Not Butter", Impact Report
+   2025/2026 (see sfc-editorial/assets/css/tokens.css):
+   · Archivo Narrow does the work: Regular body, Bold display and figures.
+   · Instrument Serif only for chapter titles, sentence case.
+   · Off white ground, cool ink, brown accent, sand for single big figures.
+   · Figures hang off a hairline with a small caps label above and a short
+     boundary note below. No cards, no pills, no rounded boxes.
+   Data colours (green = high, red = low performance) keep their meaning.
+   ═══════════════════════════════════════════════════════════════════════ */
+:root{
+  --ink:#1c1f24;--off:#f4f2ef;--paper-w:#ffffff;--brown:#855320;--brown-h:#a4682c;
+  --sand:#ab946f;--fig:#8c7a62;--rule:#d8d4ce;--muted:#8a8681;
+  --narrow:'Archivo Narrow','Arial Narrow',Arial,sans-serif;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+  /* older names used elsewhere in this file, remapped onto the house palette */
+  --sfc-red:#855320;--sfc-brown:#855320;--sfc-tan:#8c7a62;--sfc-sand:#ab946f;
+  --sfc-cream:#f4f2ef;--sfc-gold:#ab946f;--sfc-ink:#1c1f24;
+  --glass:#f4f2ef;--border:#d8d4ce;--dark:#f4f2ef;
+  --head:'Archivo Narrow','Arial Narrow',Arial,sans-serif
+}
+html,body{font-family:var(--narrow);-webkit-font-smoothing:antialiased}
+body{color:var(--ink);background:var(--off)}
+button,input,select,textarea{font-family:inherit}
+
+/* ── Map chrome: flat paper, hairline, no blur, no rounding ─────────────── */
+#header,#legend,#search-wrap,#search-dropdown,.glass-btn,.s-pill,
+.leaflet-control-layers,.leaflet-bar,#coords,#north{
+  background:var(--off)!important;backdrop-filter:none!important;
+  border:1px solid var(--rule)!important;border-radius:0!important;box-shadow:none!important}
+#north{border-radius:50%!important}
+#header{padding:12px 16px 11px}
+#header .brand{font-family:var(--narrow);font-weight:700;font-size:20px;letter-spacing:-.015em;text-transform:none;color:var(--ink)}
+.brand-dot{display:none}
+#header .sub{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+#legend h3,.leg-section,.leaflet-control-layers-subgroup-name{font-family:var(--narrow);font-size:10px!important;letter-spacing:.12em!important;color:var(--brown)!important}
+.leg-section{border-top-color:var(--rule)}
+.leg-row span,.leaflet-control-layers-list label,.leaflet-control-layers-base span,.leaflet-control-layers-overlays span{font-size:12.5px!important;color:var(--ink)!important}
+.leaflet-control-layers-list input{accent-color:var(--ink)}
+.leg-pip{border-radius:0;border:0;width:9px;height:9px}
+
+/* Filters and panel nav: text set in small caps, not pills */
+.top-row{gap:0}
+.glass-btn{font-family:var(--narrow);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600;
+  color:var(--ink)!important;padding:9px 14px;margin-left:-1px}
+.glass-btn svg{width:9px;height:9px}
+.glass-btn:hover{background:var(--paper-w)!important}
+.glass-btn.active-filter{background:var(--ink)!important;color:var(--off)!important;border-color:var(--ink)!important}
+.glass-btn.sc-locked{opacity:.55}
+
+/* Bottom figures: one joined ledger strip */
+#stats{gap:0}
+.s-pill{font-size:12px;color:var(--muted);padding:8px 14px;margin-left:-1px}
+.s-pill strong{font-family:var(--narrow);font-weight:700;font-size:15px;color:var(--ink);letter-spacing:-.01em}
+
+.sr-item:hover{background:var(--paper-w)}
+.sr-name b{color:var(--brown)}
+.leaflet-bar a,.leaflet-bar a:hover{background:var(--off);color:var(--ink);border-color:var(--rule);border-radius:0!important}
+.n-arrow{border-bottom-color:var(--ink)}
+
+/* ── Side panel: a page from the report, not a widget ─────────────────── */
+#panel,#exp-panel{background:var(--off);box-shadow:-1px 0 0 var(--rule),-18px 0 40px rgba(28,31,36,.10)}
+.panel-topbar{border-bottom:1px solid var(--rule);padding:12px 22px}
+.nav-btn,.panel-close{border:0!important;background:none!important;border-radius:0!important;color:var(--ink);font-size:18px;width:auto;height:auto;padding:2px 4px}
+.nav-btn:hover,.panel-close:hover{color:var(--brown)}
+.nav-counter{font-family:var(--narrow);font-size:11px;letter-spacing:.12em;color:var(--muted);font-weight:600;padding:0 10px}
+
+.panel-hero{padding:22px 22px 18px;border-bottom:1px solid var(--rule)}
+.hero-title h2{font-family:var(--narrow)!important;font-weight:700;font-size:34px;line-height:.96;letter-spacing:-.02em;text-transform:none!important;color:var(--ink)}
+.hero-title .coop{font-size:14px;line-height:1.35;color:var(--muted);margin-top:8px;max-width:34ch}
+.perf-badge{background:none!important;border-radius:0;padding:4px 0 0;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink)!important;display:flex;align-items:center;gap:7px}
+.perf-badge::before{content:"";width:9px;height:9px;background:currentColor}
+.perf-badge.high::before{background:#22c55e}
+.perf-badge.low::before{background:#ef4444}
+.perf-badge.expansion::before{background:var(--sand)}
+.hero-meta{gap:12px;margin-top:14px}
+.lot-chip{font-family:var(--narrow);background:none;padding:0;border-radius:0;font-size:11px;letter-spacing:.1em;color:var(--brown);font-weight:700}
+.loc-text{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+.photo-strip{background:var(--off);border-bottom:1px solid var(--rule);padding:12px 22px}
+.photo-strip img{border-radius:0}
+
+.panel-tabs{background:var(--off);border-bottom:1px solid var(--rule);padding:0 22px;gap:22px}
+.tab-btn{flex:0 0 auto;padding:13px 0 11px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab-btn:hover{color:var(--ink)}
+.tab-btn.active{color:var(--ink);border-bottom-color:var(--ink)}
+.tab-pane{padding:24px 22px 30px}
+
+/* Section eyebrow */
+.sec-lbl{font-family:var(--narrow);font-size:10.5px;letter-spacing:.12em;font-weight:700;color:var(--brown)!important;margin:4px 0 12px}
+.sec-lbl span{color:var(--muted)}
+
+/* Season comparison: two columns of figures hanging off hairlines */
+.yr-compare{gap:0 26px;margin-bottom:26px}
+.yr-tile{background:none!important;border:0!important;border-radius:0;padding:0}
+.yr-tile .yt-season{font-size:10.5px;letter-spacing:.12em;color:var(--ink)!important;padding-bottom:9px;border-bottom:1px solid var(--ink);margin-bottom:0}
+.yr-tile.y2324 .yt-season{color:var(--muted)!important;border-bottom-color:var(--rule)}
+.yt-row-lbl{font-size:10px;letter-spacing:.11em;color:var(--muted)!important;margin:12px 0 4px}
+.yr-tile .yt-kg{font-family:var(--narrow);font-weight:700;font-size:44px;line-height:.9;letter-spacing:-.035em;color:var(--ink)!important;font-variant-numeric:tabular-nums}
+.yr-tile.y2324 .yt-kg,.yr-tile.y2324 .yt-kg-sm{color:var(--fig)!important}
+.yr-tile .yt-bags,.yt-bags-sm{font-size:12px;color:var(--muted)!important;margin-top:5px}
+.yt-divider{background:var(--rule)!important;opacity:1;margin:14px 0 0}
+.yt-kg-sm{font-family:var(--narrow);font-weight:700;font-size:26px;line-height:.95;letter-spacing:-.03em;color:var(--ink)!important}
+
+/* Figures (formerly tiles): label, hairline, number, note */
+.kpi-grid{gap:0 26px;margin-bottom:26px}
+.kpi-tile{background:none!important;border:0!important;border-radius:0;padding:0 0 14px}
+.kpi-tile .kt-lbl{font-size:10px;letter-spacing:.11em;color:var(--muted);margin-bottom:8px;font-weight:600}
+.kpi-tile .kt-val{font-family:var(--narrow);font-weight:700;font-size:30px;line-height:.95;letter-spacing:-.03em;color:var(--ink)!important;padding-top:10px;border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.kpi-tile .kt-sub{font-size:12px;line-height:1.4;color:var(--muted);margin-top:6px}
+.kpi-tile .kt-sub a{color:var(--ink)}
+.kpi-tile.span2 .kt-val{font-size:56px;line-height:.86}
+#ov-yoy{color:var(--brown)!important;font-family:var(--narrow);font-weight:700;font-size:64px;line-height:.86;letter-spacing:-.04em;padding-top:12px;border-top:1px solid var(--brown);font-variant-numeric:tabular-nums}
+
+/* Network position: one ink rule on a hairline */
+.prog-row{margin-bottom:18px}
+.prog-lbl{font-size:13px;font-weight:400;color:var(--ink)}
+.prog-val{font-weight:700;font-size:15px;color:var(--ink)}
+.prog-track{height:1px;background:var(--rule);border-radius:0;overflow:visible;margin-top:9px}
+.prog-fill,.prog-fill.green,.prog-fill.red,.prog-fill.amber{height:3px;margin-top:-1px;border-radius:0;background:var(--ink)!important}
+
+/* Tags as a typeset line, separated by slashes */
+.tags-row{gap:0;margin-bottom:26px}
+.tag{background:none!important;padding:0;border-radius:0;font-size:12.5px;font-weight:600;color:var(--ink)!important}
+.tag+.tag::before{content:"/";margin:0 9px;color:var(--rule);font-weight:400}
+
+/* Records: hairline ledger rows */
+.comm-item{padding:11px 0;border-bottom:1px solid var(--rule)}
+.comm-item:first-child{border-top:1px solid var(--ink)}
+.comm-item:last-child{border-bottom:1px solid var(--rule)}
+.c-pip{border-radius:0;width:8px;height:8px}
+.c-nm{font-size:15px;color:var(--ink);font-weight:600}
+.c-est{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.div{height:0;background:none;margin:0}
+
+/* Notes: editorial notice, not an alert box */
+.alert-box,.alert-box.warn,.alert-box.danger,.alert-box.ok{background:none!important;border:0!important;border-left:2px solid var(--brown)!important;border-radius:0;padding:2px 0 2px 14px;margin-bottom:26px}
+.alert-icon{display:none}
+.alert-lbl{font-size:10px;letter-spacing:.11em;color:var(--muted)}
+.alert-text{font-size:15px;line-height:1.45;color:var(--ink)}
+
+.infra-grid{gap:0 18px;margin-bottom:26px}
+.infra-cell{background:none;border-radius:0;padding:10px 0 0;border-top:1px solid var(--rule);text-align:left}
+.infra-cell .ic-val{font-family:var(--narrow);font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:.95}
+.infra-cell .ic-lbl{font-size:11.5px;color:var(--muted);margin-top:5px}
+
+.profile-grid{border:0;border-top:1px solid var(--ink);border-radius:0;margin-bottom:26px;gap:0 26px}
+.pg-cell{padding:10px 0;border-bottom:1px solid var(--rule)!important;border-right:0!important}
+.pg-cell:nth-last-child(-n+2){border-bottom:1px solid var(--rule)!important}
+.pg-lbl{font-size:10px;letter-spacing:.11em;color:var(--muted);margin-bottom:4px}
+.pg-val{font-size:15px;color:var(--ink)}
+
+.hl-block{background:none;border:0;border-top:1px solid var(--brown);border-radius:0;padding:14px 0 0}
+.hl-lbl{font-size:10px;letter-spacing:.11em;color:var(--brown)}
+.hl-txt{font-family:var(--serif);font-size:21px;line-height:1.3;color:var(--ink)}
+
+.ins-row{gap:12px;padding:10px 0;margin:0;border-bottom:1px solid var(--rule)}
+.ins-ic{border-radius:0;width:8px;height:8px;margin-top:6px;font-size:0;background:var(--ink)!important}
+.ins-ic.good{background:#22c55e!important}.ins-ic.bad{background:#ef4444!important}.ins-ic.warn{background:var(--sand)!important}
+.ins-txt{font-size:14px;line-height:1.45;color:var(--ink)}
+
+/* ── Dashboard page ───────────────────────────────────────────────────── */
+#dash{background:var(--off)}
+.dash-header{background:var(--off);border-bottom:1px solid var(--ink)}
+.dash-title{font-family:var(--narrow)!important;font-weight:700;text-transform:none!important;letter-spacing:-.02em;color:var(--ink)!important}
+.dash-subtitle{letter-spacing:.09em;text-transform:uppercase;font-size:10.5px;color:var(--muted)}
+.dash-close,.dash-header .dash-close{font-family:var(--narrow);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:600;
+  background:none!important;border:0!important;border-radius:0!important;color:var(--ink)!important;padding:6px 0!important;margin-left:18px;border-bottom:1px solid transparent!important}
+.dash-close:hover,.dash-header .dash-close:hover{background:none!important;border-bottom-color:var(--ink)!important}
+.dash-header #dash-close{background:var(--ink)!important;color:var(--off)!important;padding:8px 14px!important}
+.kpi-row{gap:0 26px}
+.dk{background:none;border:0;border-top:1px solid var(--ink);border-radius:0;padding:12px 0 6px}
+.dk .dv{font-family:var(--narrow);font-weight:700;font-size:40px;line-height:.9;letter-spacing:-.035em;color:var(--ink)!important}
+.dk .dl{font-size:10px;letter-spacing:.11em;color:var(--brown);margin-top:10px}
+.dk .dd{font-size:12px;color:var(--muted);margin-top:4px}
+.cc{background:var(--paper-w);border:0;border-top:1px solid var(--ink);border-radius:0;padding:16px 18px}
+.cc-title{font-family:var(--narrow);font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.cc-sub{font-size:11.5px;color:var(--muted)}
+.bn-table th{font-size:10px;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--ink)}
+.bn-table td{font-size:13px;color:var(--ink);border-bottom:1px solid var(--rule)}
+.bn-badge{background:none!important;padding:0;border-radius:0;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)!important;display:inline-flex;align-items:center;gap:6px}
+.bn-badge::before{content:"";width:8px;height:8px;background:var(--muted)}
+.bn-badge.high::before{background:#22c55e}.bn-badge.low::before{background:#ef4444}.bn-badge.expansion::before{background:var(--sand)}
+
+/* ── Popups, request forms, expansion call-to-action ──────────────────── */
+.scl-card,#gate .g-form{border-radius:0!important;background:var(--off)!important;box-shadow:0 30px 70px rgba(28,31,36,.35)}
+.scl-badge{background:none;border:0;border-radius:0;padding:0;color:var(--brown);letter-spacing:.12em;font-size:10.5px}
+#sc-lock h2,#exp-req h2,#gate .g-form h2{font-family:var(--narrow)!important;text-transform:none!important;font-weight:700;font-size:26px;letter-spacing:-.02em;color:var(--ink)!important}
+#sc-lock-form input,#exp-req-form input,#gate .g-form input{border:0!important;border-bottom:1px solid var(--ink)!important;border-radius:0!important;background:transparent!important;padding:8px 0!important;box-shadow:none!important;font-size:16px}
+#sc-lock-form label,#exp-req-form label,#gate .g-form label{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.scl-btn,#gate .g-form button{border-radius:0!important;background:var(--ink)!important;color:var(--off)!important;font-family:var(--narrow)!important;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:600;padding:14px!important}
+.scl-btn:hover,#gate .g-form button:hover{background:var(--brown)!important}
+.scl-msg{border-radius:0;border:0;border-left:2px solid #b91c1c;background:none;color:var(--ink)}
+.scl-msg.ok{border-left-color:#15803d;background:none;color:var(--ink)}
+.exp-cta{background:none;border:0;border-top:1px solid var(--ink);border-radius:0;padding:14px 0 0}
+.exp-cta-t{font-family:var(--narrow)!important;text-transform:none!important;font-weight:700;font-size:19px;color:var(--ink)}
+.exp-cta-s{color:var(--muted);opacity:1;font-size:13px}
+.exp-cta-btn{align-self:flex-start;border-radius:0;background:var(--ink);color:var(--off);font-family:var(--narrow);text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;font-weight:600;padding:12px 18px}
+.exp-cta-btn:hover{background:var(--brown)}
+
+/* Cover: report-cover typography over the film */
+#gate .g-eyebrow{font-family:var(--narrow);color:var(--off);opacity:.8;letter-spacing:.16em;font-size:12px}
+#gate h1{font-family:var(--narrow)!important;font-weight:700;letter-spacing:-.02em;line-height:.88}
+#gate .g-lead{font-family:var(--narrow);font-size:clamp(17px,1.5vw,21px)}
+#gate .g-enter{border-radius:0;background:var(--off);color:var(--ink);font-family:var(--narrow);text-transform:uppercase;letter-spacing:.14em;font-size:13px;font-weight:700;padding:16px 30px}
+#gate .g-enter:hover{background:var(--sand);color:var(--off);transform:none}
+
+/* Hover explainers */
+#layer-tip{background:var(--ink);color:var(--off);border-radius:0;font-family:var(--narrow);font-size:13.5px}
+.has-tip span{text-decoration-color:var(--rule)}
+</style>
 </body>
 </html>
