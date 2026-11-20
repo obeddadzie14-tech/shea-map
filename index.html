@@ -2694,11 +2694,12 @@ topoBase.on('tileerror', e => {
 });
 const satellite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {maxZoom:19,attribution:'Tiles &copy; Esri, Maxar, GeoEye, Earthstar Geographics, CNES/Airbus DS'}
+  // Imagery over northern Ghana ends at z18; z19 returns Esri's "Map data not yet available" tile
+  {maxZoom:19,maxNativeZoom:18,attribution:'Tiles &copy; Esri, Maxar, GeoEye, Earthstar Geographics, CNES/Airbus DS'}
 );
 const terrain = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}',
-  {maxZoom:13,attribution:'Tiles &copy; Esri &mdash; Source: Esri'}
+  {maxZoom:19,maxNativeZoom:13,attribution:'Tiles &copy; Esri &mdash; Source: Esri'}
 );
 
 const map = L.map('map',{center:[9.9,-1.35],zoom:7,layers:[topo],zoomControl:false,attributionControl:true});
